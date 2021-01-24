@@ -11,7 +11,6 @@
 		unset($_SESSION['name']);
 		header("location: login.php");
 	}
-
 		?>
 		<!DOCTYPE html>
 		<html>

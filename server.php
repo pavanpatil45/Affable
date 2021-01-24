@@ -6,8 +6,6 @@ include'connection.php';
 	$name = "";
 	$email    = "";
 
-	
-
 	// After Validation REGISTER SME
 	if (isset($_POST['reg_sme'])) {
 		// receive all input values from the form

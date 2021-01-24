@@ -12,8 +12,7 @@
 	</div>
 	
 	<form method="post" action="login.php">
-
-		<div class="input-group">
+			<div class="input-group">
 			<label>email</label>
 			<input type="text" name="email" >
 		</div>
