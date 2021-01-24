@@ -32,6 +32,7 @@
 		<div class="input-group">
 			<label>Confirm password</label>
 			<input type="password" name="password_2">
+			
 		</div>
 		<div class="input-group">
 			<button type="submit" class="btn" name="reg_sme" onclick="return validate_reg()">Register</button>
