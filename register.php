@@ -27,6 +27,7 @@
 		</div>
 		<div class="input-group">
 			<label>Password</label>
+			
 			<input type="password" name="password_1">
 		</div>
 		<div class="input-group">
