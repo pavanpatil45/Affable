@@ -3,8 +3,7 @@
 <html>
 <head>
 	<title>Registration system PHP and MySQL</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript" src="/js/script_sme_login.js"></script>
+	<script type="text/javascript" src="/Affable/js/script_sme_login.js"></script>
 </head>
 <body>
 

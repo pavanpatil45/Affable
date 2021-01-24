@@ -3,8 +3,7 @@
 <html>
 <head>
 	<title>Registration system PHP and MySQL</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript" src="/js/script_sme_reg.js"></script>
+	<script type="text/javascript" src="/Affable/js/script_sme_reg.js"></script>
 </head>
 <body>
 	<div class="header">
@@ -16,11 +15,11 @@
 
 		<div class="input-group">
 			<label>name</label>
-			<input type="text" name="name" value="<?php echo $name; ?>">
+			<input type="text" name="name" >
 		</div>
 		<div class="input-group">
 			<label>Email</label>
-			<input type="email" name="email" value="<?php echo $email; ?>">
+			<input type="email" name="email">
 		</div>
 		<div class="input-group">
 			<label>Mobile</label>
