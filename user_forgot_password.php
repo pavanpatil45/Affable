@@ -22,9 +22,11 @@
         $sql_insert=mysqli_query($db,"INSERT INTO forget_password(email,temp_key) VALUES('$email','$key')");
         //sending email about update
         $to      = $email;
-		$subject = 'RESET PASSWORD DEMO BY PAVAN';
-        $msg = "Please click the URL to Reset your Password". "\r\n"."http://localhost/Affable/user_forgot_password_reset.php?key=".$key."&email=".$email;
-        $headers = 'From: AFFABLE' . "\r\n";
+		$subject = 'RESET PASSWORD DEMO AFFABLE';
+        $msg = "Please click the Link to Reset your Password". "\r\n"."http://localhost/Affable/user_forgot_password_reset.php?key=".$key."&email=".$email;
+		$headers = "From: <Website's email address> \r\n";
+		$headers .= "MIME-Version: 1.0 \r\n";
+		$headers .= "Cnontent-Type: text/html; charset=UTF-8 \r\n";
        if(mail($to, $subject, $msg, $headers))
 				{
 					echo "Email successfully sent to $to...";
