@@ -23,11 +23,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $password_2=mysqli_real_escape_string($db,$_POST['password_2']);
         if ($password_2==$password_1) {
             $message_success="New password has been set for ".$email;
-            $password=md5($password_1);
+			$password = $_POST['password_1'];
+			$hash = password_hash($password, PASSWORD_DEFAULT);
             //destroy the key from table
             mysqli_query($db,"DELETE FROM forget_password where email='$email' and temp_key='$key'");
             //update password in database
-            mysqli_query($db,"UPDATE sme_reg set password='$password' where email='$email'");
+            mysqli_query($db,"UPDATE sme_reg set password='$hash' where email='$email'");
         }
         else{
             $message="Verify your password";

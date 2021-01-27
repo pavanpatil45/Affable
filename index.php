@@ -363,58 +363,50 @@
 			
 			
 			
-			
-            <div class="modal-content otp_modal_content" id="forgot_password_modal_content_user">
+			<div class="modal-content otp_modal_content" id="forgot_password_modal_content_user">
                <div class="modal-header">
                   <h2 class="modal_title">Recover Password</h2>
                </div>
                <div class="modal-body">
-                  <form>
+                  <form method="">
                      <div class="form">
                         <div class="inputfield">
-                           <input type="text" class="input" placeholder="Enter your email id to get new password" name="reset-email">
+                           <input type="text" class="input" placeholder="Enter your email id to get new password" id="reset-email-user"  name="reset-email-user">
                         </div>
                         <div class="inputfield">
-                           <input value="Send Email" class="btn" name="sendmail" type="button">
+                           <input value="Send Email" class="btn" id="sendmail-user" name="sendmail-user" type="button">
                         </div>
-						<div class="alert alert-danger" role="alert" id="reset-email-error" style="display: none;">
+						<div class="alert alert-danger" role="alert" id="reset-email-error-user" style="display: none;">
 						</div>
                      </div>
                   </form>
-				  <div class="inputfield terms forgot_password_link" style="margin-top: 7px; margin-bottom: -10px;">
-                     <p>Check your registered email id to get new password and return to login</p>
-                  </div>
-                  
-               </div>
+			</div>
             </div>
-		
-				<script>
+			
+			<script>
 				$(document).ready(function() {
-					$('#sendmail').click(function() {
-						var email = $('#reset-email').val();
+					$('#sendmail-user').click(function() {
+						var email = $('#reset-email-user').val();
 						
 						$.ajax({
-							url: "forgot_password.php",
+							url: "user_forgot_password.php",
 							method: "POST",
 							data: {email:email},
 							success: function(error) {
 								if(error == 0)
 									window.location.replace("/Affable");
 								else {
-									document.getElementById("reset-email-error").innerHTML = error;
-									document.getElementById("reset-email-error").style.display = "block";
+									document.getElementById("reset-email-error-user").innerHTML = error;
+									document.getElementById("reset-email-error-user").style.display = "block";
 								}
 							}
 						});
 					});
 				});
-			  </script>
-			
-			
-			
-			
-			
-         </div>
+			</script>
+	
+	
+	</div>
 	  </div>
 	  <script>
 		$(document).ready(function() {
@@ -437,6 +429,7 @@
 			});
 		});
 	  </script>
+
 	  
 	  
       <!-- end modal for user login --->
@@ -529,26 +522,47 @@
 
 
 
-            <div class="modal-content otp_modal_content" id="forgot_password_modal_content_sme">
+			<div class="modal-content otp_modal_content" id="forgot_password_modal_content_sme">
                <div class="modal-header">
                   <h2 class="modal_title">Recover Password</h2>
                </div>
                <div class="modal-body">
-                  <form>
+                  <form method="">
                      <div class="form">
                         <div class="inputfield">
-                           <input type="text" class="input" placeholder="Enter your email id to get new password" name="mobile">
+                           <input type="text" class="input" placeholder="Enter your email id to get new password" id="reset-email-sme"  name="reset-email-sme">
                         </div>
                         <div class="inputfield">
-                           <input value="SUMBIT" class="btn" name="submit" type="button">
+                           <input value="Send Email" class="btn" id="sendmail-sme" name="sendmail-sme" type="button">
                         </div>
+						<div class="alert alert-danger" role="alert" id="reset-email-error-sme" style="display: none;">
+						</div>
                      </div>
                   </form>
-                  <div class="inputfield terms forgot_password_link" style="margin-top: 7px; margin-bottom: -10px;">
-                     <p>Check your registered email id to get new password and return to login</p>
-                  </div>
-               </div>
+			</div>
             </div>
+			
+			<script>
+				$(document).ready(function() {
+					$('#sendmail-sme').click(function() {
+						var email = $('#reset-email-sme').val();
+						
+						$.ajax({
+							url: "sme_forgot_password.php",
+							method: "POST",
+							data: {email:email},
+							success: function(error) {
+								if(error == 0)
+									window.location.replace("/Affable");
+								else {
+									document.getElementById("reset-email-error-sme").innerHTML = error;
+									document.getElementById("reset-email-error-sme").style.display = "block";
+								}
+							}
+						});
+					});
+				});
+			</script>
 			
 			
 			
@@ -562,7 +576,7 @@
 				var email = $('#sme-email').val();
 				var password = $('#sme-password').val();
 				$.ajax({
-					url: "user_signin_validation.php",
+					url: "sme_signin_validation.php",
 					method: "POST",
 					data: {email:email, password:password},
 					success: function(error) {
