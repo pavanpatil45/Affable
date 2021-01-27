@@ -2,8 +2,8 @@
 	include "connection.php";
 	
 	// User Sign In Entry Validation
-	$email = trim($_POST['email']);
-	
+	$email = $_POST['email'];
+	echo "ERRORRRRRRRR";
 	if(!filter_var($email, FILTER_VALIDATE_EMAIL))
 		echo "Please enter valid Email address";
 		
