@@ -133,7 +133,7 @@
 						   <div class="alert alert-danger" role="alert" id="reg-error" style="display: none;">
 						   </div>
 						    <div class="alert alert-success" role="alert" id="email-sent-msg" style="display: none;">
-							<p>Verification Email is Sent, Kindly check your email ID</p>
+							<p>Verification Email is Sent, Kindly check and Verify your email ID</p>
 						   </div>
 						 
 							
@@ -391,7 +391,7 @@
 						<center><progress max="100"  id="loader-user" style="height:20px; width: 200px; display: none;"></progress>
 						</center>
 						<div class="alert alert-success" role="alert" id="reset-msg-user" style="display: none;">
-							<p>Your Password Reset Email is Sent to your Registered email ID</p>
+							<p>Your Password Reset Link is Sent to your Registered email ID</p>
 						</div>
 						
 						
@@ -565,7 +565,7 @@
 						<center><progress max="100"  id="loader-sme" style="height:20px; width: 200px; display: none;"></progress>
 						</center>
 						<div class="alert alert-success" role="alert" id="reset-msg-sme" style="display: none;">
-							<p>Your Password Reset Email is Sent to your Registered email ID</p>
+							<p>Your Password Reset Link is Sent to your Registered email ID</p>
 						</div>
 					</div>
                   </form>
