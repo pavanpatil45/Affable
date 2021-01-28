@@ -15,9 +15,10 @@
 		if($stmt->rowCount() == 0)
 			echo "Account $email does not exist";
 		else
+		{
 		//	echo "Please check your email inbox or spam folder to change Password.";
 		
-		$key=md5(time()+123456789% rand(4000, 55000000));
+		$key = md5(time()+123456789% rand(4000, 55000000));
         //insert this temporary key into database
         $sql_insert=mysqli_query($db,"INSERT INTO forget_password(email,temp_key) VALUES('$email','$key')");
         //sending email about update
@@ -33,5 +34,6 @@
 				} 	else {
 					echo "Email sending failed...";
 				}
-    }
+		}
+ }
 ?>

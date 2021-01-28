@@ -14,9 +14,6 @@ if(isset($_GET['key']) && isset($_GET['email'])) {
       exit;
     }
 }
-else{
-  header('location:login.php');
-}
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
         $password_1=mysqli_real_escape_string($db,$_POST['password_1']);
