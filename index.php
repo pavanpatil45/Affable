@@ -132,6 +132,11 @@
 						   </div>
 						   <div class="alert alert-danger" role="alert" id="reg-error" style="display: none;">
 						   </div>
+						    <div class="alert alert-success" role="alert" id="email-sent-msg" style="display: none;">
+							<p>Verification Email is Sent, Kindly check your email ID</p>
+						   </div>
+						 
+							
                            <!-- <div class="inputfield terms">
                               <p>By joining I agree to the terms and conditions of Affable</p>
                               </div> -->
@@ -161,12 +166,16 @@
 						data: {name:name, email:email, phone:phone, password:password, cpassword:cpassword},
 						success: function(error) {
 							if(error == 0) {
-								window.location.replace("/Affable");
+								
+								//window.location.replace("/Affable");
 								$.ajax({
 									url: "user_registration_entry.php",
 									method: "POST",
 									data: {name:name, email:email, phone:phone, password:password}
+									
 								});
+								$('#reg-error').hide();
+								$('#email-sent-msg').show();
 							}
 							else {
 								document.getElementById("reg-error").innerHTML = error;

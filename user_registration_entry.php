@@ -25,9 +25,14 @@
 	$message = "You have been registered for SME Portal.<br>";
 	$message .= "Please <a href='http://localhost/Affable/user_registration_verification.php?vkey=".$vkey."&email=".$email."'>click here</a> to confirm your registration.";
 	
-	$headers = "From: <Website's email address> \r\n";
+	//$headers = "From: <Website's email address> \r\n";
 	$headers .= "MIME-Version: 1.0 \r\n";
 	$headers .= "Content-Type: text/html; charset=UTF-8 \r\n";
 	
-	mail($email, $subject, $message, $headers);
+	if(mail($email, $subject, $message, $headers))
+		{
+					echo "Verification Email is Sent to your email ID";
+				} 	else {
+					echo "Email Verification sending failed... try Again!";
+				}
 ?>

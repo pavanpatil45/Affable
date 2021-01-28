@@ -1,13 +1,13 @@
 <?php
 	include "connection.php";
 	
-	// User Sign In Entry Validation
+	// SME Sign In Entry Validation
 	$email = $_POST['email'];
 	if(!filter_var($email, FILTER_VALIDATE_EMAIL))
 		echo "Please enter valid Email address";
 		
 	else {
-		$stmt = $conn->prepare("SELECT email FROM user WHERE email = :email");
+		$stmt = $conn->prepare("SELECT email FROM sme_reg WHERE email = :email");
 		$stmt->execute(array(":email" => $email));
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		
@@ -25,9 +25,9 @@
         $to      = $email;
 		$subject = 'SME Portal Password Reset';
 		$msg = "<a href='http://localhost/Affable/sme_forgot_password_reset.php?key=".$key."&email=".$email."' style=' background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;'>Click To Reset password</a>";
-		$headers = "From: <Website's email address> \r\n";
-		$headers .= "MIME-Version: 1.0 \r\n";
-		$headers .= "Content-Type: text/html; charset=UTF-8 \r\n";
+		//$headers = "From: <Website's email address> \r\n";
+		$headers = "MIME-Version: 1.0 \r\n";
+		$headers = "Content-Type: text/html; charset=UTF-8 \r\n";
        if(mail($to, $subject, $msg, $headers))
 				{
 					echo "Email successfully sent to $to...";
