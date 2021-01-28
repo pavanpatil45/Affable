@@ -1,6 +1,5 @@
 <?php
 	include "connection.php";
-	//include "index.php";
 
 	// Verifying User Registration
 	if(isset($_GET['vkey']) && isset($_GET['email'])) {
@@ -13,17 +12,5 @@
 			$stmt->execute(array(':email' => $_GET['email']));
 		}
 	}
-	//header("Location: index.php");
-	
+	header("Location: index.php");
 ?>
-<script>
-		$(document).ready(function() {
-
-		  if(window.location.href.indexOf('#signInUser') != -1) {
-			$('#signInUser').modal('show');
-		  }
-
-		});
-</script>
-	
-

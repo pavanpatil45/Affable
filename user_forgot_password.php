@@ -1,5 +1,6 @@
 <?php
 	include "connection.php";
+	include "base.php";
 	
 	// User Sign In Entry Validation
 	$email = $_POST['email'];
@@ -18,13 +19,13 @@
 		{
 		//	echo "Please check your email inbox or spam folder to change Password.";
 		
-		$key = md5(time()+123456789% rand(4000, 55000000));
+		$key=md5(time()+123456789% rand(4000, 55000000));
         //insert this temporary key into database
         $sql_insert=mysqli_query($db,"INSERT INTO forget_password(email,temp_key) VALUES('$email','$key')");
         //sending email about update
         $to      = $email;
 		$subject = 'SME Portal Password Reset';
-		$msg = "<a href='http://localhost/Affable/user_forgot_password_reset.php?key=".$key."&email=".$email."' style=' background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;'>Click To Reset password</a>";
+		$msg = "<a href='".BASE_URL."/user_forgot_password_reset.php?key=".$key."&email=".$email."' style=' background-color: #4CAF50;border: none;color: white;padding: 15px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;'>Click To Reset password</a>";
 		//$headers = "From: <Website's email address> \r\n";
 		$headers = "MIME-Version: 1.0 \r\n";
 		$headers = "Content-Type: text/html; charset=UTF-8 \r\n";

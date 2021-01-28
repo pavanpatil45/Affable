@@ -1,24 +1,3 @@
-<?php
-	// Write to us
-	if(isset($_POST['send-message'])) {
-		$name = trim($_POST['writetous-name']);
-		$email = trim($_POST['writetous-email']);
-		$message = trim($_POST['writetous-message']);
-
-		$subject = 'Write to us';
-		
-		$body = "<b>Name:</b> ".$name."<br>";
-		$body .= "<b>From:</b> ".$email."<br><br>";
-		$body .= "<b>Message:</b><br>".$message;
-
-		$headers = "From: <Website's email add> \r\n";
-		$headers .= "MIME-Version: 1.0 \r\n";
-		$headers .= "Content-Type: text/html; charset=UTF-8 \r\n";
-		
-		mail("<Email add>", $subject, $body, $headers);
-	}
-?>
-
 
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
@@ -132,8 +111,8 @@
 						   </div>
 						   <div class="alert alert-danger" role="alert" id="reg-error" style="display: none;">
 						   </div>
-						    <div class="alert alert-success" role="alert" id="email-sent-msg" style="display: none;">
-							<p>Verification Email is Sent, Kindly check and Verify your email ID</p>
+						    <div class="alert alert-success" role="alert" id="email-sent-msg-user" style="display: none;">
+							<p>Verification mail has been sent to its registered email id</p>
 						   </div>
 						 
 							
@@ -175,7 +154,7 @@
 									
 								});
 								$('#reg-error').hide();
-								$('#email-sent-msg').show();
+								$('#email-sent-msg-user').show();
 							}
 							else {
 								document.getElementById("reg-error").innerHTML = error;
@@ -231,6 +210,9 @@
 						   </div>
 						   <div class="alert alert-danger" role="alert" id="reg-error-sme" style="display: none;">
 						   </div>
+						   <div class="alert alert-success" role="alert" id="email-sent-msg-sme" style="display: none;">
+							<p>Verification mail has been sent to its registered email id</p>
+						   </div>
                            <!-- <div class="inputfield terms">
                               <p>By joining I agree to the terms and conditions of Affable</p>
                               </div> -->
@@ -266,6 +248,8 @@
 									method: "POST",
 									data: {name:name, email:email, phone:phone, password:password}
 								});
+								$('#reg-error-sme').hide();
+								$('#email-sent-msg-sme').show();
 							}
 							else {
 								document.getElementById("reg-error-sme").innerHTML = error;
@@ -444,7 +428,7 @@
 					data: {email:email, password:password},
 					success: function(error) {
 						if(error == 0)
-							window.location.replace("/Affable");
+							window.location.replace("index.php");
 						else {
 							document.getElementById("signin-error").innerHTML = error;
 							document.getElementById("signin-error").style.display = "block";
@@ -615,7 +599,7 @@
 					data: {email:email, password:password},
 					success: function(error) {
 						if(error == 0)
-							window.location.replace("/Affable");
+							window.location.replace("index.php");
 						else {
 							document.getElementById("signin-error-sme").innerHTML = error;
 							document.getElementById("signin-error-sme").style.display = "block";
@@ -626,7 +610,7 @@
 		});
 	  </script>
       <!-- end modal for SME login --->
-      <!-- start banner Area -->
+          <!-- start banner Area -->
       <section class="home-banner-area relative" id="home" data-parallax="scroll" data-image-src="images/header-bg.jpg">
          <div class="overlay-bg overlay"></div>
          <h1 class="template-name">AFFABLE</h1>
@@ -642,7 +626,6 @@
                </div>
             </div>
          </div>
-		 
       </section>
       <!-- End banner Area -->
       <!-- Start brands Area -->
@@ -876,18 +859,18 @@
                   <img src="images/write_to_us.jpg" style="max-width: 100%;">
                </div>
                <div class="col-lg-5">
-                  <form class="contact_form" method="post" id="contactForm" novalidate="novalidate">
+                  <form class="contact_form" id="contactForm" novalidate="novalidate">
                      <div class="form-group">
-                        <input type="text" class="form-control" id="name" name="writetous-name" placeholder="Enter your name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'" required=""/>
+                        <input type="text" class="form-control" id="writetous-name" name="name" placeholder="Enter your name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'" required=""/>
                      </div>
                      <div class="form-group">
-                        <input type="email" class="form-control" id="email" name="writetous-email" placeholder="Enter email address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'" required=""/>
+                        <input type="email" class="form-control" id="writetous-email" name="email" placeholder="Enter email address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'" required=""/>
                      </div>
                      <div class="form-group">
                         <textarea
                            class="form-control"
-                           name="writetous-message"
-                           id="message"
+                           name="message"
+                           id="writetous-message"
                            rows="1"
                            placeholder="Enter Message"
                            onfocus="this.placeholder = ''"
@@ -895,8 +878,10 @@
                            required=""
                            ></textarea>
                      </div>
+					 <div class="alert alert-success" id="notify" role="alert" style="display: none;">
+					 </div>
                      <div>
-                        <button type="submit" value="submit" class="btn primary-btn" name="send-message" style="color: #38489E;">
+                        <button type="button" value="submit" class="btn primary-btn" id="send-message" name="submit" style="color: #38489E;">
                         Send Message
                         </button>
                      </div>
@@ -924,6 +909,26 @@
             </div>
          </div>
       </section>
+	  <script>
+		$(document).ready(function() {
+			$('#send-message').click(function() {
+				var name = $('#writetous-name').val();
+				var email = $('#writetous-email').val();
+				var message = $('#writetous-message').val();
+				$.ajax({
+					url: "writetous.php",
+					method: "POST",
+					data: {name:name, email:email, message:message},
+					success: function(status) {
+						if(status == 1) {
+							document.getElementById("notify").innerHTML = "Message has been sent.";
+							document.getElementById("notify").style.display = "block";
+						}
+					}
+				});
+			});
+		});
+	  </script>
       <!-- end write to us section -->
       <!-- Start footer -->
       <footer style="background-color: #f2f2f2">
@@ -1036,5 +1041,5 @@
              }
          }
       </script>
-</body>
+   </body>
 </html>
