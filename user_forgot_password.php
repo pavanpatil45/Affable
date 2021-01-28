@@ -30,6 +30,6 @@
 		$headers = "Content-Type: text/html; charset=UTF-8 \r\n";
 		mail($to, $subject, $msg, $headers);
 				
- }
-}
+		}
+	}
 ?>

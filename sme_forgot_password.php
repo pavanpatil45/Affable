@@ -28,12 +28,8 @@
 		//$headers = "From: <Website's email address> \r\n";
 		$headers = "MIME-Version: 1.0 \r\n";
 		$headers = "Content-Type: text/html; charset=UTF-8 \r\n";
-       if(mail($to, $subject, $msg, $headers))
-				{
-					echo "Email successfully sent to $to...";
-				} 	else {
-					echo "Email sending failed...";
-				}
+        mail($to, $subject, $msg, $headers);
+				
 		}
     }
 ?>
