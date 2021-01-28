@@ -29,10 +29,5 @@
 	$headers .= "MIME-Version: 1.0 \r\n";
 	$headers .= "Content-Type: text/html; charset=UTF-8 \r\n";
 	
-	if(mail($email, $subject, $message, $headers))
-		{
-					echo "Verification Email is Sent to your email ID";
-				} 	else {
-					echo "Email Verification sending failed... try Again!";
-				}
+	mail($email, $subject, $message, $headers);	
 ?>

@@ -374,7 +374,7 @@
 			
 			<div class="modal-content otp_modal_content" id="forgot_password_modal_content_user">
                <div class="modal-header">
-                  <h2 class="modal_title">Recover Password</h2>
+                  <h2 class="modal_title">Reset Password</h2>
                </div>
                <div class="modal-body">
                   <form method="">
@@ -383,13 +383,16 @@
                            <input type="text" class="input" placeholder="Enter your email id to get new password" id="reset-email-user"  name="reset-email-user">
                         </div>
                         <div class="inputfield">
-                           <input value="Send Email" class="btn" id="sendmail-user" name="sendmail-user" type="button">
+                           <input value="Submit" class="btn" id="sendmail-user" name="sendmail-user" type="button">
                         </div>
 						<div class="alert alert-danger" role="alert" id="reset-email-error-user" style="display: none;">
 						</div>
 						
 						<center><progress max="100"  id="loader-user" style="height:20px; width: 200px; display: none;"></progress>
 						</center>
+						<div class="alert alert-success" role="alert" id="reset-msg-user" style="display: none;">
+							<p>Your Password Reset Email is Sent to your Registered email ID</p>
+						</div>
 						
 						
                      </div>
@@ -409,12 +412,16 @@
 							method: "POST",
 							data: {email:email},
 							success: function(error) {
+								$('#loader-user').hide();
 								if(error == 0)
-									window.location.replace("/Affable");
+									//window.location.replace("/Affable");
+									//$('#reset-email-error-user').hide();
+									$('#reset-msg-user').show();
+
 								else {
 									document.getElementById("reset-email-error-user").innerHTML = error;
 									document.getElementById("reset-email-error-user").style.display = "block";
-									$('#loader-user').hide();
+									
 								}
 							}
 							
@@ -542,7 +549,7 @@
 
 			<div class="modal-content otp_modal_content" id="forgot_password_modal_content_sme">
                <div class="modal-header">
-                  <h2 class="modal_title">Recover Password</h2>
+                  <h2 class="modal_title">Reset Password</h2>
                </div>
                <div class="modal-body">
                   <form method="">
@@ -551,13 +558,16 @@
                            <input type="text" class="input" placeholder="Enter your email id to get new password" id="reset-email-sme"  name="reset-email-sme">
                         </div>
                         <div class="inputfield">
-                           <input value="Send Email" class="btn" id="sendmail-sme" name="sendmail-sme" type="button">
+                           <input value="Submit" class="btn" id="sendmail-sme" name="sendmail-sme" type="button">
                         </div>
 						<div class="alert alert-danger" role="alert" id="reset-email-error-sme" style="display: none;">
 						</div>
 						<center><progress max="100"  id="loader-sme" style="height:20px; width: 200px; display: none;"></progress>
 						</center>
-                     </div>
+						<div class="alert alert-success" role="alert" id="reset-msg-sme" style="display: none;">
+							<p>Your Password Reset Email is Sent to your Registered email ID</p>
+						</div>
+					</div>
                   </form>
 			</div>
             </div>
@@ -573,12 +583,14 @@
 							method: "POST",
 							data: {email:email},
 							success: function(error) {
+								$('#loader-sme').hide();
 								if(error == 0)
-									window.location.replace("/Affable");
+									//window.location.replace("/Affable");
+									$('#reset-msg-sme').show();
 								else {
 									document.getElementById("reset-email-error-sme").innerHTML = error;
 									document.getElementById("reset-email-error-sme").style.display = "block";
-									$('#loader-sme').hide();
+									
 								}
 							}
 						});
