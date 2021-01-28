@@ -379,7 +379,7 @@
 						<div class="alert alert-danger" role="alert" id="reset-email-error-user" style="display: none;">
 						</div>
 						
-						<center><progress max="100"  id="loader" style="height:20px; width: 200px; display: none;"></progress>
+						<center><progress max="100"  id="loader-user" style="height:20px; width: 200px; display: none;"></progress>
 						</center>
 						
 						
@@ -393,7 +393,7 @@
 					$('#sendmail-user').click(function() {
 						var email = $('#reset-email-user').val();
 						
-						$('#loader').show();
+						$('#loader-user').show();
 						
 						$.ajax({
 							url: "user_forgot_password.php",
@@ -405,7 +405,7 @@
 								else {
 									document.getElementById("reset-email-error-user").innerHTML = error;
 									document.getElementById("reset-email-error-user").style.display = "block";
-									$('#loader').hide();
+									$('#loader-user').hide();
 								}
 							}
 							
@@ -546,7 +546,7 @@
                         </div>
 						<div class="alert alert-danger" role="alert" id="reset-email-error-sme" style="display: none;">
 						</div>
-						<center><progress max="100"  id="loader" style="height:20px; width: 200px; display: none;"></progress>
+						<center><progress max="100"  id="loader-sme" style="height:20px; width: 200px; display: none;"></progress>
 						</center>
                      </div>
                   </form>
@@ -557,7 +557,7 @@
 				$(document).ready(function() {
 					$('#sendmail-sme').click(function() {
 						var email = $('#reset-email-sme').val();
-						$('#loader').show();
+						$('#loader-sme').show();
 						
 						$.ajax({
 							url: "sme_forgot_password.php",
@@ -569,7 +569,7 @@
 								else {
 									document.getElementById("reset-email-error-sme").innerHTML = error;
 									document.getElementById("reset-email-error-sme").style.display = "block";
-									$('#loader').hide();
+									$('#loader-sme').hide();
 								}
 							}
 						});
