@@ -112,7 +112,7 @@
 						   <div class="alert alert-danger" role="alert" id="reg-error" style="display: none;">
 						   </div>
 						    <div class="alert alert-success" role="alert" id="email-sent-msg-user" style="display: none;">
-							<p>Verification mail has been sent to its registered email id</p>
+							<p>Verification mail has been sent to your registered email id</p>
 						   </div>
 						 
 							
@@ -211,7 +211,7 @@
 						   <div class="alert alert-danger" role="alert" id="reg-error-sme" style="display: none;">
 						   </div>
 						   <div class="alert alert-success" role="alert" id="email-sent-msg-sme" style="display: none;">
-							<p>Verification mail has been sent to its registered email id</p>
+							<p>Verification mail has been sent to your registered email id</p>
 						   </div>
                            <!-- <div class="inputfield terms">
                               <p>By joining I agree to the terms and conditions of Affable</p>
