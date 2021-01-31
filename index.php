@@ -48,8 +48,8 @@
                         Sign In
                         </a>
                         <div class="dropdown-menu">
-                           <a class="dropdown-item" href="#" type="button" data-toggle="modal" data-target="#signInUser" onclick="hideuserOTPsection();">Sign In as user</a>
-                           <a class="dropdown-item" href="#" type="button" data-toggle="modal" data-target="#signInSME" onclick="hidesmeOTPsection();">Sign In as SME</a>
+                           <a class="dropdown-item" href="#" type="button" id="userSignIn" data-toggle="modal" data-target="#signInUser" onclick="hideuserOTPsection();">Sign In as user</a>
+                           <a class="dropdown-item" href="#" type="button" id="smeSignIn" data-toggle="modal" data-target="#signInSME" onclick="hidesmeOTPsection();">Sign In as SME</a>
                         </div>
                      </li>
                      <li class="dropdown">
@@ -1023,7 +1023,17 @@
       <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
       <!-- For accordion in FAQ section --->
-      <script>
+       <script>
+	  	if(<?= isset($_GET['userSignIn']); ?>)
+			document.getElementById('userSignIn').click();
+	  </script>
+	  
+	  <script>
+	  	if(<?= isset($_GET['smeSignIn']); ?>)
+			document.getElementById('smeSignIn').click();
+	  </script>
+	  
+	  <script>
          const accordion = document.getElementsByClassName('contentBx');
          
          for(i=0; i< accordion.length; i++ ){

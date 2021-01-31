@@ -12,5 +12,5 @@
 			$stmt->execute(array(':email' => $_GET['email']));
 		}
 	}
-	header("Location: index.php");
+	header("Location: index.php?smeSignIn=1");
 ?>
