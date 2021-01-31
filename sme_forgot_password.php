@@ -8,7 +8,7 @@
 		echo "Please enter valid Email address";
 		
 	else {
-		$stmt = $conn->prepare("SELECT email FROM sme_reg WHERE email = :email");
+		$stmt = $conn->prepare("SELECT email FROM sme_profile WHERE email = :email");
 		$stmt->execute(array(":email" => $email));
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		

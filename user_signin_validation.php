@@ -23,6 +23,9 @@
 		elseif($row['verified'] == 0)
 			echo "Account $email is not verified";
 		else
-			echo 0;
+			
+			$email=$row['email'];
+		  // session_start();
+		   $_SESSION['email']=$email;
 	}
 ?>

@@ -427,7 +427,7 @@
 					data: {email:email, password:password},
 					success: function(error) {
 						if(error == 0)
-							window.location.replace("index.php");
+							window.location.replace("client_dashboard.php");
 						else {
 							document.getElementById("signin-error").innerHTML = error;
 							document.getElementById("signin-error").style.display = "block";
@@ -598,7 +598,7 @@
 					data: {email:email, password:password},
 					success: function(error) {
 						if(error == 0)
-							window.location.replace("index.php");
+							window.location.replace("sme_dashboard.php");
 						else {
 							document.getElementById("signin-error-sme").innerHTML = error;
 							document.getElementById("signin-error-sme").style.display = "block";

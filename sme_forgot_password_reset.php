@@ -25,7 +25,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             //destroy the key from table
             mysqli_query($db,"DELETE FROM forget_password where email='$email' and temp_key='$key'");
             //update password in database
-            mysqli_query($db,"UPDATE sme_reg set password='$hash' where email='$email'");
+            mysqli_query($db,"UPDATE sme_profile set password='$hash' where email='$email'");
         }
         else{
             $message="Verify your password";

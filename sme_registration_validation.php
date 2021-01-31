@@ -23,7 +23,7 @@
 	
 	else {
 		// Validating the unavailability of email address
-		$stmt = $conn->prepare("SELECT email FROM sme_reg WHERE email = :email");
+		$stmt = $conn->prepare("SELECT email FROM sme_profile WHERE email = :email");
 		$stmt->execute(array(":email" => $email));
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		if($stmt->rowCount() == 1)

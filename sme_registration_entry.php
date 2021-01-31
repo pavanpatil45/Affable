@@ -10,7 +10,7 @@
 	$hash = password_hash($password, PASSWORD_DEFAULT);
 	$vkey = md5(time().$email);
 
-	$sql = "INSERT INTO sme_reg (email, name, phone, password, verified, vkey) VALUES (:email, :name, :phone, :hash, 0, :vkey)";
+	$sql = "INSERT INTO sme_profile (email, name, phone, password, verified, vkey, review_rating) VALUES (:email, :name, :phone, :hash, 0, :vkey, 4.0)";
 	$stmt = $conn->prepare($sql);
 	$stmt->execute(array(
 		':email' => $email,
