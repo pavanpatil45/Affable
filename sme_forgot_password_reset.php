@@ -63,7 +63,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <button type="submit" class="btn" name="submit" >Save Password</button>
                 <br><br>
                 <label>This link will work only once for a limited time period.</label>
-                <a href="login.php">Back to Login</a
+                <a href="index.php?userSignIn=1">Back to Login</a
                 <br>
           </form>
   </body>
