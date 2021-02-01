@@ -28,7 +28,7 @@ if(isset($_SESSION['email'])){
 	}
 }
 else{
-	header("Location:index.php");
+	header("Location:index.php?smeSignIn=1");
 	exit;
 }
  
@@ -384,7 +384,7 @@ else{
 
 						  <div class="row">
 						  <div class="col-sm-3">
-							 <img src="images/profile_photo.jpeg" style="max-width: 100%;">
+							 <img src="Data/photo_loc/<?php echo $photo_loc;?>" style="max-width: 100%;">
 						  </div>
                         
 							<div class="col-sm-9">
