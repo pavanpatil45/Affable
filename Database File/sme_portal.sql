@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2021 at 01:58 PM
+-- Generation Time: Feb 01, 2021 at 01:01 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -46,6 +46,18 @@ INSERT INTO `category` (`categoryName`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `forget_password`
+--
+
+CREATE TABLE `forget_password` (
+  `email` varchar(200) NOT NULL,
+  `temp_key` varchar(200) NOT NULL,
+  `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sme_profile`
 --
 
@@ -76,8 +88,8 @@ CREATE TABLE `sme_profile` (
 --
 
 INSERT INTO `sme_profile` (`name`, `email`, `phone`, `password`, `verified`, `vkey`, `pincode`, `postal_addr`, `categoryname`, `experience`, `skillset`, `sme_cert`, `sme_language`, `webinars`, `sme_fees`, `mode_of_cons`, `photo_loc`, `resume_loc`, `review_rating`) VALUES
-('pavan2', 'pavanadhao222@gmail.com', 9123243782, '$2y$10$zUDG5IRsDFkoppffX5rQbuZqNGIQgXR3N/ArrdzEaBaSpoQNdnQAS', 1, 'e9c3b3212b1d852b1d04d813b1d3f16f', NULL, '', 'Entrepreneurship', 0, '', '', '', 'Yes', 0, 'Chat,Email,', 'SAMPLE PDF.pdf', '2.jpg', 4),
-('Pavan Patil', 'pavanadhao685@gmail.com', 9876543672, '$2y$10$S7jiHFPOF1bMDasgBrGufe0dfrqdc0Eh9jsZ45JeBfCaGCQ8L52wa', 1, '962ee05a508ab9d5b70d8ab7d92ddf66', '1212', 'At. Pimpri Adhao, nandura, maharashtra', 'Entrepreneurship', 2, 'HTML, Java, Flutter', 'NDG Linux unhatched, Python Automation.', 'Marathi, Hindi, English', 'Yes', 500, 'Chat,Email,', '1.jpg', '', 4.5);
+('pavan12', 'pavanadhao222@gmail.com', 9763243782, '$2y$10$RcxeA5QMK4qu/TW0hwNyvOSgueDuOAo9Ads9B3tCAUe1fHX6hVAzy', 1, '9409c06f1508777381a089464ea54bbe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4),
+('Pavan Patil', 'pavanadhao685@gmail.com', 9876543672, '$2y$10$Ovy6tWP66k2eWnWdJC9SfeJQ3tWc/pkxPd36Z8xcFmpRe245hrl5m', 1, '962ee05a508ab9d5b70d8ab7d92ddf66', '1212', 'At. Pimpri Adhao, nandura, maharashtra', 'Entrepreneurship', 2, 'HTML, Java, Flutter', 'NDG Linux unhatched, Python Automation.', 'Marathi, Hindi, English', 'Yes', 500, 'Chat,Email,Call,', '', '', 4.5);
 
 -- --------------------------------------------------------
 
@@ -119,6 +131,13 @@ CREATE TABLE `userquestion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Dumping data for table `userquestion`
+--
+
+INSERT INTO `userquestion` (`questionid`, `category`, `topic`, `question`, `email`, `status`) VALUES
+(1, 'Entrepreneurship', 'Mobile App', 'how can i start making mopney from developing apps', 'pavanadhao685@gmail.com', NULL);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -127,6 +146,12 @@ CREATE TABLE `userquestion` (
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`categoryName`);
+
+--
+-- Indexes for table `forget_password`
+--
+ALTER TABLE `forget_password`
+  ADD KEY `forget_password_ibfk_1` (`email`);
 
 --
 -- Indexes for table `sme_profile`
@@ -156,11 +181,17 @@ ALTER TABLE `userquestion`
 -- AUTO_INCREMENT for table `userquestion`
 --
 ALTER TABLE `userquestion`
-  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `forget_password`
+--
+ALTER TABLE `forget_password`
+  ADD CONSTRAINT `forget_password_ibfk_1` FOREIGN KEY (`email`) REFERENCES `sme_profile` (`email`);
 
 --
 -- Constraints for table `sme_profile`
