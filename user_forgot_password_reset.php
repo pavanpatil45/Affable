@@ -3,7 +3,7 @@
 $message="";
 $valid='true';
 include("connection.php");
-session_start();
+//session_start();
 if(isset($_GET['key']) && isset($_GET['email'])) {
     $key=$_GET['key'];
     $email=$_GET['email'];
