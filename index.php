@@ -57,8 +57,8 @@
                         Register
                         </a>
                         <div class="dropdown-menu">
-                           <a class="dropdown-item" href="#" type="button" data-toggle="modal" data-target="#registerUser">Register as user</a>
-                           <a class="dropdown-item" href="#" type="button" data-toggle="modal" data-target="#registerSME">Register as SME</a>
+                           <a class="dropdown-item" href="#" type="button"  id="userRegister" data-toggle="modal" data-target="#registerUser">Register as user</a>
+                           <a class="dropdown-item" href="#" type="button" id="smeRegister" data-toggle="modal" data-target="#registerSME">Register as SME</a>
                         </div>
                      </li>
                   </ul>
@@ -124,7 +124,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>Already a member?<span><button class="link_button">Sign In</button></span></p>
+                        <p>Already a member?<span><button class="link_button" onclick="location.href='index.php?userSignIn=1';">Sign In</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -221,7 +221,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>Already a member?<span><button class="link_button">Sign In</button></span></p>
+                        <p>Already a member?<span><button class="link_button" onclick="location.href='index.php?smeSignIn=1';">Sign In</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -320,7 +320,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>New member?<span><button class="link_button">Register</button></span></p>
+                        <p>New member?<span><button class="link_button" onclick="location.href='index.php?userRegister=1';">Register</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -496,7 +496,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>New member?<span><button class="link_button">Register</button></span></p>
+                        <p>New member?<span><button class="link_button" onclick="location.href='index.php?smeRegister=1';">Register</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -1031,6 +1031,16 @@
 	  <script>
 	  	if(<?= isset($_GET['smeSignIn']); ?>)
 			document.getElementById('smeSignIn').click();
+	  </script>
+	  
+	  	  <script>
+	  	if(<?= isset($_GET['userRegister']); ?>)
+			document.getElementById('userRegister').click();
+	  </script>
+	  
+	  	  <script>
+	  	if(<?= isset($_GET['smeRegister']); ?>)
+			document.getElementById('smeRegister').click();
 	  </script>
 	  
 	  <script>
