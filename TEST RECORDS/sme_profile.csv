@@ -1,0 +1,6 @@
+"name","email","phone","password","verified","vkey","pincode","postal_addr","categoryname","experience","skillset","sme_cert","sme_language","webinars","sme_fees","mode_of_cons","photo_loc","resume_loc","review_rating"
+"sme1","sme1@gmail.com","9999999232","123","1",NULL,"65432","12, kothrud,pune, maharashtra","IT","12","Java, Python,C++","Google cloud, Linux unhatched, Red Hat","English, hindi","Yes","300","Call",NULL,NULL,"4"
+"sme2","sme2@gmail.com","8654235672","123","1",NULL,"36547","At. Nandura, Maharashtra,12","Entrepreneurship","2","Digital Marketing","Google Digital Marketing","Marathi, Hindi, English","No","600","Email,Call",NULL,NULL,"4"
+"sme3","sme3@gmail.com","7765897654","123","1",NULL,"4356","34,laxmi nagar, kondhawa, pune","Health and Fitness","3","abc,xyz","national health influencer Award","Gujarati, Hindi, English","No","700","Call,Email",NULL,NULL,NULL
+"sme4","sme4@gmail.com","9876376534","123","1",NULL,"443404","at. Tilak Nagar, Nashik 12, Maharashtra","RealEstate","4","Knowledge about Economics","Real Estate Broker","Hindi, English","Yes","1000","Chat,Email",NULL,NULL,"4"
+"sme5","sme5@gmail.com","9876535463","123","1",NULL,"12421","99, Sai Apartment, Pimpri Chinchwad, Maharashtra","IT","5","Flutter, Android, IOS","Google Certified App Dev.","Hindi, Marathi, Hindi","No","300","Chat, Call",NULL,NULL,"4"
