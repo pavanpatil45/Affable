@@ -610,7 +610,7 @@ else{
                   <div class="profile_section">
                      <div class="title">CHOOSE CONSULTATION MODE</div>
                      <div class="form">
-                        <form>
+                        <form method="POST" action="consultation_slots.php" enctype="multipart/form-data">
                            <div class="row">
                               <div class="col-lg-2 col-xl-4"></div>
                               <div class="col-12 col-sm-12 col-lg-10 col-xl-4">
@@ -642,51 +642,83 @@ else{
                                     <label for="Tooltips" class="error" id="iddate1"></label>
                                     <label>select date</label>
                                     <div class="inputfield">
-                                       <input type="date" class="input" required="" id="date1" onblur="dateChecker(this);">
-                                    </div>
+                                       
+									   <input type="date" class="input" required="" id="date1" name="date1" onblur="dateChecker(this);">
+                                   
+								   </div>
                                     <label>start time</label>
                                     <div class="inputfield">
-                                       <input type="time" class="input" required="" id="startone">
-                                    </div>
-                                    <label for="Tooltips" class="error" id="idone"></label>
+                                      
+									  <input type="time" class="input" required="" id="startone" name="startone">
+                                   
+								   </div>
+                                    <label for="Tooltips" class="error" id="time1"></label>
                                     <label>end time</label>
                                     <div class="inputfield">
-                                       <input type="time" class="input" required="" id="one" onblur="timeChecker(this);">
-                                    </div>
+                                     
+									 <input type="time" class="input" required="" id="endone" name="endone" onblur="timeChecker(this);">
+                                    
+									</div>
                                  </div>
+								 
+								 
+								 
                                  <div class="col-sm-4">
                                     <div class="subtitle">SLOT 2</div>
                                     <label for="Tooltips" class="error" id="iddate2"></label>
                                     <label>select date</label>
                                     <div class="inputfield">
-                                       <input type="date" class="input" required="" id="date2" onblur="dateChecker(this);">
-                                    </div>
+                                      
+									  <input type="date" class="input" required="" id="date2" name="date2" onblur="dateChecker(this);">
+                                    
+									</div>
                                     <label>start time</label>
                                     <div class="inputfield">
-                                       <input type="time" class="input" required="" id="starttwo">
-                                    </div>
+                                      
+									  <input type="time" class="input" required="" id="starttwo" name="starttwo">
+                                   
+								   </div>
                                     <label for="Tooltips" class="error" id="idtwo"></label>
                                     <label>end time</label>
                                     <div class="inputfield">
-                                       <input type="time" class="input" required="" id="two" onblur="timeChecker(this);">
-                                    </div>
+                                       
+									   <input type="time" class="input" required="" id="endtwo" name="endtwo" onblur="timeChecker(this);">
+                                    
+									</div>
+									
                                  </div>
+								 
+								 
+								 
+								 
                                  <div class="col-sm-4">
                                     <div class="subtitle">SLOT 3</div>
                                     <label for="Tooltips" class="error" id="iddate3"></label>
                                     <label>select date</label>
                                     <div class="inputfield">
-                                       <input type="date" class="input" required="" id="date3" onblur="dateChecker(this);">
-                                    </div>
+                                       
+									   <input type="date" class="input" required="" id="date3" name="date3" onblur="dateChecker(this);">
+                                   
+								   </div>
                                     <label>start time</label>
                                     <div class="inputfield">
-                                       <input type="time" class="input" required="" id="startthree">
-                                    </div>
+                                      
+									  <input type="time" class="input" required="" id="startthree" name="startthree">
+                                    
+									</div>
                                     <label for="Tooltips" class="error" id="idthree"></label>
                                     <label>end time</label>
                                     <div class="inputfield">
-                                       <input type="time" class="input" required="" id="three" onblur="timeChecker(this);">
-                                    </div>
+                                      
+									  <input type="time" class="input" required="" id="endthree" name="endthree" onblur="timeChecker(this);">
+                                   
+								   </div>
+					
+									 <!-- <input type="input" class="input" id="sme_email" name="sme_email" value="<?php echo $email;?>" style="display: none;">
+									  <input type="input" class="input" id="client_email" name="client_email" style="display: none;">
+									   <input type="input" class="input" id="queid" name="queid" style="display: none;"> -->
+										
+								   
                                  </div>
                               </div>
                            </div>
@@ -708,7 +740,7 @@ else{
                               <div class="col-sm-4 col-lg-5"></div>
                               <div class="col-sm-4 col-lg-2">
                                  <div class="inputfield">
-                                    <input type="button" value="SAVE" class="btn" onclick="finalValidation();">
+                                    <input type="submit" value="SAVE" name="save_cons" id="save_cons" class="btn" onclick="finalValidation();">
                                  </div>
                               </div>
                               <div class="col-sm-4 col-lg-5"></div>

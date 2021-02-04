@@ -11,7 +11,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta charset="UTF-8">
       <!-- Site Title -->
-      <title>AFFABLE || HOME</title>
+	  <title>AFFABLE || CLIENT</title>
       <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700|Roboto:400,500" rel="stylesheet">
       <!--fontawesome-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
@@ -42,10 +42,10 @@
                </button>
                <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                   <ul class="navbar-nav sme_dashboard_navbar">
-                     <li><a href="#">CONSULTATIONS</a></li>
+				  	 <li><a href="#">CONSULTATIONS</a></li>
 					 <li><a href="#" data-toggle="modal" data-target="#postQuestion">POST YOUR REQUEST</a></li>
                      <li><a href="#section2">FAQS</a></li>
-                     <li><a href="#section3">YOUR REQUESTS</a></li>
+                     <li><a href="#section4">YOUR REQUESTS</a></li>
                      <li class="notifications_humberger"><a href="#section3">NOTIFICATIONS</a></li>
                      <li class="dropdown profile_humberger">
                         <a class="dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -54,7 +54,7 @@
                         <div class="dropdown-menu">
                            <!-- <a class="dropdown-item" href="#">View Profile</a> -->
                            <a class="dropdown-item" href="#" type="button" data-toggle="modal" data-target="#passwordChangeUser">Change Password</a>
-                           <a class="dropdown-item" href="logout.php">Logout</a>
+                           <a class="dropdown-item" href="#">Logout</a>
                         </div>
                      </li>
                      <li class="notifications"><a href="#"><i class="fas fa-bell fa-2x"></i></a></li>
@@ -74,34 +74,161 @@
          </nav>
       </header>
       <!-- End Header Area -->
-      <br>
-      <!-- Start About Area -->
-      <section class="about-area section-gap" id="section1">
-         <div class="container">
-            <div class="row align-items-center justify-content-center">
-               <div class="col-lg-6 col-md-12 about-right">
-                  <div class="section-title text-left">
-                     <h2>Who are we?</h2>
-                     <h4>We are here to make it easier for you</h4>
-                     <!-- <h2>We are here <br /> to make it easier for you</h2> -->
-                  </div>
+	  <!-- Start client request section -->
+      <br><br><br>
+      <section class="section-gap" id="section4">
+         <div class="container-fluid">
+            <div class="row">
+			<div class="col-sm-3 post_request" style="/* box-shadow: -5px -4px 3px 0px rgba(255, 255, 255, 0.425),
+                  5px 4px 3px 0px rgba(88, 88, 88, 0.425); */ padding: 0px; background-color: #fff;">
                   <div>
-                     <p>
-                        We connect you to Subject Matter Experts from various areas of expertise who will answer your questions and help you in taking right decisions in all your phases of life.
-                     </p>
+                     <h1>Request for a SME</h1>
+                     <h5>Send the topic and question to consult our SME</h5>
+                     <img src="images/how_it_works_4.jpg">
                   </div>
-                  <a href="#" class="primary-btn">Read More</a>
+                  <button class="btn" data-toggle="modal" data-target="#postQuestion">POST A REQUEST</button>
                </div>
-               <div class="col-lg-6 col-md-12 about-left">
-                  <!-- <img class="img-fluid" src="images/about.png" alt=""> -->
-                  <video controls class="img-fluid" loop autoplay muted>
-                     <source src="images/test_video.mp4" type="video/mp4">
-                  </video>
+               <div class="col-sm-9">
+                  <div class="row">
+					<div class="col-sm-6 client_request">
+					<h1>requests</h1>
+					
+					<?php						
+						// Retrieving user requests from table
+						$stmt1 = $conn->prepare("SELECT questionid, category, topic, question, status FROM userquestion WHERE email = :email");
+						$stmt1->execute(array(":email" => $_SESSION['email']));
+
+						while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+							$request = $row1;
+							
+							// Retrieving sme answer from table
+							$stmt2 = $conn->prepare("SELECT answered_by, answer FROM sme_answer WHERE questionId = :questionId");
+							$stmt2->execute(array(":questionId" => $request['questionid']));
+							if($stmt2->rowCount() == 0) {
+								$seen_by = "";
+								$answer = "";
+							}
+							else {
+								$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+								$answer = $row2['answer'];
+
+								// Retrieving sme name from table
+								$stmt3 = $conn->prepare("SELECT name FROM sme_profile WHERE email = :email");
+								$stmt3->execute(array(":email" => $row2['answered_by']));
+								$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+								$seen_by = $row3['name'];
+							}
+							
+							// Retrieving consultancy status from table
+							$stmt4 = $conn->prepare("SELECT status FROM consultation WHERE questionId = :questionId");
+							$stmt4->execute(array(":questionId" => $request['questionid']));
+							if($stmt4->rowCount() == 0)
+								$status = "Pending";
+							else {
+								$row4 = $stmt4->fetch(PDO::FETCH_ASSOC);
+								$status = $row4['status'];
+							}
+					?>
+
+                        <button class="accordion"><?= $request['topic'] ?></button>
+                        <div class="panel">
+                           <div class="profile_section">
+                              <div class="form">
+                                 <form>
+                                    <div class="inputfield terms">
+                                       <label>Request ID: </label>
+                                       <label style="width: 100%;"><?= $request['questionid'] ?></label>
+                                    </div>
+                                    <div class="inputfield terms">
+                                       <label>Category: </label>
+                                       <label style="width: 100%;"><?= $request['category'] ?></label>
+                                    </div>
+                                    <div class="inputfield">
+                                       <label>Question</label>
+                                       <label style="width: 100%;"><?= $request['question'] ?></label>
+                                    </div>
+                                    <div class="inputfield">
+                                       <label>Seen by</label>
+                                       <label style="width: 100%;"><?= $seen_by ?></label>
+                                    </div>
+                                    <div class="inputfield">
+                                       <label>Status</label>
+                                       <label style="width: 100%;"><?= $request['status'] ?></label>
+                                    </div>
+                                    <div class="inputfield">
+                                       <label>SME's reply</label>
+                                       <label style="width: 100%;"><?= $answer ?></label>
+                                    </div>
+                                    <div class="inputfield">
+                                       <label>Consultation status</label>
+                                       <label style="width: 100%;"><?= $status ?></label>
+                                    </div>
+                                 </form>
+                              </div>
+							</div>
+                        </div>
+					<?php } ?>
+					</div>
+					 
+					 <div class="col-sm-6 client_request">
+                     <h1>consultations</h1>
+                     <button class="accordion">Consultation ID 1</button>
+                     <div class="panel">
+                        <div class="profile_section">
+                           <div class="form">
+                              <form>
+                                 <div class="inputfield terms">
+                                    <label>Consultation ID: </label>
+                                    <label style="width: 100%;">1150012</label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Category: </label>
+                                    <label style="width: 100%;">Real Estate</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Question</label>
+                                    <label style="width: 100%;">How can I apply for a scholarship in Kemerovo state medical university?</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>SME</label>
+                                    <label style="width: 100%;">Pratiti Bera</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Mode</label>
+                                    <label style="width: 100%;">Call</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Date</label>
+                                    <label style="width: 100%;">27/02/2021</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Time</label>
+                                    <label style="width: 100%;">10:00 am</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <input type="submit" value="Click to connect" class="btn">
+                                 </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                     <button class="accordion">Consultation ID 2</button>
+                     <div class="panel"></div>
+                     <button class="accordion">Consultation ID 3</button>
+                     <div class="panel"></div>
+                     <button class="accordion">Consultation ID 4</button>
+                     <div class="panel"></div>
+                     <button class="accordion">Consultation ID 5</button>
+                     <div class="panel"></div>
+                  </div>
                </div>
             </div>
          </div>
+
+		 </div>
       </section>
-      <!-- End About Area -->
+      <br>
+      <!-- end client request section -->
       <!-- modal for user change password --->
       <div class="modal fade" id="passwordChangeUser" role="dialog">
          <div class="modal-dialog">
@@ -295,6 +422,7 @@
 	  </script>
       <!--end modal for post question --->
       <!-- Start footer -->
+	  <br><br>
       <footer style="background-color: #f2f2f2">
          <div class="container">
             <div class="row">
@@ -331,16 +459,19 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
       <!-- For accordion in FAQ section --->
       <script>
-         const accordion = document.getElementsByClassName('contentBx');
-         
-         for(i=0; i< accordion.length; i++ ){
-         
-           accordion[i].addEventListener('click', function(){
-         
-             this.classList.toggle('active')
-         
-           })
-         
+         var acc = document.getElementsByClassName("accordion");
+         var i;
+
+         for (i = 0; i < acc.length; i++) {
+           acc[i].addEventListener("click", function() {
+             this.classList.toggle("active");
+             var panel = this.nextElementSibling;
+             if (panel.style.display === "block") {
+               panel.style.display = "none";
+             } else {
+               panel.style.display = "block";
+             }
+           });
          }
       </script>
       <script>
