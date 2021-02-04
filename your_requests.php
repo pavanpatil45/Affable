@@ -29,7 +29,7 @@
 		}
 		
 		// Retrieving consultancy status from table
-		$stmt4 = $conn->prepare("SELECT status FROM consultation WHERE questionId = :questionId");
+		$stmt4 = $conn->prepare("SELECT status FROM consultation_slots WHERE questionId = :questionId");
 		$stmt4->execute(array(":questionId" => $request['questionid']));
 		if($stmt4->rowCount() == 0)
 			$status = "Pending";

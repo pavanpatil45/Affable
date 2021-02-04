@@ -26,14 +26,26 @@ if(isset($_SESSION['email'])){
 		$review_rating=$row['review_rating'];
 		
 	}
+	
+	
+	$results1 = mysqli_query($db,"SELECT userquestion.questionid, userquestion.email, user.name, userquestion.category, userquestion.question FROM userquestion inner join user on userquestion.email=user.email") or die(mysqli_error($db));
+	$row_cnt1=mysqli_num_rows($results1);
+	if($row_cnt1==1){
+		$row1=mysqli_fetch_array($results1);
+		$questionid=$row1['questionid'];
+		$email=$row1['email'];
+		$username=$row1['name'];
+		$category=$row1['category'];
+		$question=$row1['question'];
+		
+	}
+	
 }
 else{
 	header("Location:index.php?smeSignIn=1");
 	exit;
 }
  
-
-
 
 ?>
 <!DOCTYPE html>
@@ -43,7 +55,7 @@ else{
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta charset="UTF-8">
       <!-- Site Title -->
-      <title>AFFABLE || DASHBOARD</title>
+      <title>AFFABLE || SME DASHBOARD</title>
       <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700|Roboto:400,500" rel="stylesheet">
       <!--fontawesome-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
@@ -58,10 +70,23 @@ else{
       <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
       <!--Page css -->
       <link rel="stylesheet" href="css/style.css">
-      <!--jQuery Script-->
-      <script src="js/jquery-2.2.4.min.js"></script>
    </head>
-   <body data-spy="scroll" data-target=".navbar" data-offset="50" onload="sme_dashboard();">
+   <body onload="sme_dashboard();" data-spy="scroll" data-target=".navbar" data-offset="50">
+      <!-- <div class="alert hide" id="alert1">
+         <span class="fas fa-exclamation-circle"></span>
+         <span class="msg">Please share your thoughts before accepting!</span>
+         <div class="close-btn">
+           <span class="fas fa-times"></span>
+         </div>
+         </div>
+         
+         <div class="alert hide" id="alert2">
+         <span class="fas fa-exclamation-circle"></span>
+         <span class="msg">Please enter a future date!</span>
+         <div class="close-btn">
+           <span class="fas fa-times"></span>
+         </div>
+         </div> -->
       <!-- Start Header Area -->
       <header class="default-header" style="background-color: #38489E;">
          <nav class="navbar navbar-expand-lg navbar-light">
@@ -74,7 +99,7 @@ else{
                </button>
                <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                   <ul class="navbar-nav sme_dashboard_navbar">
-                     <li><a class="active" href="#section1">CLIENT REQUESTS</a></li>
+                     <li><a class="active" href="#section1" onclick="viewSections();">CLIENT REQUESTS</a></li>
                      <li><a href="#section2">CONSULTATIONS</a></li>
                      <li><a href="#section3">TESTIMONIALS</a></li>
                      <li><a href="#section4">WEBINARS</a></li>
@@ -95,7 +120,7 @@ else{
                         <i class="fas fa-user-circle fa-2x"></i>
                         </a>
                         <div class="dropdown-menu" style="background-color: #f7f7f7;">
-                           <a class="dropdown-item" href="#" onclick="viewSMEprofile();">View Profile</a>
+                           <div class="dropdown-item" href="#" onclick="viewSMEprofile();">View Profile</div>
                            <a class="dropdown-item" href="#" type="button" data-toggle="modal" data-target="#passwordChangeSME">Change Password</a>
                            <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -106,137 +131,75 @@ else{
          </nav>
       </header>
       <!-- End Header Area -->
-      <br><br>
-      <!-- Start About Area -->
-      <section class="about-area section-gap" id="section1">
+      <!-- Start client request section -->
+      <br>
+      <section class="section-gap" id="section1">
          <div class="container-fluid">
-            <div class="row align-items-center justify-content-center">
-               <div class="col-lg-6 col-md-12 about-right">
-                  <div class="section-title text-left">
-                     <h2>Who are we?</h2>
-                     <h4>We are here to make it easier for you</h4>
-                     <!-- <h2>We are here <br /> to make it easier for you</h2> -->
+            <div class="row">
+               <div class="col-12 col-lg-6 col-sm-12 client_request">
+                  <h1>Client Requests</h1>
+                  <button class="accordion">CLIENT REQUEST 1</button>
+                  <div class="panel">
+                     <div class="profile_section">
+                        <div class="form">
+                           <form>
+                              <div class="inputfield terms">
+                                 <label>From: </label>
+                                 <label style="width: 100%;"><?php echo $username;?></label>
+                              </div>
+                              <div class="inputfield terms">
+                                 <label>Category: </label>
+                                 <label style="width: 100%;"><?php echo $category;?></label>
+                              </div>
+                              <div class="inputfield">
+                                 <label>Question</label>
+                                 <label style="width: 100%;"><?php echo $question;?></label>
+                              </div>
+                              <div class="inputfield">
+                                 <label for="Tooltips" class="error thoughts"></label>
+                                 <label>Your thoughts on the matter</label>
+                                 <textarea class="textarea" required="" id="SMEthoughts"></textarea>
+                              </div>
+                              <div class="row">
+                                 <div class="col-sm-2"></div>
+                                 <div class="col-sm-4">
+                                    <div class="inputfield">
+                                       <input type="button" value="ACCEPT" class="btn" onclick="thoughtChecker();">
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-4">
+                                    <div class="inputfield">
+                                       <input type="button" value="DECLINE" class="btn" data-toggle="modal" data-target="#declineRequest" style="background-color: #F3834B">
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-2"></div>
+                              </div>
+                           </form>
+                        </div>
+                     </div>
                   </div>
-                  <div>
-                     <p>
-                        We connect you to Subject Matter Experts from various areas of expertise who will answer your questions and help you in taking right decisions in all your phases of life.
-                     </p>
-                  </div>
-                  <a href="#" class="primary-btn">Read More</a>
+                  <button class="accordion">CLIENT REQUEST 2</button>
+                  <div class="panel"></div>
+                  <button class="accordion">CLIENT REQUEST 3</button>
+                  <div class="panel"></div>
+                  <button class="accordion">CLIENT REQUEST 4</button>
+                  <div class="panel"></div>
+                  <button class="accordion">CLIENT REQUEST 5</button>
+                  <div class="panel"></div>
                </div>
-               <div class="col-lg-6 col-md-12 about-left">
-                  <!-- <img class="img-fluid" src="images/about.png" alt=""> -->
-                  <video controls class="img-fluid" loop autoplay muted>
+               <div class="col-12 col-lg-6 col-sm-12" style="padding: 50px;">
+                  <br>
+                  <img class="img-fluid" src="images/write_to_us.jpg" alt="">
+                  <!-- <video controls class="img-fluid" loop autoplay muted>
                      <source src="images/test_video.mp4" type="video/mp4">
-                  </video>
+                     </video> -->
                </div>
             </div>
          </div>
       </section>
-      <!-- End About Area -->
-      <!-- <div class="container" id="sme_profile">
-         <div class="profile_section">
-            <div class="title">CREATE YOUR PROFILE</div>
-            <div class="form">
-               <form>
-                  <div class="row">
-                     <div class="col-sm-6">
-                        <div class="inputfield">
-                           <label>Email Address</label>
-                           <input type="text" class="input" required="">
-                        </div>
-                        <div class="inputfield">
-                           <label>Pincode</label>
-                           <input type="text" class="input" required="">
-                        </div>
-                        <div class="inputfield">
-                           <label>Postal Address</label>
-                           <textarea class="textarea"></textarea>
-                        </div>
-                        <div class="inputfield">
-                           <label>Fees per hour</label>
-                           <input type="text" class="input" required="">
-                        </div>
-                        <div class="inputfield">
-                           <label>Mode of cunsultation</label>
-                           <label class="check">
-                           <input type="checkbox">
-                           <span class="checkmark"></span>
-                           </label>
-                           <p>Chat</p>
-                           <label class="check">
-                           <input type="checkbox">
-                           <span class="checkmark"></span>
-                           </label>
-                           <p>Email</p>
-                           <label class="check">
-                           <input type="checkbox">
-                           <span class="checkmark"></span>
-                           </label>
-                           <p>Call</p>
-                        </div>
-                        <div class="inputfield">
-                           <label>Upload profile photo</label>
-                           <input class="input" type="file" id="myFile" name="filename" required="">
-                        </div>
-                        <div class="inputfield">
-                           <label>Upload resume</label>
-                           <input class="input" type="file" id="myFile" name="filename" required="">
-                        </div>
-                     </div>
-                     <div class="col-sm-6">
-                        <div class="inputfield">
-                           <label>Category</label>
-                           <div class="custom_select">
-                              <select required="">
-                                 <option value="">Select</option>
-                                 <option value="male">Category A</option>
-                                 <option value="female">Category B</option>
-                                 <option value="female">Category C</option>
-                              </select>
-                           </div>
-                        </div>
-                        <div class="inputfield">
-                           <label>Experience</label>
-                           <input type="text" class="input" placeholder="Enter years of experience">
-                        </div>
-                        <div class="inputfield">
-                           <label>Skillset</label>
-                           <textarea class="textarea" required=""></textarea>
-                        </div>
-                        <div class="inputfield">
-                           <label>Languages known</label>
-                           <input type="text" class="input" required="">
-                        </div>
-                        <div class="inputfield">
-                           <label>Willingness for webinars</label>
-                           <label class="check">
-                           <input type="checkbox">
-                           <span class="checkmark"></span>
-                           </label>
-                           <p>Yes</p>
-                           <label class="check">
-                           <input type="checkbox">
-                           <span class="checkmark"></span>
-                           </label>
-                           <p>No</p>
-                        </div>
-                        <div class="inputfield">
-                           <label>Upload certificates</label>
-                           <input class="input" type="file" id="myFile" name="filename">
-                        </div>
-                        <div class="inputfield">
-                           <input type="submit" value="UPLOAD PROFILE" class="btn">
-                        </div>
-                     </div>
-                  </div>
-               </form>
-            </div>
-         </div>
-      </div> -->
-
-
-      <!--Profile section of SME--->
+      <br>
+      <!-- end client request section -->
+<!--Profile section of SME--->
       <div class="container" id="sme_profile">
          <div class="profile_section">
             <div class="title">YOUR PROFILE<span type="button" data-toggle="modal" data-target="#edit_profile"><i class="fas fa-pen" style="margin-left: 10px;"></i></span></div>
@@ -638,8 +601,140 @@ else{
 	  
 	  
       <!--end modal for SME password change --->
-
-
+      <!-- modal for client request accept --->
+      <div class="modal fade" id="acceptClientRequest" role="dialog">
+         <div class="modal-dialog modal-xl">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body">
+                  <div class="profile_section">
+                     <div class="title">CHOOSE CONSULTATION MODE</div>
+                     <div class="form">
+                        <form>
+                           <div class="row">
+                              <div class="col-lg-2 col-xl-4"></div>
+                              <div class="col-12 col-sm-12 col-lg-10 col-xl-4">
+                                 <div class="inputfield terms appointment">
+                                    <label class="label">select mode</label>
+                                    <label class="check">
+                                    <input type="checkbox" onclick="onlyOne(this);" name="consultation_mode" value="chat" id="chat">
+                                    <span class="checkmark"></span>
+                                    </label>
+                                    <p>chat</p>
+                                    <label class="check">
+                                    <input type="checkbox" onclick="onlyOne(this);" name="consultation_mode" value="email" id="email">
+                                    <span class="checkmark"></span>
+                                    </label>
+                                    <p>email</p>
+                                    <label class="check">
+                                    <input type="checkbox" onclick="onlyOne(this);" name="consultation_mode" value="call" id="call">
+                                    <span class="checkmark"></span>
+                                    </label>
+                                    <p>call</p>
+                                 </div>
+                              </div>
+                              <div class="col-lg-2 col-xl-4"></div>
+                           </div>
+                           <div id="appointment">
+                              <div class="row">
+                                 <div class="col-sm-4">
+                                    <div class="subtitle">SLOT 1</div>
+                                    <label for="Tooltips" class="error" id="iddate1"></label>
+                                    <label>select date</label>
+                                    <div class="inputfield">
+                                       <input type="date" class="input" required="" id="date1" onblur="dateChecker(this);">
+                                    </div>
+                                    <label>start time</label>
+                                    <div class="inputfield">
+                                       <input type="time" class="input" required="" id="startone">
+                                    </div>
+                                    <label for="Tooltips" class="error" id="idone"></label>
+                                    <label>end time</label>
+                                    <div class="inputfield">
+                                       <input type="time" class="input" required="" id="one" onblur="timeChecker(this);">
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-4">
+                                    <div class="subtitle">SLOT 2</div>
+                                    <label for="Tooltips" class="error" id="iddate2"></label>
+                                    <label>select date</label>
+                                    <div class="inputfield">
+                                       <input type="date" class="input" required="" id="date2" onblur="dateChecker(this);">
+                                    </div>
+                                    <label>start time</label>
+                                    <div class="inputfield">
+                                       <input type="time" class="input" required="" id="starttwo">
+                                    </div>
+                                    <label for="Tooltips" class="error" id="idtwo"></label>
+                                    <label>end time</label>
+                                    <div class="inputfield">
+                                       <input type="time" class="input" required="" id="two" onblur="timeChecker(this);">
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-4">
+                                    <div class="subtitle">SLOT 3</div>
+                                    <label for="Tooltips" class="error" id="iddate3"></label>
+                                    <label>select date</label>
+                                    <div class="inputfield">
+                                       <input type="date" class="input" required="" id="date3" onblur="dateChecker(this);">
+                                    </div>
+                                    <label>start time</label>
+                                    <div class="inputfield">
+                                       <input type="time" class="input" required="" id="startthree">
+                                    </div>
+                                    <label for="Tooltips" class="error" id="idthree"></label>
+                                    <label>end time</label>
+                                    <div class="inputfield">
+                                       <input type="time" class="input" required="" id="three" onblur="timeChecker(this);">
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <br>
+                           <!-- <div class="row">
+                                 <div class="col-sm-3 col-lg-4"></div>
+                                 <div class="col-sm-6 col-lg-4" style="text-align: center;">
+                                    <div class="inputfield terms appointment">
+                                       <label class="check">
+                                       <input type="checkbox" onclick="finalValidation();" id="finalValidate">
+                                       <span class="checkmark"></span>
+                                       </label>
+                                       <p>I confirm the above details</p>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-3 col-lg-4"></div>
+                              </div> -->
+                           <div class="row">
+                              <div class="col-sm-4 col-lg-5"></div>
+                              <div class="col-sm-4 col-lg-2">
+                                 <div class="inputfield">
+                                    <input type="button" value="SAVE" class="btn" onclick="finalValidation();">
+                                 </div>
+                              </div>
+                              <div class="col-sm-4 col-lg-5"></div>
+                              </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      </div>
+      <!--end modal for client request accept --->
+      <!-- modal for request decline confirmation --->
+      <div class="modal fade" id="declineRequest" role="dialog">
+         <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body" style="text-align: center;">
+                  <p style="color: #38489E; font-size: 18px; font-weight: bold;">Are you sure you want to decline the client request?</p>
+                  <button class="btn" style="background-color: #F3834B;">CONFIRM</button>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--end modal for request decline confirmation --->
       <!-- Start footer -->
       <footer style="background-color: #f2f2f2">
          <div class="container">
@@ -662,7 +757,6 @@ else{
          </div>
       </footer>
       <!-- end footer -->
-      
       <!--- Scripts section --->
       <!-- sticky nav -->
       <script src="js/jquery-2.2.4.min.js"></script>
@@ -679,16 +773,19 @@ else{
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
       <!-- For accordion in FAQ section --->
       <script>
-         const accordion = document.getElementsByClassName('contentBx');
+         var acc = document.getElementsByClassName("accordion");
+         var i;
          
-         for(i=0; i< accordion.length; i++ ){
-         
-           accordion[i].addEventListener('click', function(){
-         
-             this.classList.toggle('active')
-         
-           })
-         
+         for (i = 0; i < acc.length; i++) {
+           acc[i].addEventListener("click", function() {
+             this.classList.toggle("active");
+             var panel = this.nextElementSibling;
+             if (panel.style.display === "block") {
+               panel.style.display = "none";
+             } else {
+               panel.style.display = "block";
+             }
+           });
          }
       </script>
       <script>
