@@ -19,19 +19,24 @@
 		':hash' => $hash,
 		":vkey" => $vkey
 	));
-	 /* $last_id=mysqli_insert_id($db);
-	if($last_id){
-		$sme_code="SME".$last_id;
+	
+		//$sme_code='SME0000'; 
+		//++$sme_code;
+		//$randomid = rand(100,1000);
+		$last_id = $conn->lastInsertId();
+		//$sme_code="SME".$randomid.$last_id."";
+		$sme_code="SME0000".$last_id."";
 		$query1='UPDATE sme_profile set sme_code ="'.$sme_code.'" WHERE email ="'.$email.'"';              
-		$res1=mysqli_query($db,query1); 
-		} */
+		$res1=mysqli_query($db,$query1); 
+		
+ 
 	
 
 	// Sending verification email
 	$subject = 'SME Registration Verification';
 	
 	$message = "You have been registered for SME Portal.<br>";
-	//$message = "Your Unique Code on SME Portal is ".$sme_code.".<br>";
+	$message = "Your Unique Code on SME Portal is ".$sme_code.".<br>";
 	$message .= "Please <a href='".BASE_URL."/sme_registration_verification.php?vkey=".$vkey."&email=".$email."'>click here</a> to Login.";
 	
 	$header = "MIME-Version: 1.0 \r\n";
