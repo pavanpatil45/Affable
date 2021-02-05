@@ -16,7 +16,7 @@ if(isset($_SESSION['email'])){
 	$mode_of_cons = $_POST['consultation_mode'];
 	$answer = $_POST['SMEthoughts1'];
 	
-	//get Que ID from userquestion (Here I Didnt Understand How to get values from selected request from While Loop)
+	//get Que ID from userquestion (Here I Didnt Understand How to get values from selected request)
 	$results1 = mysqli_query($db,'SELECT questionid, email FROM userquestion') or die(mysqli_error($db));
 	$row_cnt1=mysqli_num_rows($results1);
 	$row1=mysqli_fetch_array($results1);
