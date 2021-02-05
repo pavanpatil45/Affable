@@ -13,7 +13,7 @@ if(isset($_SESSION['email'])){
 	$date3=trim($_POST['date3']);
 	$startthree=trim($_POST['startthree']);
 	$endthree=trim($_POST['endthree']);
-	$mode_of_cons = $_POST['consultation_mode'] ;
+	$mode_of_cons = $_POST['consultation_mode'];
 	$answer = $_POST['SMEthoughts1'];
 	
 	//get Que ID from userquestion (Didnt Understand How to get values from selected request)
