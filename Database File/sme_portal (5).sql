@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 04, 2021 at 09:50 AM
+-- Generation Time: Feb 05, 2021 at 01:42 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -42,6 +42,24 @@ INSERT INTO `category` (`categoryName`, `description`) VALUES
 ('IT', 'Software, Hardware, Training'),
 ('Others', 'Psychology, art, sports'),
 ('RealEstate', 'Civil, Construction, Land Disputes, Residential Complex');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `consultation`
+--
+
+CREATE TABLE `consultation` (
+  `consultationId` int(11) NOT NULL,
+  `clientEmailId` varchar(100) DEFAULT NULL,
+  `smeEmailId` varchar(100) DEFAULT NULL,
+  `questionId` int(11) DEFAULT NULL,
+  `mode` text DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `fromTime` time DEFAULT NULL,
+  `toTime` time DEFAULT NULL,
+  `status` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -126,7 +144,10 @@ CREATE TABLE `sme_profile` (
 --
 
 INSERT INTO `sme_profile` (`name`, `email`, `phone`, `password`, `verified`, `vkey`, `pincode`, `postal_addr`, `categoryname`, `experience`, `skillset`, `sme_cert`, `sme_language`, `webinars`, `sme_fees`, `mode_of_cons`, `photo_loc`, `resume_loc`, `review_rating`, `ID`, `sme_code`) VALUES
-('pavan', 'pavanadhao685@gmail.com', 9763243782, '$2y$10$9u3/pABio5wIO.MGk77hbu2lHEQpLT0LCCyuM8tNIBnh4Dj65Tdvi', 1, 'a7ec09b8e9e0f6b9fb7d31d089646783', NULL, '', 'Entrepreneurship', 0, '', '', '', 'Yes', 0, 'Chat,Email,', '2.jpg', '', 4, 60, 'SME000060');
+('pavan', 'pavanadhao685@gmail.com', 9763243782, '$2y$10$Z6L7f0QIPD.oiJ6nqZ5dBe8FNHE545IZHGN7TXqJhP3iAwlAltPNu', 1, '798bc7b82edf52b97abb517d00eff56e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 61, 'SME000061'),
+('sme1', 'sme1@gmail.com', 9983634262, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '435675', '12, kothrud,pune, maharashtra', 'Entrepreneurship', 4, 'Java, Python,C++', 'Google cloud, Linux unhatched, Red Hat', 'English, hindi', 'Yes', 700, 'Chat,Email,', '3.jpg', '', 4, 1, 'SME00001'),
+('sme2', 'sme2@gmail.com', 4567234567, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '563213', 'At. Nandura, Maharashtra,12', 'Entrepreneurship', 2, 'Digital Marketing', 'Google Digital Marketing', 'Marathi, Hindi, English', 'Yes', 600, 'Chat,Call,Email', NULL, NULL, 4, 2, 'SME00002'),
+('sme3', 'sme3@gmail.com', 9876535463, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '443456', '34,laxmi nagar, kondhawa, pune', 'RealEstate', 12, 'Knowledge about Economics', 'Real Estate Broker', 'Hindi, English', 'No', 1000, 'Chat,Email', NULL, NULL, 4, 3, 'SME00003');
 
 -- --------------------------------------------------------
 
@@ -148,7 +169,14 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`email`, `name`, `phoneNumber`, `password`, `verified`, `vkey`) VALUES
-('pavanadhao685@gmail.com', 'pavan', '9763243782', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, 'a2623b0620e7099f76049ac64b0c2813');
+('user1@gmail.com', 'user1', '9876524367', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
+('user2@gmail.com', 'user2', '7638647364', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
+('user3@gmail.com', 'user3', '9873654632', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
+('user4@gmail.com', 'user4', '8765345223', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
+('user5@gmail.com', 'user5', '7638965463', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
+('user6@gmail.com', 'user6', '8762987364', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
+('user7@gmail.com', 'user7', '9837654263', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
+('user8@gmail.com', 'user8', '9876374653', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -166,14 +194,6 @@ CREATE TABLE `userquestion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `userquestion`
---
-
-INSERT INTO `userquestion` (`questionid`, `category`, `topic`, `question`, `email`, `status`) VALUES
-(1, 'Entrepreneurship', 'Mobile App', 'how can i start making mopney from developing apps', 'pavanadhao685@gmail.com', NULL),
-(3, 'IT', 'App development', 'Should i learn Flutter instead of Java.', 'pavanadhao685@gmail.com', NULL);
-
---
 -- Indexes for dumped tables
 --
 
@@ -182,6 +202,15 @@ INSERT INTO `userquestion` (`questionid`, `category`, `topic`, `question`, `emai
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`categoryName`);
+
+--
+-- Indexes for table `consultation`
+--
+ALTER TABLE `consultation`
+  ADD PRIMARY KEY (`consultationId`),
+  ADD KEY `clientEmailId` (`clientEmailId`),
+  ADD KEY `smeEmailId` (`smeEmailId`),
+  ADD KEY `questionId` (`questionId`);
 
 --
 -- Indexes for table `consultation_slots`
@@ -227,32 +256,46 @@ ALTER TABLE `userquestion`
 --
 
 --
+-- AUTO_INCREMENT for table `consultation`
+--
+ALTER TABLE `consultation`
+  MODIFY `consultationId` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `consultation_slots`
 --
 ALTER TABLE `consultation_slots`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `sme_answer`
 --
 ALTER TABLE `sme_answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `sme_profile`
 --
 ALTER TABLE `sme_profile`
-  MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT for table `userquestion`
 --
 ALTER TABLE `userquestion`
-  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `consultation`
+--
+ALTER TABLE `consultation`
+  ADD CONSTRAINT `consultation_ibfk_1` FOREIGN KEY (`clientEmailId`) REFERENCES `user` (`email`),
+  ADD CONSTRAINT `consultation_ibfk_2` FOREIGN KEY (`smeEmailId`) REFERENCES `sme_profile` (`email`),
+  ADD CONSTRAINT `consultation_ibfk_3` FOREIGN KEY (`questionId`) REFERENCES `userquestion` (`questionid`);
 
 --
 -- Constraints for table `forget_password`
