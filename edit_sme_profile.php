@@ -26,7 +26,7 @@ if(isset($_SESSION['email'])){
        }  
 	
 	$photo_loc=trim($_POST['photo_loc']);
-	$targetPhotoDir = "Data/photo_loc/";
+	$targetPhotoDir = "Affable-master/Data/photo_loc/";
 	$photoName = basename($_FILES["photo_loc"]["name"]);
 	$targetPhotoPath = $targetPhotoDir . $photoName;
 	$PhotoType = pathinfo($targetPhotoPath,PATHINFO_EXTENSION);
@@ -37,7 +37,7 @@ if(isset($_SESSION['email'])){
 		
 		
 	$resume_loc=trim($_POST['resume_loc']);
-	$targetResumeDir = "Data/resume_loc/";
+	$targetResumeDir = "Affable-master/Data/resume_loc/";
 	$ResumeName = basename($_FILES["resume_loc"]["name"]);
 	$targetResumePath = $targetResumeDir . $ResumeName;
 	$ResumeType = pathinfo($targetResumePath,PATHINFO_EXTENSION);

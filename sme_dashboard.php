@@ -28,7 +28,7 @@ if(isset($_SESSION['email'])){
 	}
 	
 	
-	$results1 = mysqli_query($db,"SELECT userquestion.questionid, userquestion.email, user.name, userquestion.category, userquestion.question FROM userquestion inner join user on userquestion.email=user.email") or die(mysqli_error($db));
+/* 	$results1 = mysqli_query($db,"SELECT userquestion.questionid, userquestion.email, user.name, userquestion.category, userquestion.question FROM userquestion inner join user on userquestion.email=user.email") or die(mysqli_error($db));
 	$row_cnt1=mysqli_num_rows($results1);
 	if($row_cnt1==1){
 		$row1=mysqli_fetch_array($results1);
@@ -38,7 +38,7 @@ if(isset($_SESSION['email'])){
 		$category=$row1['category'];
 		$question=$row1['question'];
 		
-	}
+	} */
 	
 }
 else{
@@ -70,6 +70,8 @@ else{
       <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
       <!--Page css -->
       <link rel="stylesheet" href="css/style.css">
+	  <script src="js/jquery-2.2.4.min.js"></script>
+	 <script src=" https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
    </head>
    <body onload="sme_dashboard();" data-spy="scroll" data-target=".navbar" data-offset="50">
       <!-- <div class="alert hide" id="alert1">
@@ -138,11 +140,30 @@ else{
             <div class="row">
                <div class="col-12 col-lg-6 col-sm-12 client_request">
                   <h1>Client Requests</h1>
-                  <button class="accordion">CLIENT REQUEST 1</button>
+				  <?php
+
+					$stmt1 = $conn->prepare("SELECT userquestion.questionid, userquestion.topic, userquestion.email, user.name, userquestion.category, userquestion.question FROM userquestion inner join user on userquestion.email=user.email");
+						$stmt1->execute(array(":email" => $_SESSION['email']));
+						while ($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)){
+						$request = $row1;
+						// $row1=mysqli_fetch_array($results1);
+						$questionid=$row1['questionid'];
+						$email=$row1['email'];
+						$username=$row1['name'];
+						$category=$row1['category'];
+						$question=$row1['question']; 
+						?>
+				  
+				  
+				<button class="accordion"><?= $request['topic'] ?></button>
                   <div class="panel">
                      <div class="profile_section">
                         <div class="form">
                            <form>
+								<div class="inputfield terms">
+                                 <label>ID: </label>
+                                 <label style="width: 100%;"><?php  echo $questionid;?></label>
+                              </div>
                               <div class="inputfield terms">
                                  <label>From: </label>
                                  <label style="width: 100%;"><?php echo $username;?></label>
@@ -158,7 +179,7 @@ else{
                               <div class="inputfield">
                                  <label for="Tooltips" class="error thoughts"></label>
                                  <label>Your thoughts on the matter</label>
-                                 <textarea class="textarea" required="" id="SMEthoughts"></textarea>
+                                 <textarea class="textarea" required="" name="SMEthoughts" id="SMEthoughts"></textarea>
                               </div>
                               <div class="row">
                                  <div class="col-sm-2"></div>
@@ -177,15 +198,14 @@ else{
                            </form>
                         </div>
                      </div>
-                  </div>
-                  <button class="accordion">CLIENT REQUEST 2</button>
-                  <div class="panel"></div>
-                  <button class="accordion">CLIENT REQUEST 3</button>
-                  <div class="panel"></div>
-                  <button class="accordion">CLIENT REQUEST 4</button>
-                  <div class="panel"></div>
-                  <button class="accordion">CLIENT REQUEST 5</button>
-                  <div class="panel"></div>
+                  </div> 
+ 
+				<?php } ?>
+				
+				 <script>$('#SMEthoughts').change(function() {
+					$('#SMEthoughts1').val($(this).val());
+				});</script>
+				
                </div>
                <div class="col-12 col-lg-6 col-sm-12" style="padding: 50px;">
                   <br>
@@ -713,10 +733,11 @@ else{
 									  <input type="time" class="input" required="" id="endthree" name="endthree" onblur="timeChecker(this);">
                                    
 								   </div>
+										
+										
+									<input type="text" class="input" id="SMEthoughts1" name="SMEthoughts1" style="display: none;">
+									<input type="input" class="input" id="questionid" name="questionid" value="<?php echo $questionid;?>" >
 					
-									 <!-- <input type="input" class="input" id="sme_email" name="sme_email" value="<?php echo $email;?>" style="display: none;">
-									  <input type="input" class="input" id="client_email" name="client_email" style="display: none;">
-									   <input type="input" class="input" id="queid" name="queid" style="display: none;"> -->
 										
 								   
                                  </div>
