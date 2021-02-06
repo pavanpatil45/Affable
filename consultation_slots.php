@@ -16,6 +16,14 @@ if(isset($_SESSION['email'])){
 	$mode_of_cons = $_POST['consultation_mode'];
 	$answer = $_POST['SMEthoughts1'];
 	
+	//Get SME details
+	$results3 = mysqli_query($db,'SELECT sme_code, name from sme_profile where email="'.$email.'"') or die(mysqli_error($db));
+	$row_cnt3=mysqli_num_rows($results3);
+	$row3=mysqli_fetch_array($results3);
+	$sme_code=$row3['sme_code'];
+	$sme_name=$row3['name'];
+	
+	
 	//get Que ID from userquestion (Here I Didnt Understand How to get values from selected request)
 	$results1 = mysqli_query($db,'SELECT questionid, email FROM userquestion') or die(mysqli_error($db));
 	$row_cnt1=mysqli_num_rows($results1);
@@ -49,7 +57,8 @@ else{
 
 	//Send Email to client
 		$subject = 'Question has been Accepted by our SME';
-		$msg = 'Your question has been Accepted by our SME.';
+		$msg = "Your question has been Accepted by our SME - ".$sme_name."";
+		$msg = "SME CODE - ".$sme_code."";
 		$headers = "MIME-Version: 1.0 \r\n";
 		$headers = "Content-Type: text/html; charset=UTF-8 \r\n";
         mail($client_email, $subject, $msg, $headers);
