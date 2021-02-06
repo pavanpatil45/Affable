@@ -16,6 +16,7 @@ if(isset($_SESSION['email'])){
 	$mode_of_cons = $_POST['consultation_mode'];
 	$answer = $_POST['SMEthoughts1'];
 	
+	
 	//Get SME details
 	$results3 = mysqli_query($db,'SELECT sme_code, name from sme_profile where email="'.$email.'"') or die(mysqli_error($db));
 	$row_cnt3=mysqli_num_rows($results3);
@@ -23,14 +24,14 @@ if(isset($_SESSION['email'])){
 	$sme_code=$row3['sme_code'];
 	$sme_name=$row3['name'];
 	
-	
+	$questionid = $_SESSION['questionid'];
 	//get Que ID from userquestion (Here I Didnt Understand How to get values from selected request)
-	$results1 = mysqli_query($db,'SELECT questionid, email FROM userquestion') or die(mysqli_error($db));
+	$results1 = mysqli_query($db,'SELECT questionid, email FROM userquestion where questionid = "'.$questionid.'"') or die(mysqli_error($db));
 	$row_cnt1=mysqli_num_rows($results1);
 	$row1=mysqli_fetch_array($results1);
-	$client_email=$row1['email'];
-	$questionid = $row1['questionid'];	
-	
+	//$client_email=$row1['email'];
+	//$questionid = $row1['questionid'];	
+
 	
 	//insert slots values in consultation_slot
 	$sql="INSERT INTO consultation_slots(sme_email, client_email, questionid, mode_of_cons, slot1_date, slot1_from_time, slot1_to_time, slot2_date, slot2_from_time, slot2_to_time, slot3_date, slot3_from_time, slot3_to_time) VALUES('$email', '$client_email', '$questionid', '$mode_of_cons', '$date1', '$startone','$endone', '$date2', '$starttwo','$endtwo', '$date3', '$startthree','$endthree')";           

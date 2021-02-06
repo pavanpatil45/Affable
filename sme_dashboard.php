@@ -148,10 +148,12 @@ else{
 						$request = $row1;
 						// $row1=mysqli_fetch_array($results1);
 						$questionid=$row1['questionid'];
-						$email=$row1['email'];
+						$client_email=$row1['email'];
 						$username=$row1['name'];
 						$category=$row1['category'];
 						$question=$row1['question']; 
+						$_SESSION['questionid']=$questionid;
+						$_SESSION['email']=$client_email;
 						?>
 				  
 				  
