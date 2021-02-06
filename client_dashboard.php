@@ -43,7 +43,7 @@
                <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                   <ul class="navbar-nav sme_dashboard_navbar">
 				  	 <li><a href="#">CONSULTATIONS</a></li>
-					 <li><a href="#" data-toggle="modal" data-target="#postQuestion">POST YOUR REQUEST</a></li>
+					 <!-- <li><a href="#" data-toggle="modal" data-target="#postQuestion">POST YOUR REQUEST</a></li> -->
                      <li><a href="#section2">FAQS</a></li>
                      <li><a href="#section4">YOUR REQUESTS</a></li>
                      <li class="notifications_humberger"><a href="#section3">NOTIFICATIONS</a></li>
@@ -163,6 +163,9 @@
                                        <label>Consultation status</label>
                                        <label style="width: 100%;"><?= $status ?></label>
                                     </div>
+									<div class="inputfield">
+                                    <input type="button" value="Confirm consultation" class="btn" data-toggle="modal" data-target="#chooseSlot">
+                                 </div>
                                  </form>
                               </div>
 							</div>
@@ -172,38 +175,62 @@
 					 
 					 <div class="col-sm-6 client_request">
                      <h1>consultations</h1>
-                     <button class="accordion">Consultation ID 1</button>
+
+					<?php						
+						// Retrieving consultaions from table
+						$stmt1 = $conn->prepare("SELECT consultationId, smeEmailId, questionId, mode, date, fromTime FROM consultation WHERE clientEmailId = :email");
+						$stmt1->execute(array(":email" => $_SESSION['email']));
+
+						$consultation_count = 1;
+						while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+							$consultation = $row1;
+							
+							// Retrieving user question from table
+							$stmt2 = $conn->prepare("SELECT category, question FROM userquestion WHERE questionId = :questionId");
+							$stmt2->execute(array(":questionId" => $consultation['questionId']));
+							$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+							$category = $row2['category'];
+							$question = $row2['question'];
+
+							// Retrieving sme name from table
+							$stmt3 = $conn->prepare("SELECT name FROM sme_profile WHERE email = :email");
+							$stmt3->execute(array(":email" => $consultation['smeEmailId']));
+							$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+							$sme = $row3['name'];
+					?>		
+
+                     <button class="accordion">Consultation ID <?= $consultation_count ?></button>
                      <div class="panel">
                         <div class="profile_section">
                            <div class="form">
                               <form>
                                  <div class="inputfield terms">
                                     <label>Consultation ID: </label>
-                                    <label style="width: 100%;">1150012</label>
+                                    <label style="width: 100%;"><?= $consultation['consultationId'] ?></label>
                                  </div>
                                  <div class="inputfield terms">
                                     <label>Category: </label>
-                                    <label style="width: 100%;">Real Estate</label>
+                                    <label style="width: 100%;"><?= $category ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Question</label>
-                                    <label style="width: 100%;">How can I apply for a scholarship in Kemerovo state medical university?</label>
+                                    <label style="width: 100%;"><?= $question ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>SME</label>
-                                    <label style="width: 100%;">Pratiti Bera</label>
+                                    <label style="width: 100%;"><?= $sme ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Mode</label>
-                                    <label style="width: 100%;">Call</label>
+                                    <label style="width: 100%;"><?= $consultation['mode'] ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Date</label>
-                                    <label style="width: 100%;">27/02/2021</label>
+                                    <label style="width: 100%;"><?= $consultation['date'] ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Time</label>
-                                    <label style="width: 100%;">10:00 am</label>
+                                    <label style="width: 100%;"><?= $consultation['fromTime'] ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <input type="submit" value="Click to connect" class="btn">
@@ -212,14 +239,10 @@
                            </div>
                         </div>
                      </div>
-                     <button class="accordion">Consultation ID 2</button>
-                     <div class="panel"></div>
-                     <button class="accordion">Consultation ID 3</button>
-                     <div class="panel"></div>
-                     <button class="accordion">Consultation ID 4</button>
-                     <div class="panel"></div>
-                     <button class="accordion">Consultation ID 5</button>
-                     <div class="panel"></div>
+					<?php 
+							$consultation_count++;
+						}
+					?>
                   </div>
                </div>
             </div>
@@ -366,7 +389,7 @@
                               </div>
                               <div class="col-sm-3"></div>
                            </div>
-						   <br><div class="alert alert-success" role="alert" id="ques-status" style="display: none;"></div>
+						   <br><div class="alert alert-danger" role="alert" id="ques-status" style="display: none;"></div>
 						</form>
                      </div>
                   </div>
@@ -380,7 +403,6 @@
 				var category = document.getElementById("category").value;
 				var topic = document.getElementById("topic").value.trim();
 				var question = document.getElementById("question").value.trim();
-				var quesStatus = document.getElementById("ques-status");
 				var error = 0;
 
 				if(category.length == 0)
@@ -391,9 +413,8 @@
 					error = "Please fill out question field.";	
 				
 				if(error != 0) {
-					quesStatus.innerHTML = error;
-					quesStatus.setAttribute("class", "alert alert-danger");
-					quesStatus.style.display = "block";
+					document.getElementById("ques-status").innerHTML = error;
+					document.getElementById("ques-status").style.display = "block";
 				}
 				
 				else {
@@ -405,9 +426,8 @@
 							if(status == 1) {
 								for(var i=0; i<3; i++)
 									document.getElementsByClassName("ques")[i].value="";
-								quesStatus.innerHTML = "Your question has been sent to our SME for review.";
-								quesStatus.setAttribute("class", "alert alert-success");
-								quesStatus.style.display = "block";
+								alert("Your question has been sent to our SME for review.");
+								window.location.replace("client_dashboard.php");
 								$.ajax({
 									url: "userQuestion.php",
 									method: "POST",
@@ -421,6 +441,62 @@
 		});
 	  </script>
       <!--end modal for post question --->
+	   <!-- modal for choose slot --->
+	   <div class="modal fade" id="chooseSlot" role="dialog">
+         <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body">
+                  <div class="profile_section choose_slot">
+                     <div class="title">Proposed slots by SME: 150021</div>
+                     <div class="subtitle">How can I start my own startup with the least investment?</div>
+                     <div class="form">
+                        <form>
+                           <div class="inputfield terms">
+                              <label class="check">
+                              <input type="checkbox" checked="">
+                              <span class="checkmark"></span>
+                              </label>
+                              <p><input type="button" value="10-02-2020" class="btn"></p>
+                              <p><input type="button" value="From 10:30am" class="btn"></p>
+                              <p><input type="button" value="To 11:30am" class="btn"></p>
+                           </div>
+                           <div class="inputfield terms">
+                              <label class="check">
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                              </label>
+                              <p><input type="button" value="10-02-2020" class="btn"></p>
+                              <p><input type="button" value="From 10:30am" class="btn"></p>
+                              <p><input type="button" value="To 11:30am" class="btn"></p>
+                           </div>
+                           <div class="inputfield terms">
+                              <label class="check">
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                              </label>
+                              <p><input type="button" value="10-02-2020" class="btn"></p>
+                              <p><input type="button" value="From 10:30am" class="btn"></p>
+                              <p><input type="button" value="To 11:30am" class="btn"></p>
+                           </div>
+
+                           <div class="row">
+                              <div class="col-sm-4"></div>
+                              <div class="col-sm-4">
+                                 <div class="inputfield">
+                                    <input type="submit" value="Submit" class="btn">
+                                 </div>
+                              </div>
+                              <div class="col-sm-4"></div>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--end modal for choose slot --->
       <!-- Start footer -->
 	  <br><br>
       <footer style="background-color: #f2f2f2">
