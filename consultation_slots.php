@@ -57,12 +57,9 @@ else{
 
 	//Send Email to client
 		$subject = 'Question has been Accepted by our SME';
-		$msg = "Your question has been Accepted by our SME - ".$sme_name."";
-		$msg = "SME CODE - ".$sme_code."";
+		$msg = "Your question has been Accepted by our SME - ".$sme_name."<br>SME CODE - ".$sme_code."";
 		$headers = "MIME-Version: 1.0 \r\n";
 		$headers = "Content-Type: text/html; charset=UTF-8 \r\n";
         mail($client_email, $subject, $msg, $headers);
-
-
-
+		
 ?>
