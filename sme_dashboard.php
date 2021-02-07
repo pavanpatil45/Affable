@@ -152,8 +152,9 @@ else{
 						$username=$row1['name'];
 						$category=$row1['category'];
 						$question=$row1['question']; 
-						$_SESSION['questionid']=$questionid;
-						$_SESSION['email']=$client_email;
+						
+						//$_SESSION['questionid']=$questionid;
+						//$_SESSION['email']=$client_email;
 						?>
 				  
 				  

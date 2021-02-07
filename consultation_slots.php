@@ -24,13 +24,13 @@ if(isset($_SESSION['email'])){
 	$sme_code=$row3['sme_code'];
 	$sme_name=$row3['name'];
 	
-	$questionid = $_SESSION['questionid'];
+	//$questionid = $_SESSION['questionid'];
 	//get Que ID from userquestion (Here I Didnt Understand How to get values from selected request)
-	$results1 = mysqli_query($db,'SELECT questionid, email FROM userquestion where questionid = "'.$questionid.'"') or die(mysqli_error($db));
+	$results1 = mysqli_query($db,'SELECT questionid, email FROM userquestion') or die(mysqli_error($db));
 	$row_cnt1=mysqli_num_rows($results1);
 	$row1=mysqli_fetch_array($results1);
-	//$client_email=$row1['email'];
-	//$questionid = $row1['questionid'];	
+	$client_email=$row1['email'];
+	$questionid = $row1['questionid'];	
 
 	
 	//insert slots values in consultation_slot
