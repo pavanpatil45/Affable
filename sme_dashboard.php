@@ -43,8 +43,10 @@ if(isset($_SESSION['email'])){
 }
 else{
 	header("Location:index.php?smeSignIn=1");
-	exit;
 }
+
+	if(isset($_SESSION['questionid']))
+		unset($_SESSION['questionid']);
  
 
 ?>
@@ -146,15 +148,11 @@ else{
 						$stmt1->execute(array(":email" => $_SESSION['email']));
 						while ($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)){
 						$request = $row1;
-						// $row1=mysqli_fetch_array($results1);
 						$questionid=$row1['questionid'];
 						$client_email=$row1['email'];
 						$username=$row1['name'];
 						$category=$row1['category'];
 						$question=$row1['question']; 
-						
-						//$_SESSION['questionid']=$questionid;
-						//$_SESSION['email']=$client_email;
 						?>
 				  
 				  
@@ -188,7 +186,7 @@ else{
                                  <div class="col-sm-2"></div>
                                  <div class="col-sm-4">
                                     <div class="inputfield">
-                                       <input type="button" value="ACCEPT" class="btn" onclick="thoughtChecker();">
+                                       <input type="button" value="ACCEPT" class="btn" onclick="thoughtChecker('<?= $questionid ?>')" >
                                     </div>
                                  </div>
                                  <div class="col-sm-4">
@@ -202,15 +200,35 @@ else{
                         </div>
                      </div>
                   </div> 
- 
+
 				<?php } ?>
-				
-				 <script>$('#SMEthoughts').change(function() {
-					$('#SMEthoughts1').val($(this).val());
-				});</script>
-				
                </div>
-               <div class="col-12 col-lg-6 col-sm-12" style="padding: 50px;">
+			   
+			   
+			   	<script>	
+				
+				function thoughtChecker(questionid) {
+				var smethoughts = document.getElementById('SMEthoughts');
+				if (smethoughts.value != '') {
+					$('#acceptClientRequest').modal('show');
+				} else {
+					$('.error').text('Please give your thoughts...!');
+					$('.error').fadeIn('slow');
+					setTimeout(function () {
+						$('.error').fadeOut('slow');
+					}, 3000);
+				}
+				}
+				</script>
+				
+				
+				<script>$('#SMEthoughts').change(function() {
+					$('#SMEthoughts1').val($(this).val());
+				});
+				</script>
+			   
+			   
+					<div class="col-12 col-lg-6 col-sm-12" style="padding: 50px;">
                   <br>
                   <img class="img-fluid" src="images/write_to_us.jpg" alt="">
                   <!-- <video controls class="img-fluid" loop autoplay muted>
@@ -349,8 +367,9 @@ else{
                </form>
             </div>
          </div>
-      </div>
       <!--Profile section of SME end--->
+	  
+	  
 
       <!-- modal for SME profile edit --->
       <div class="modal fade" id="edit_profile" role="dialog">
@@ -776,7 +795,7 @@ else{
             </div>
          </div>
       </div>
-      </div>
+  
       <!--end modal for client request accept --->
       <!-- modal for request decline confirmation --->
       <div class="modal fade" id="declineRequest" role="dialog">

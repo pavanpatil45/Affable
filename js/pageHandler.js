@@ -59,7 +59,7 @@ function viewSections() {
 	document.getElementById('sme_profile').setAttribute('style', 'display: none;');
 }
 
-function thoughtChecker() {
+/*  function thoughtChecker() {
 	var smethoughts = document.getElementById('SMEthoughts');
 	if (smethoughts.value != '') {
 		$('#acceptClientRequest').modal('show');
@@ -70,7 +70,7 @@ function thoughtChecker() {
 			$('.error').fadeOut('slow');
 		}, 3000);
 	}
-}
+}  */
 
 var mode_id = "";
 
