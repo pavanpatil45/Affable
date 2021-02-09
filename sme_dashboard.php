@@ -180,13 +180,13 @@ else{
                               <div class="inputfield">
                                  <label for="Tooltips" class="error thoughts"></label>
                                  <label>Your thoughts on the matter</label>
-                                 <textarea class="textarea" required="" name="SMEthoughts" id="SMEthoughts"></textarea>
+                                 <textarea class="textarea" required="" name="SMEthoughts" id="SMEthoughts<?= $questionid ?>"></textarea>
                               </div>
                               <div class="row">
                                  <div class="col-sm-2"></div>
                                  <div class="col-sm-4">
                                     <div class="inputfield">
-                                       <input type="button" value="ACCEPT" class="btn" onclick="thoughtChecker('<?= $questionid ?>')" >
+                                       <input type="button" value="ACCEPT" class="btn" onclick="thoughtChecker(<?= $questionid ?>)" >
                                     </div>
                                  </div>
                                  <div class="col-sm-4">
@@ -206,11 +206,18 @@ else{
 			   
 			   
 			   	<script>	
-				
 				function thoughtChecker(questionid) {
-				var smethoughts = document.getElementById('SMEthoughts');
+				var smethoughts = document.getElementById("SMEthoughts".concat(questionid));
 				if (smethoughts.value != '') {
-					$('#acceptClientRequest').modal('show');
+					$.ajax({
+						url: "consultation_slots.php",
+						method: "POST",
+						data: {smethoughts:smethoughts, questionid:questionid}
+						});
+							$('#acceptClientRequest').modal('show');
+						
+					
+		
 				} else {
 					$('.error').text('Please give your thoughts...!');
 					$('.error').fadeIn('slow');
@@ -222,18 +229,90 @@ else{
 				</script>
 				
 				
-				<script>$('#SMEthoughts').change(function() {
+				<script>
+				/* $('#SMEthoughts'.concat(questionid)).change(function() {
 					$('#SMEthoughts1').val($(this).val());
-				});
+				}); */
 				</script>
 			   
 			   
-					<div class="col-12 col-lg-6 col-sm-12" style="padding: 50px;">
+				<div class="col-12 col-lg-6 col-sm-12" style="padding: 50px;">
                   <br>
                   <img class="img-fluid" src="images/write_to_us.jpg" alt="">
                   <!-- <video controls class="img-fluid" loop autoplay muted>
                      <source src="images/test_video.mp4" type="video/mp4">
                      </video> -->
+               </div>
+            <div class="col-sm-6" style="padding: 50px;">
+                        <br>
+                        <img class="img-fluid" src="images/write_to_us.jpg" alt="">
+                        <!-- <video controls class="img-fluid" loop autoplay muted>
+                           <source src="images/test_video.mp4" type="video/mp4">
+                           </video> -->
+                     </div>
+                     <div class="col-12 col-sm-6 client_request">
+                        <h1>consultations</h1>
+                        <button class="accordion">Consultation ID 1</button>
+                     <div class="panel">
+                        <div class="profile_section">
+                           <div class="form">
+                              <form>
+                                 <div class="inputfield terms">
+                                    <label>Consultation ID: </label>
+                                    <label style="width: 100%;">1150012</label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Category: </label>
+                                    <label style="width: 100%;">Real Estate</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Question</label>
+                                    <label style="width: 100%;">How can I apply for a scholarship in Kemerovo state medical university?</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Client</label>
+                                    <label style="width: 100%;">Pratiti Bera</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Mode</label>
+                                    <label style="width: 100%;">Call</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Date</label>
+                                    <label style="width: 100%;" id="consultation_1">2021-02-06</label>
+                                 </div>
+                                 <div class="inputfield">
+                                    <label>Time</label>
+                                    <label style="width: 100%;" id="consultation_time_1">20:30</label>
+                                 </div>
+                                 <div class="row">
+                                       <div class="col-sm-2"></div>
+                                       <div class="col-sm-4">
+                                          <div class="inputfield">
+                                             <input type="submit" value="Connect" class="btn" disabled="">
+                                          </div>
+                                       </div>
+                                       <div class="col-sm-4">
+                                          <div class="inputfield">
+                                             <input type="button" value="Cancel" class="btn" id="cancelConsultation_1" onclick="cancelConsultation(this.id);">
+                                          </div>
+                                       </div>
+                                       <div class="col-sm-2"></div>
+                                    </div>
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+                     <button class="accordion">Consultation ID 2</button>
+                     <div class="panel"></div>
+                     <button class="accordion">Consultation ID 3</button>
+                     <div class="panel"></div>
+                     <button class="accordion">Consultation ID 4</button>
+                     <div class="panel"></div>
+                     <button class="accordion">Consultation ID 5</button>
+                     <div class="panel"></div>
+                     </div>
+                  </div>
                </div>
             </div>
          </div>
@@ -810,6 +889,65 @@ else{
          </div>
       </div>
       <!--end modal for request decline confirmation --->
+	  
+	  
+	  <!-- modal for cancel consultation --->
+      <div class="modal fade" id="cancelConsultation" role="dialog">
+         <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body">
+                  <div class="profile_section cancel_consultation">
+                     <div class="title">CANCEL CONSULTATION</div>
+                     <div class="form">
+                        <form>
+                           <div class="inputfield terms">
+                              <label class="check">
+                              <input type="checkbox" checked="">
+                              <span class="checkmark"></span>
+                              </label>
+                              <p>Got busy with something else</p>
+                           </div>
+                           <div class="inputfield terms">
+                              <label class="check">
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                              </label>
+                              <p>Clashing with another consultation</p>
+                           </div>
+                           <div class="inputfield terms">
+                              <label class="check">
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                              </label>
+                              <p>Personal constraint</p>
+                           </div>
+                           <div class="inputfield terms">
+                              <label class="check">
+                              <input type="checkbox">
+                              <span class="checkmark"></span>
+                              </label>
+                              <p>Not listed</p>
+                           </div>
+                           <div class="row">
+                              <div class="col-sm-4"></div>
+                              <div class="col-sm-4">
+                                 <div class="inputfield">
+                                    <input type="submit" value="Submit" class="btn">
+                                 </div>
+                              </div>
+                              <div class="col-sm-4"></div>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--end modal for cancel consultation --->
+	  
+	  
       <!-- Start footer -->
       <footer style="background-color: #f2f2f2">
          <div class="container">

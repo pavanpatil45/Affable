@@ -14,7 +14,7 @@ if(isset($_SESSION['email'])){
 	$startthree=trim($_POST['startthree']);
 	$endthree=trim($_POST['endthree']);
 	$mode_of_cons = $_POST['consultation_mode'];
-	$answer = $_POST['SMEthoughts1'];
+	$answer = $_POST['smethoughts'];
 	
 	
 	//Get SME details
