@@ -821,7 +821,7 @@ else{
 					 
 					 
 					 
-					         <!--Email reply starts 
+					        <!--Email reply starts --->
                            <div id="emailResponse">
                               <label>From: pratitibera99@gmail.com</label><br>
                               <label>Topic: How can I have my own startup? What is the minimum cost for having one?</label><br>
@@ -848,7 +848,7 @@ else{
 						</div>
 
                            <br>
-                            email reply ends ----> 
+                           <!-- email reply ends ---->
 					 
 					 
 					 

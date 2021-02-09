@@ -3912,6 +3912,10 @@ h6 {
     display: none;
 }
 
+#emailResponse{
+    display: none;
+}
+
 .modal_content_footer {
     display: -webkit-box;
     display: -ms-flexbox;

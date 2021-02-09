@@ -86,11 +86,14 @@ function onlyOne(checkbox) {
 	if (mode_id == 'chat' || mode_id == 'call') {
 		if (document.getElementById(mode_id).checked) {
 			document.getElementById('appointment').style.display = "block";
+			document.getElementById('emailResponse').style.display = "none";
 		} else {
 			document.getElementById('appointment').style.display = "none";
 		}
 	} else {
 		document.getElementById('appointment').style.display = "none";
+		document.getElementById('emailResponse').style.display = "block";
+		document.getElementById('savebutton').style.display = "none";
 	}
 }
 
