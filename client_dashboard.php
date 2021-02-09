@@ -191,7 +191,7 @@
 					<script>
 						function retrieve_slots(questionid) {
 							$.ajax({
-								url: "consultation_slots.php",
+								url: "final_confirmed_slot.php",
 								method: "POST",
 								data: {do:"retreive_slots", questionid: questionid},
 								success: function(data) {
@@ -473,8 +473,8 @@
 							if(status == 1) {
 								for(var i=0; i<3; i++)
 									document.getElementsByClassName("ques")[i].value="";
-								alert("Your question has been sent to our SME for review.");
 								window.location.replace("client_dashboard.php");
+								alert("Your question has been sent to our SME for review.");
 								$.ajax({
 									url: "userQuestion.php",
 									method: "POST",
@@ -561,12 +561,17 @@
 
 			if(slot != 0) {
 				$.ajax({
-					url: "consultation_slots.php",
+					url: "final_confirmed_slot.php",
 					method: "POST",
 					data: {do:"enter_slot", slot:slot},
-					success: function(data) {
-						alert("Consultation confirmed.");
+					success: function(sme_email) {
 						window.location.replace("client_dashboard.php");
+						alert("Consultation confirmed.");
+						$.ajax({
+							url: "final_confirmed_slot.php",
+							method: "POST",
+							data: {do:"mail", sme_email:sme_email}
+						});
 					}
 				});
 			}
