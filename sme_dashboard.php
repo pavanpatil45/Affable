@@ -27,32 +27,15 @@ if(isset($_SESSION['email'])){
 		
 	}
 	
-	
-/* 	$results1 = mysqli_query($db,"SELECT userquestion.questionid, userquestion.email, user.name, userquestion.category, userquestion.question FROM userquestion inner join user on userquestion.email=user.email") or die(mysqli_error($db));
-	$row_cnt1=mysqli_num_rows($results1);
-	if($row_cnt1==1){
-		$row1=mysqli_fetch_array($results1);
-		$questionid=$row1['questionid'];
-		$email=$row1['email'];
-		$username=$row1['name'];
-		$category=$row1['category'];
-		$question=$row1['question'];
-		
-	} */
-	
 }
 else{
 	header("Location:index.php?smeSignIn=1");
 }
 
-	if(isset($_SESSION['questionid']))
-		unset($_SESSION['questionid']);
- 
-
 ?>
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
-   <head>
+<head>
       <!-- Mobile Specific Meta -->
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta charset="UTF-8">
@@ -73,8 +56,7 @@ else{
       <!--Page css -->
       <link rel="stylesheet" href="css/style.css">
 	  <script src="js/jquery-2.2.4.min.js"></script>
-	 <script src=" https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-   </head>
+</head>
    <body onload="sme_dashboard();" data-spy="scroll" data-target=".navbar" data-offset="50">
       <!-- <div class="alert hide" id="alert1">
          <span class="fas fa-exclamation-circle"></span>
@@ -153,57 +135,66 @@ else{
             <div class="row">
                <div class="col-12 col-lg-6 col-sm-12 client_request">
                   <h1>Client Requests</h1>
-				  <?php
 
-					$stmt1 = $conn->prepare("SELECT userquestion.questionid, userquestion.topic, userquestion.email, user.name, userquestion.category, userquestion.question FROM userquestion inner join user on userquestion.email=user.email");
-						$stmt1->execute(array(":email" => $_SESSION['email']));
-						while ($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)){
-						$request = $row1;
-						$questionid=$row1['questionid'];
-						$client_email=$row1['email'];
-						$username=$row1['name'];
-						$category=$row1['category'];
-						$question=$row1['question']; 
-						?>
+				<?php
+					// Retrieving sme category from table
+					$stmt1 = $conn->prepare("SELECT categoryname FROM sme_profile WHERE email = :email");
+					$stmt1->execute(array(":email" => $_SESSION['email']));
+					$row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+					$categoryname = $row1['categoryname'];
+
+					// Retrieving user requests from table
+					$stmt2 = $conn->prepare("SELECT questionid, topic, question, email FROM userquestion WHERE category = :categoryname");
+					$stmt2->execute(array(":categoryname" => $categoryname));
+
+					while($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+						$request = $row2;
+						$questionid = $request['questionid'];
+
+						// Retrieving client name from table
+						$stmt3 = $conn->prepare("SELECT name FROM user WHERE email = :email");
+						$stmt3->execute(array(":email" => $request['email']));
+						$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+						$from = $row3['name'];
+				?>
 				  
-				  
-				<button class="accordion"><?= $request['topic'] ?></button>
+				<button class="accordion"><?= htmlentities($request['topic']) ?></button>
                   <div class="panel">
                      <div class="profile_section">
                         <div class="form">
                            <form>
 								<div class="inputfield terms">
                                  <label>ID: </label>
-                                 <label style="width: 100%;"><?php  echo $questionid;?></label>
+                                 <label style="width: 100%;"><?= $questionid ?></label>
                               </div>
                               <div class="inputfield terms">
                                  <label>From: </label>
-                                 <label style="width: 100%;"><?php echo $username;?></label>
+                                 <label style="width: 100%;"><?= htmlentities($from) ?></label>
                               </div>
                               <div class="inputfield terms">
                                  <label>Category: </label>
-                                 <label style="width: 100%;"><?php echo $category;?></label>
+                                 <label style="width: 100%;"><?= htmlentities($categoryname) ?></label>
                               </div>
                               <div class="inputfield">
                                  <label>Question</label>
-                                 <label style="width: 100%;"><?php echo $question;?></label>
+                                 <label style="width: 100%;"><?= htmlentities($request['question']) ?></label>
                               </div>
                               <div class="inputfield">
-                                 <label for="Tooltips" class="error thoughts"></label>
+                                 <label for="Tooltips" class="error thoughts" id="error_<?= $questionid ?>"></label>
                                  <label>Your thoughts on the matter</label>
-                                 <textarea class="textarea" required="" name="SMEthoughts" id="SMEthoughts<?= $questionid ?>"></textarea>
+                                 <textarea class="textarea" required="" id="SMEthoughts_<?= $questionid ?>"></textarea>
                               </div>
                               <div class="row">
                                  <div class="col-sm-2"></div>
                                  <div class="col-sm-4">
                                     <div class="inputfield">
-                                       <input type="button" value="ACCEPT" class="btn" onclick="thoughtChecker(<?= $questionid ?>)" >
+										<input type="button" value="ACCEPT" class="btn" onclick="thoughtChecker('<?= $questionid ?>');">
                                     </div>
                                  </div>
                                  <div class="col-sm-4">
-                                    <div class="inputfield">
-                                       <input type="button" value="DECLINE" class="btn" data-toggle="modal" data-target="#declineRequest" style="background-color: #F3834B">
-                                    </div>
+								 	<div class="inputfield">
+										<input type="button" value="DECLINE" class="btn" onclick="decline_req('<?= $questionid ?>');" style="background-color: #F3834B">
+									</div>
                                  </div>
                                  <div class="col-sm-2"></div>
                               </div>
@@ -211,90 +202,97 @@ else{
                         </div>
                      </div>
                   </div> 
-
 				<?php } ?>
                </div>
 			   
-			   
-			   	<script>	
-				function thoughtChecker(questionid) {
-				var smethoughts = document.getElementById("SMEthoughts".concat(questionid));
-				if (smethoughts.value != '') {
-					$.ajax({
-						url: "consultation_slots.php",
-						method: "POST",
-						data: {smethoughts:smethoughts, questionid:questionid}
-						
+			   <script>
+					function thoughtChecker(questionid) {
+						var smethoughts = document.getElementById('SMEthoughts_'.concat(questionid));
+						if (smethoughts.value != '') {
+							document.getElementById('appointment').style.display = "none";
+							for(var i=0; i<3; i++)
+								document.getElementsByClassName("selectmode")[i].checked = false;
+							for(var i=0; i<9; i++)
+								document.getElementsByClassName("sel_dt_tm")[i].value = "";
+
+							document.getElementById("saveBtn").setAttribute("onclick", "finalValidation(); save_slots('" + questionid + "');");
 							$('#acceptClientRequest').modal('show');
-						});
+						}
+						
+						else {
+							$('#error_'.concat(questionid)).text('Please give your thoughts...!');
+							$('#error_'.concat(questionid)).fadeIn('slow');
+							setTimeout(function () {
+								$('#error_'.concat(questionid)).fadeOut('slow');
+							}, 3000);
+						}
+					}
 					
-		
-				} else {
-					$('.error').text('Please give your thoughts...!');
-					$('.error').fadeIn('slow');
-					setTimeout(function () {
-						$('.error').fadeOut('slow');
-					}, 3000);
-				}
-				}
+					function decline_req(questionid) {
+						document.getElementById("confirmBtn").setAttribute("onclick", "decline_confirm('" + questionid + "');");
+						$('#declineRequest').modal('show');
+					}
 				</script>
 				
-				
-				<script>
-				/* $('#SMEthoughts'.concat(questionid)).change(function() {
-					$('#SMEthoughts1').val($(this).val());
-				}); */
-				</script>
-			   
-			   
-				<div class="col-12 col-lg-6 col-sm-12" style="padding: 50px;">
-                  <br>
-                  <img class="img-fluid" src="images/write_to_us.jpg" alt="">
-                  <!-- <video controls class="img-fluid" loop autoplay muted>
-                     <source src="images/test_video.mp4" type="video/mp4">
-                     </video> -->
-               </div>
-            <div class="col-sm-6" style="padding: 50px;">
-                        <br>
-                        <img class="img-fluid" src="images/write_to_us.jpg" alt="">
-                        <!-- <video controls class="img-fluid" loop autoplay muted>
-                           <source src="images/test_video.mp4" type="video/mp4">
-                           </video> -->
-                     </div>
+
                      <div class="col-12 col-sm-6 client_request">
                         <h1>consultations</h1>
-                        <button class="accordion">Consultation ID 1</button>
+
+						<?php						
+							// Retrieving consultaions from table
+							$stmt1 = $conn->prepare("SELECT consultationId, clientEmailId, questionId, mode, date, fromTime FROM consultation WHERE smeEmailId = :email");
+							$stmt1->execute(array(":email" => $_SESSION['email']));
+
+							$consultation_count = 1;
+							while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+								$consultation = $row1;
+								
+								// Retrieving user question from table
+								$stmt2 = $conn->prepare("SELECT category, question FROM userquestion WHERE questionId = :questionId");
+								$stmt2->execute(array(":questionId" => $consultation['questionId']));
+								$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+								$category = $row2['category'];
+								$question = $row2['question'];
+
+								// Retrieving client name from table
+								$stmt3 = $conn->prepare("SELECT name FROM user WHERE email = :email");
+								$stmt3->execute(array(":email" => $consultation['clientEmailId']));
+								$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+								$client = $row3['name'];
+						?>
+
+                        <button class="accordion">Consultation ID <?= $consultation_count ?></button>
                      <div class="panel">
                         <div class="profile_section">
                            <div class="form">
                               <form>
                                  <div class="inputfield terms">
                                     <label>Consultation ID: </label>
-                                    <label style="width: 100%;">1150012</label>
+                                    <label style="width: 100%;"><?= $consultation['consultationId'] ?></label>
                                  </div>
                                  <div class="inputfield terms">
                                     <label>Category: </label>
-                                    <label style="width: 100%;">Real Estate</label>
+                                    <label style="width: 100%;"><?= htmlentities($category) ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Question</label>
-                                    <label style="width: 100%;">How can I apply for a scholarship in Kemerovo state medical university?</label>
+                                    <label style="width: 100%;"><?= htmlentities($question) ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Client</label>
-                                    <label style="width: 100%;">Pratiti Bera</label>
+                                    <label style="width: 100%;"><?= htmlentities($client) ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Mode</label>
-                                    <label style="width: 100%;">Call</label>
+                                    <label style="width: 100%;"><?= htmlentities($consultation['mode']) ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Date</label>
-                                    <label style="width: 100%;" id="consultation_1">2021-02-06</label>
+                                    <label style="width: 100%;" id="consultation_1"><?= htmlentities($consultation['date']) ?></label>
                                  </div>
                                  <div class="inputfield">
                                     <label>Time</label>
-                                    <label style="width: 100%;" id="consultation_time_1">20:30</label>
+                                    <label style="width: 100%;" id="consultation_time_1"><?= htmlentities($consultation['fromTime']) ?></label>
                                  </div>
                                  <div class="row">
                                        <div class="col-sm-2"></div>
@@ -314,14 +312,10 @@ else{
                            </div>
                         </div>
                      </div>
-                     <button class="accordion">Consultation ID 2</button>
-                     <div class="panel"></div>
-                     <button class="accordion">Consultation ID 3</button>
-                     <div class="panel"></div>
-                     <button class="accordion">Consultation ID 4</button>
-                     <div class="panel"></div>
-                     <button class="accordion">Consultation ID 5</button>
-                     <div class="panel"></div>
+						<?php 
+								$consultation_count++;
+							}
+						?>
                      </div>
                   </div>
                </div>
@@ -742,24 +736,24 @@ else{
                   <div class="profile_section">
                      <div class="title">CHOOSE CONSULTATION MODE</div>
                      <div class="form">
-                        <form method="POST" action="consultation_slots.php" enctype="multipart/form-data">
+                        <form>
                            <div class="row">
                               <div class="col-lg-2 col-xl-4"></div>
                               <div class="col-12 col-sm-12 col-lg-10 col-xl-4">
                                  <div class="inputfield terms appointment">
                                     <label class="label">select mode</label>
                                     <label class="check">
-                                    <input type="checkbox" onclick="onlyOne(this);" name="consultation_mode" value="chat" id="chat">
+                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="chat" id="chat">
                                     <span class="checkmark"></span>
                                     </label>
                                     <p>chat</p>
                                     <label class="check">
-                                    <input type="checkbox" onclick="onlyOne(this);" name="consultation_mode" value="email" id="email">
+                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="email" id="email">
                                     <span class="checkmark"></span>
                                     </label>
                                     <p>email</p>
                                     <label class="check">
-                                    <input type="checkbox" onclick="onlyOne(this);" name="consultation_mode" value="call" id="call">
+                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="call" id="call">
                                     <span class="checkmark"></span>
                                     </label>
                                     <p>call</p>
@@ -774,110 +768,77 @@ else{
                                     <label for="Tooltips" class="error" id="iddate1"></label>
                                     <label>select date</label>
                                     <div class="inputfield">
-                                       
-									   <input type="date" class="input" required="" id="date1" name="date1" onblur="dateChecker(this);">
-                                   
-								   </div>
+                                       <input type="date" class="input sel_dt_tm" required="" id="date1" onblur="dateChecker(this);">
+                                    </div>
                                     <label>start time</label>
                                     <div class="inputfield">
-                                      
-									  <input type="time" class="input" required="" id="startone" name="startone">
-                                   
-								   </div>
-                                    <label for="Tooltips" class="error" id="time1"></label>
+                                       <input type="time" class="input sel_dt_tm" required="" id="startone">
+                                    </div>
+                                    <label for="Tooltips" class="error" id="idone"></label>
                                     <label>end time</label>
                                     <div class="inputfield">
-                                     
-									 <input type="time" class="input" required="" id="endone" name="endone" onblur="timeChecker(this);">
-                                    
-									</div>
+                                       <input type="time" class="input sel_dt_tm" required="" id="one" onblur="timeChecker(this);">
+                                    </div>
                                  </div>
-								 
-								 
-								 
                                  <div class="col-sm-4">
                                     <div class="subtitle">SLOT 2</div>
                                     <label for="Tooltips" class="error" id="iddate2"></label>
                                     <label>select date</label>
                                     <div class="inputfield">
-                                      
-									  <input type="date" class="input" required="" id="date2" name="date2" onblur="dateChecker(this);">
-                                    
-									</div>
+                                       <input type="date" class="input sel_dt_tm" required="" id="date2" onblur="dateChecker(this);">
+                                    </div>
                                     <label>start time</label>
                                     <div class="inputfield">
-                                      
-									  <input type="time" class="input" required="" id="starttwo" name="starttwo">
-                                   
-								   </div>
+                                       <input type="time" class="input sel_dt_tm" required="" id="starttwo">
+                                    </div>
                                     <label for="Tooltips" class="error" id="idtwo"></label>
                                     <label>end time</label>
                                     <div class="inputfield">
-                                       
-									   <input type="time" class="input" required="" id="endtwo" name="endtwo" onblur="timeChecker(this);">
-                                    
-									</div>
-									
+                                       <input type="time" class="input sel_dt_tm" required="" id="two" onblur="timeChecker(this);">
+                                    </div>
                                  </div>
-								 
-								 
-								 
-								 
                                  <div class="col-sm-4">
                                     <div class="subtitle">SLOT 3</div>
                                     <label for="Tooltips" class="error" id="iddate3"></label>
                                     <label>select date</label>
                                     <div class="inputfield">
-                                       
-									   <input type="date" class="input" required="" id="date3" name="date3" onblur="dateChecker(this);">
-                                   
-								   </div>
+                                       <input type="date" class="input sel_dt_tm" required="" id="date3" onblur="dateChecker(this);">
+                                    </div>
                                     <label>start time</label>
                                     <div class="inputfield">
-                                      
-									  <input type="time" class="input" required="" id="startthree" name="startthree">
-                                    
-									</div>
+                                       <input type="time" class="input sel_dt_tm" required="" id="startthree">
+                                    </div>
                                     <label for="Tooltips" class="error" id="idthree"></label>
                                     <label>end time</label>
                                     <div class="inputfield">
-                                      
-									  <input type="time" class="input" required="" id="endthree" name="endthree" onblur="timeChecker(this);">
-                                   
-								   </div>
-										
-										
-									<input type="text" class="input" id="SMEthoughts1" name="SMEthoughts1" style="display: none;">
-									<input type="input" class="input" id="questionid" name="questionid" value="<?php echo $questionid;?>" >
-					
-										
-								   
+                                       <input type="time" class="input sel_dt_tm" required="" id="three" onblur="timeChecker(this);">
+                                    </div>
                                  </div>
                               </div>
                            </div>
                            <br>
                            <!-- <div class="row">
-                                 <div class="col-sm-3 col-lg-4"></div>
-                                 <div class="col-sm-6 col-lg-4" style="text-align: center;">
-                                    <div class="inputfield terms appointment">
-                                       <label class="check">
-                                       <input type="checkbox" onclick="finalValidation();" id="finalValidate">
-                                       <span class="checkmark"></span>
-                                       </label>
-                                       <p>I confirm the above details</p>
-                                    </div>
+                              <div class="col-sm-3 col-lg-4"></div>
+                              <div class="col-sm-6 col-lg-4" style="text-align: center;">
+                                 <div class="inputfield terms appointment">
+                                    <label class="check">
+                                    <input type="checkbox" onclick="finalValidation();" id="finalValidate">
+                                    <span class="checkmark"></span>
+                                    </label>
+                                    <p>I confirm the above details</p>
                                  </div>
-                                 <div class="col-sm-3 col-lg-4"></div>
+                              </div>
+                              <div class="col-sm-3 col-lg-4"></div>
                               </div> -->
                            <div class="row">
                               <div class="col-sm-4 col-lg-5"></div>
                               <div class="col-sm-4 col-lg-2">
                                  <div class="inputfield">
-                                    <input type="submit" value="SAVE" name="save_cons" id="save_cons" class="btn" onclick="finalValidation();">
+                                    <input type="button" id="saveBtn" value="SAVE" class="btn" onclick="finalValidation();">
                                  </div>
                               </div>
                               <div class="col-sm-4 col-lg-5"></div>
-                              </div>
+                           </div>
                         </form>
                      </div>
                   </div>
@@ -885,7 +846,83 @@ else{
             </div>
          </div>
       </div>
-  
+      </div>
+	  <script>
+		function save_slots(questionid) {
+			var answer = document.getElementById("SMEthoughts_".concat(questionid)).value;
+			var selectmode = document.getElementsByClassName("selectmode");
+			var mode_of_cons = "";
+			for(var i=0; i<3; i++) 
+				if(selectmode[i].checked)
+					mode_of_cons = selectmode[i].value;
+
+
+			if(mode_of_cons == 'email') {
+				$.ajax({
+					url: "consultation_slots.php",
+					method: "POST",
+					data: {do:"accept_request", questionid:questionid, answer:answer, mode_of_cons: mode_of_cons},
+					success: function(client_email) {
+						var client_email = client_email.trim();
+						window.location.replace("sme_dashboard.php");
+						alert("Request accepted.");
+						$.ajax({
+							url: "consultation_slots.php",
+							method: "POST",
+							data: {do:"mail", client_email:client_email}
+						});
+					}
+				});
+			}
+
+			else if(mode_of_cons != '') {
+				var empty = 0;
+				for(var i=0; i<9; i++)
+					if(document.getElementsByClassName("sel_dt_tm")[i].value == "") {
+						empty = 1;
+						break;
+					}
+				if(empty == 0) {
+
+					var date1 = document.getElementById("date1").value;
+					var ftime1 = document.getElementById("startone").value;
+					var ttime1 = document.getElementById("one").value;
+					var date2 = document.getElementById("date2").value;
+					var ftime2 = document.getElementById("starttwo").value;
+					var ttime2 = document.getElementById("two").value;
+					var date3 = document.getElementById("date3").value;
+					var ftime3 = document.getElementById("startthree").value;
+					var ttime3 = document.getElementById("three").value;
+
+					$.ajax({
+						url: "consultation_slots.php",
+						method: "POST",
+						data: {do:"accept_request", questionid:questionid, answer:answer, mode_of_cons: mode_of_cons,
+							date1:date1,
+							ftime1:ftime1,
+							ttime1:ttime1,
+							date2:date2,
+							ftime2:ftime2,
+							ttime2:ttime2,
+							date3:date3,
+							ftime3:ftime3,
+							ttime3:ttime3
+						},
+						success: function(client_email) {
+							var client_email = client_email.trim();
+							window.location.replace("sme_dashboard.php");
+							alert("Request accepted.");
+							$.ajax({
+								url: "consultation_slots.php",
+								method: "POST",
+								data: {do:"mail", client_email:client_email}
+							});
+						}
+					});
+				}
+			}
+		}
+	  </script>
       <!--end modal for client request accept --->
       <!-- modal for request decline confirmation --->
       <div class="modal fade" id="declineRequest" role="dialog">
@@ -894,11 +931,26 @@ else{
             <div class="modal-content">
                <div class="modal-body" style="text-align: center;">
                   <p style="color: #38489E; font-size: 18px; font-weight: bold;">Are you sure you want to decline the client request?</p>
-                  <button class="btn" style="background-color: #F3834B;">CONFIRM</button>
+                  <button class="btn" id="confirmBtn" style="background-color: #F3834B;">CONFIRM</button>
                </div>
             </div>
          </div>
       </div>
+	  <script>
+		function decline_confirm(questionid) {
+			$.ajax({
+				url: "consultation_slots.php",
+				method: "POST",
+				data: {do:"decline_request", questionid: questionid},
+				success: function(status) {
+					if(status.trim() == "1") {
+						window.location.replace("sme_dashboard.php");
+						alert("Request declined.");
+					}
+				}
+			});
+		}
+	  </script>
       <!--end modal for request decline confirmation --->
 	  
 	  
@@ -983,7 +1035,6 @@ else{
       <!-- end footer -->
       <!--- Scripts section --->
       <!-- sticky nav -->
-      <script src="js/jquery-2.2.4.min.js"></script>
       <script src="js/parallax.min.js"></script>
       <script src="js/owl.carousel.min.js"></script>
       <script src="js/isotope.pkgd.min.js"></script>
