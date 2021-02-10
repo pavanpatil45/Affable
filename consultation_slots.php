@@ -72,5 +72,59 @@
 		
 		mail($_POST['client_email'], $subject, $message, $header);
 	}
+	
+	
+	
+	if($_POST['do'] == "email_ans") {
+	//Uploaded File Details
+	$ans_file = $_FILES['ans_file'];
+	$ans_file_name = $ans_file['name'];
+	$ans_file_type = $ans_file['type'];
+	$tmp_name = $ans_file['tmp_name'];
+	$ans_file_size = $ans_file['size'];
+	
+	//Start Mail Function here
+	$to = " ";  //client Email
+	$subject = ' ';
+	$from = " ";
+	$aa=filesize($tmp_name);
+	$headers = "From: $from";
+	$msg = "SME's Attachment -";
+	$message = strip_tags($msg);
+	
+	$file = fopen($tmp_name,'sme_ans');
+	$data = fread($file,filesize($tmp_name));
+	fclose($file);
+	$semi_rand = md5(time());
+
+	$mime_boundary = "==Multipart_Boundary_x{$semi_rand}x";
+	$headers .= "\nMIME-Version: 1.0\n" ."Content-Type: multipart/mixed;\n" . " boundary=\"{$mime_boundary}\"";
+	// Add a multipart boundary above the plain message
+	$message .= "This is a multi-part message in MIME format.\n\n" . "--{$mime_boundary}\n" ."Content-Type: text/html; charset=\"iso-8859-1\"\n" ."Content-Transfer-Encoding: 7bit\n\n" . $message . "\n\n";
+	// Base64 encode the file data
+	$data = chunk_split(base64_encode($data));
+	// Add file attachment to the message
+	$message .= "--{$mime_boundary}\n" ."Content-Type: {$ans_file_type};\n" . " name=\"{$ans_file_name}\"\n" ."Content-Transfer-Encoding: base64\n\n" .
+	$data . "\n\n" ."--{$mime_boundary}--\n";
+
+	// Send the message;
+	$ok = @mail($to, $subject, $message, $headers);
+	
+	if($ok){
+	?>
+		<script type="text/javascript">
+			alert('Your Answer is sent to Client');
+			window.location.href="sme_dashboard.php";
+		</script>
+	<?php
+	}else{
+	?>
+		<script type="text/javascript">
+			alert('Something Wrong..Please Try Again');
+			window.location.href="sme_dashboard.php";
+		</script>
+	<?php
+	}
+}
 
 ?>

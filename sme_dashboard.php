@@ -232,6 +232,7 @@ else{
 						document.getElementById("confirmBtn").setAttribute("onclick", "decline_confirm('" + questionid + "');");
 						$('#declineRequest').modal('show');
 					}
+					
 				</script>
 				
 
@@ -833,9 +834,12 @@ else{
   padding: 8px 10px;
   border-radius: 3px;
   transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
+  
+  <input type="file" name="ans_file" id="ans_file">
+  
   <br>
   <div class="text-center">
-                              <button class="btn" style="
+                              <button class="btn" id="email_client" style="
    padding: 8px 10px;
   font-size: 15px; 
   border: 0px;
@@ -892,7 +896,7 @@ else{
 						$.ajax({
 							url: "consultation_slots.php",
 							method: "POST",
-							data: {do:"mail", client_email:client_email}
+							data: {do:"email_ans", client_email:client_email}
 						});
 					}
 				});
