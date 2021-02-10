@@ -59,8 +59,7 @@ function viewSections() {
 	document.getElementById('sme_profile').setAttribute('style', 'display: none;');
 }
 
-/*
-function thoughtChecker() {
+/* function thoughtChecker() {
 	var smethoughts = document.getElementById('SMEthoughts');
 	if (smethoughts.value != '') {
 		$('#acceptClientRequest').modal('show');
@@ -71,10 +70,11 @@ function thoughtChecker() {
 			$('.error').fadeOut('slow');
 		}, 3000);
 	}
-}
-*/
+} */
 
 var mode_id = "";
+
+
 
 /* function onlyOne(checkbox) {
 	mode_id = checkbox.id;
@@ -96,6 +96,7 @@ var mode_id = "";
 		document.getElementById('savebutton').style.display = "none";
 	}
 } */
+
 
 
 
@@ -126,12 +127,11 @@ function onlyOne(checkbox) {
 		}
 		else{
 			document.getElementById('appointment').style.display = "none";
-		document.getElementById('emailResponse').style.display = "none";
+		document.getElementById('emailResponse').style.display = "block";
 		document.getElementById('savebutton').style.visibility = "hidden";
 		}
 	}
 }
-
 
 var date_id = "";
 

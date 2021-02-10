@@ -233,6 +233,7 @@ else{
 						$('#declineRequest').modal('show');
 					}
 					
+					
 				</script>
 				
 
@@ -854,10 +855,7 @@ else{
                            <br>
                            <!-- email reply ends ---->
 					 
-					 
-					 
-					 
-                           <div class="row" id="savebutton">
+							<div class="row" id="savebutton">
                               <div class="col-sm-4 col-lg-5"></div>
                               <div class="col-sm-4 col-lg-2">
                                  <div class="inputfield">
@@ -866,6 +864,9 @@ else{
                               </div>
                               <div class="col-sm-4 col-lg-5"></div>
                            </div>
+						   
+						   
+						   
                         </form>
                      </div>
                   </div>
