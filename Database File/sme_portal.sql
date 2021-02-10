@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 05, 2021 at 01:42 PM
+-- Generation Time: Feb 10, 2021 at 06:10 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -87,10 +87,10 @@ CREATE TABLE `consultation_slots` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forget_password`
+-- Table structure for table `forgot_password`
 --
 
-CREATE TABLE `forget_password` (
+CREATE TABLE `forgot_password` (
   `email` varchar(200) NOT NULL,
   `temp_key` varchar(200) NOT NULL,
   `created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -144,8 +144,8 @@ CREATE TABLE `sme_profile` (
 --
 
 INSERT INTO `sme_profile` (`name`, `email`, `phone`, `password`, `verified`, `vkey`, `pincode`, `postal_addr`, `categoryname`, `experience`, `skillset`, `sme_cert`, `sme_language`, `webinars`, `sme_fees`, `mode_of_cons`, `photo_loc`, `resume_loc`, `review_rating`, `ID`, `sme_code`) VALUES
-('pavan', 'pavanadhao685@gmail.com', 9763243782, '$2y$10$Z6L7f0QIPD.oiJ6nqZ5dBe8FNHE545IZHGN7TXqJhP3iAwlAltPNu', 1, '798bc7b82edf52b97abb517d00eff56e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, 61, 'SME000061'),
-('sme1', 'sme1@gmail.com', 9983634262, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '435675', '12, kothrud,pune, maharashtra', 'Entrepreneurship', 4, 'Java, Python,C++', 'Google cloud, Linux unhatched, Red Hat', 'English, hindi', 'Yes', 700, 'Chat,Email,', '3.jpg', '', 4, 1, 'SME00001'),
+('pavansme', 'pavanadhao685@gmail.com', 9763243782, '$2y$10$TW7Jk4jBM07b1WxlcDtTq.EdhQxCPmSxLEqKhhkzEqbcuoggB4SQC', 1, 'd796f66605147f8de7079c00b49969f3', NULL, '', 'IT', 0, '', '', '', 'Yes', 0, 'Chat,Email,', '', '', 4, 65, 'SME000065'),
+('sme1', 'sme1@gmail.com', 9983634262, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '435675', '12, kothrud,pune, maharashtra', 'Entrepreneurship', 4, 'Java, Python,C++', 'Google cloud, Linux unhatched', 'English, hindi', 'No', 700, 'Chat,', '', '', 4, 1, 'SME00001'),
 ('sme2', 'sme2@gmail.com', 4567234567, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '563213', 'At. Nandura, Maharashtra,12', 'Entrepreneurship', 2, 'Digital Marketing', 'Google Digital Marketing', 'Marathi, Hindi, English', 'Yes', 600, 'Chat,Call,Email', NULL, NULL, 4, 2, 'SME00002'),
 ('sme3', 'sme3@gmail.com', 9876535463, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '443456', '34,laxmi nagar, kondhawa, pune', 'RealEstate', 12, 'Knowledge about Economics', 'Real Estate Broker', 'Hindi, English', 'No', 1000, 'Chat,Email', NULL, NULL, 4, 3, 'SME00003');
 
@@ -169,6 +169,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`email`, `name`, `phoneNumber`, `password`, `verified`, `vkey`) VALUES
+('pavanadhao685@gmail.com', 'pavanuser', '9763243782', '$2y$10$xbBRUb97m7lGWKNwN.k8bOZeaIeQK1508kHJ46cOhK8QgVBKUDG9u', 1, '18f87314d3c73bb61818a21edd719f83'),
 ('user1@gmail.com', 'user1', '9876524367', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
 ('user2@gmail.com', 'user2', '7638647364', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
 ('user3@gmail.com', 'user3', '9873654632', '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL),
@@ -219,9 +220,9 @@ ALTER TABLE `consultation_slots`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `forget_password`
+-- Indexes for table `forgot_password`
 --
-ALTER TABLE `forget_password`
+ALTER TABLE `forgot_password`
   ADD KEY `forget_password_ibfk_1` (`email`);
 
 --
@@ -259,31 +260,31 @@ ALTER TABLE `userquestion`
 -- AUTO_INCREMENT for table `consultation`
 --
 ALTER TABLE `consultation`
-  MODIFY `consultationId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `consultationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `consultation_slots`
 --
 ALTER TABLE `consultation_slots`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- AUTO_INCREMENT for table `sme_answer`
 --
 ALTER TABLE `sme_answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `sme_profile`
 --
 ALTER TABLE `sme_profile`
-  MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `userquestion`
 --
 ALTER TABLE `userquestion`
-  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
@@ -298,10 +299,10 @@ ALTER TABLE `consultation`
   ADD CONSTRAINT `consultation_ibfk_3` FOREIGN KEY (`questionId`) REFERENCES `userquestion` (`questionid`);
 
 --
--- Constraints for table `forget_password`
+-- Constraints for table `forgot_password`
 --
-ALTER TABLE `forget_password`
-  ADD CONSTRAINT `forget_password_ibfk_1` FOREIGN KEY (`email`) REFERENCES `sme_profile` (`email`);
+ALTER TABLE `forgot_password`
+  ADD CONSTRAINT `forgot_password_ibfk_1` FOREIGN KEY (`email`) REFERENCES `sme_profile` (`email`);
 
 --
 -- Constraints for table `sme_profile`
