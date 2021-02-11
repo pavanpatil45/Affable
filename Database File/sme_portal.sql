@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 10, 2021 at 06:10 AM
+-- Generation Time: Feb 11, 2021 at 08:06 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -87,6 +87,18 @@ CREATE TABLE `consultation_slots` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `declined_requests`
+--
+
+CREATE TABLE `declined_requests` (
+  `declineId` int(11) NOT NULL,
+  `questionid` int(11) DEFAULT NULL,
+  `sme_email` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `forgot_password`
 --
 
@@ -148,6 +160,25 @@ INSERT INTO `sme_profile` (`name`, `email`, `phone`, `password`, `verified`, `vk
 ('sme1', 'sme1@gmail.com', 9983634262, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '435675', '12, kothrud,pune, maharashtra', 'Entrepreneurship', 4, 'Java, Python,C++', 'Google cloud, Linux unhatched', 'English, hindi', 'No', 700, 'Chat,', '', '', 4, 1, 'SME00001'),
 ('sme2', 'sme2@gmail.com', 4567234567, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '563213', 'At. Nandura, Maharashtra,12', 'Entrepreneurship', 2, 'Digital Marketing', 'Google Digital Marketing', 'Marathi, Hindi, English', 'Yes', 600, 'Chat,Call,Email', NULL, NULL, 4, 2, 'SME00002'),
 ('sme3', 'sme3@gmail.com', 9876535463, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '443456', '34,laxmi nagar, kondhawa, pune', 'RealEstate', 12, 'Knowledge about Economics', 'Real Estate Broker', 'Hindi, English', 'No', 1000, 'Chat,Email', NULL, NULL, 4, 3, 'SME00003');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sme_webinar`
+--
+
+CREATE TABLE `sme_webinar` (
+  `webinar_id` int(11) NOT NULL,
+  `webinar_topic` varchar(255) DEFAULT NULL,
+  `webinar_desc` varchar(255) DEFAULT NULL,
+  `who_attend` varchar(255) DEFAULT NULL,
+  `key_takeaways` varchar(255) DEFAULT NULL,
+  `webinar_fees` int(11) DEFAULT NULL,
+  `webinar_date` date DEFAULT NULL,
+  `webinar_from_time` time DEFAULT NULL,
+  `webinar_to_time` time DEFAULT NULL,
+  `sme_email` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -220,6 +251,14 @@ ALTER TABLE `consultation_slots`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `declined_requests`
+--
+ALTER TABLE `declined_requests`
+  ADD PRIMARY KEY (`declineId`),
+  ADD KEY `questionid` (`questionid`),
+  ADD KEY `sme_email` (`sme_email`);
+
+--
 -- Indexes for table `forgot_password`
 --
 ALTER TABLE `forgot_password`
@@ -238,6 +277,12 @@ ALTER TABLE `sme_profile`
   ADD PRIMARY KEY (`email`),
   ADD UNIQUE KEY `ID` (`ID`),
   ADD KEY `categoryname` (`categoryname`);
+
+--
+-- Indexes for table `sme_webinar`
+--
+ALTER TABLE `sme_webinar`
+  ADD PRIMARY KEY (`webinar_id`);
 
 --
 -- Indexes for table `user`
@@ -260,19 +305,25 @@ ALTER TABLE `userquestion`
 -- AUTO_INCREMENT for table `consultation`
 --
 ALTER TABLE `consultation`
-  MODIFY `consultationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `consultationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `consultation_slots`
 --
 ALTER TABLE `consultation_slots`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+
+--
+-- AUTO_INCREMENT for table `declined_requests`
+--
+ALTER TABLE `declined_requests`
+  MODIFY `declineId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sme_answer`
 --
 ALTER TABLE `sme_answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 
 --
 -- AUTO_INCREMENT for table `sme_profile`
@@ -281,10 +332,16 @@ ALTER TABLE `sme_profile`
   MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
+-- AUTO_INCREMENT for table `sme_webinar`
+--
+ALTER TABLE `sme_webinar`
+  MODIFY `webinar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `userquestion`
 --
 ALTER TABLE `userquestion`
-  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Constraints for dumped tables
@@ -297,6 +354,13 @@ ALTER TABLE `consultation`
   ADD CONSTRAINT `consultation_ibfk_1` FOREIGN KEY (`clientEmailId`) REFERENCES `user` (`email`),
   ADD CONSTRAINT `consultation_ibfk_2` FOREIGN KEY (`smeEmailId`) REFERENCES `sme_profile` (`email`),
   ADD CONSTRAINT `consultation_ibfk_3` FOREIGN KEY (`questionId`) REFERENCES `userquestion` (`questionid`);
+
+--
+-- Constraints for table `declined_requests`
+--
+ALTER TABLE `declined_requests`
+  ADD CONSTRAINT `declined_requests_ibfk_1` FOREIGN KEY (`questionid`) REFERENCES `userquestion` (`questionid`),
+  ADD CONSTRAINT `declined_requests_ibfk_2` FOREIGN KEY (`sme_email`) REFERENCES `sme_profile` (`email`);
 
 --
 -- Constraints for table `forgot_password`
