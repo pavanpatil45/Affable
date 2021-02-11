@@ -91,9 +91,9 @@
 	$ans_file_size = $ans_file['size'];
 	
 	//Start Mail Function here
-	$to = " ";  //client Email
-	$subject = ' ';
-	$from = " ";
+	$to = $_POST['client_email'];  //client Email
+	$subject = 'Email Consultation by SME';
+	$from = $_SESSION['email'];
 	$aa=filesize($tmp_name);
 	$headers = "From: $from";
 	$msg = "SME's Attachment -";
