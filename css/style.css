@@ -4596,27 +4596,3 @@ h6 {
 }
 
 
-/* Email section */
-#emailResponse textarea{
-    width: 100%;
-  outline: none;
-  border: 1px solid #d5dbd9;
-  font-size: 15px;
-  padding: 8px 10px;
-  border-radius: 3px;
-  transition: all 0.3s ease; 
-  height: 120px; 
-  resize: none;
-}
-
-#emailResponse button{
-    padding: 8px 10px;
-  font-size: 15px; 
-  border: 0px;
-  background: #F3834B;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 3px;
-  outline: none;
-}
-

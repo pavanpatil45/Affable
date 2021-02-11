@@ -128,7 +128,6 @@ function onlyOne(checkbox) {
 		else{
 			document.getElementById('appointment').style.display = "none";
 		document.getElementById('emailResponse').style.display = "block";
-		//document.getElementById('emailResponse').style.display = "none";
 		document.getElementById('savebutton').style.visibility = "hidden";
 		}
 	}

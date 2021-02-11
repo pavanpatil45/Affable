@@ -58,7 +58,21 @@ else{
 	  <script src="js/jquery-2.2.4.min.js"></script>
 </head>
    <body onload="sme_dashboard();" data-spy="scroll" data-target=".navbar" data-offset="50">
-
+      <!-- <div class="alert hide" id="alert1">
+         <span class="fas fa-exclamation-circle"></span>
+         <span class="msg">Please share your thoughts before accepting!</span>
+         <div class="close-btn">
+           <span class="fas fa-times"></span>
+         </div>
+         </div>
+         
+         <div class="alert hide" id="alert2">
+         <span class="fas fa-exclamation-circle"></span>
+         <span class="msg">Please enter a future date!</span>
+         <div class="close-btn">
+           <span class="fas fa-times"></span>
+         </div>
+         </div> -->
       <!-- Start Header Area -->
       <header class="default-header" style="background-color: #38489E;">
          <nav class="navbar navbar-expand-lg navbar-light">
@@ -115,14 +129,12 @@ else{
                      <h5>Send the topic and question to consult our SME</h5>
                      <img src="images/how_it_works_4.jpg">
                   </div>
-                  <button class="btn" data-toggle="modal" data-target="#postWebinar">POST A WEBINAR</button>
+                  <button class="btn" data-toggle="modal" data-target="#postQuestion">POST A REQUEST</button>
                </div>
                <div class="col-sm-9">
             <div class="row">
                <div class="col-12 col-lg-6 col-sm-12 client_request">
-                 
-				  <p>Email: <?= $_SESSION['email'] ?></p>
-				  <h1>client requests</h1>
+                  <h1>client requests</h1>
 
 				<?php
 					// Retrieving sme category from table
@@ -132,33 +144,12 @@ else{
 					$categoryname = $row1['categoryname'];
 
 					// Retrieving user requests from table
-					$stmt2 = $conn->prepare("SELECT questionid, topic, question, email, status FROM userquestion WHERE category = :categoryname");
+					$stmt2 = $conn->prepare("SELECT questionid, topic, question, email FROM userquestion WHERE category = :categoryname");
 					$stmt2->execute(array(":categoryname" => $categoryname));
 
 					while($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 						$request = $row2;
 						$questionid = $request['questionid'];
-						
-						
-						// Checking whether another SME has answered the client question
-						$stmt4 = $conn->prepare("SELECT count(*) AS cnt FROM sme_answer WHERE questionid = :questionid AND answered_by <> :email");
-						$stmt4->execute(array(
-							":questionid" => $questionid,
-							":email" => $_SESSION['email']
-						));
-						$row4 = $stmt4->fetch(PDO::FETCH_ASSOC);
-						if($row4['cnt'] == 1)
-							continue;
-
-						// Checking whether SME has declined request
-						$stmt5 = $conn->prepare("SELECT count(*) AS dcnt FROM declined_requests WHERE questionid = :questionid AND sme_email = :email");
-						$stmt5->execute(array(
-							":questionid" => $questionid,
-							":email" => $_SESSION['email']
-						));
-						$row5 = $stmt5->fetch(PDO::FETCH_ASSOC);
-						if($row5['dcnt'] == 1)
-							continue;
 
 						// Retrieving client name from table
 						$stmt3 = $conn->prepare("SELECT name FROM user WHERE email = :email");
@@ -193,11 +184,6 @@ else{
                                  <label>Your thoughts on the matter</label>
                                  <textarea class="textarea" required="" id="SMEthoughts_<?= $questionid ?>"></textarea>
                               </div>
-							  
-							   <?php
-								if($request['status'] != 'Accepted' && $request['status'] != 'Consultation confirmed') {
-							  ?>
-							  
                               <div class="row">
                                  <div class="col-sm-2"></div>
                                  <div class="col-sm-4">
@@ -212,8 +198,6 @@ else{
                                  </div>
                                  <div class="col-sm-2"></div>
                               </div>
-							  
-							  <?php } ?>
                            </form>
                         </div>
                      </div>
@@ -866,7 +850,6 @@ else{
   border-radius: 3px;
   outline: none;">EMAIL CLIENT</button>
                         </div>
-						
 						</div>
 
                            <br>
@@ -1054,152 +1037,6 @@ else{
          </div>
       </div>
       <!--end modal for cancel consultation --->
-	  
-	  
-	  
-	  
-	  
-	  <!-- modal for post webinar--->
-      <div class="modal fade" id="postWebinar" role="dialog">
-         <div class="modal-dialog modal-lg">
-            <!-- Modal content-->
-            <div class="modal-content">
-               <div class="modal-body">
-                  <div class="profile_section">
-                     <div class="title">POST A WEBINAR</div>
-                     <div class="form">
-                        <form>
-							
-                           <div class="inputfield">
-                              <label>Webinar topic</label>
-                              <input type="text" name="webinar_topic" id="webinar_topic" class="input" required="">
-                           </div>
-                           <div class="inputfield">
-                              <label>Description(Within 200 words)</label>
-                              <textarea type="text" name="webinar_desc" id="webinar_desc" class="textarea" required="" placeholder="Objective of the course"></textarea>
-                           </div>
-                           <div class="inputfield">
-                              <label>Who can attend?</label>
-                              <textarea type="text" name="who_attend" id="who_attend" class="textarea" required="" placeholder="Target audience"></textarea>
-                           </div>
-                           <div class="inputfield">
-                              <label>Key takeaways (Within 100 words)</label>
-                              <textarea type="text" name="key_takeaways" id="key_takeaways" class="textarea" required=""></textarea>
-                           </div>
-                           <div class="inputfield">
-                              <label>Fees</label>
-                              <input type="text" name="webinar_fees" id="webinar_fees" class="input" required="">
-                           </div>
-						  
-                           <div class="inputfield">
-						    <label for="Tooltips" class="error" id="iddate"></label>
-                              <label>Date</label>
-                              <input type="date" id="date" class="input" required="" onblur="dateChecker(this);">
-                           </div>
-
-                           <div class="inputfield">
-                              <label>Start time</label>
-                              <input type="time"  id="startone1" class="input" required="" onblur="timeChecker(this);">
-                           </div>
-						   <label for="Tooltips" class="error" id="idone1"></label>
-                           <div class="inputfield">
-                              <label>End time</label>
-                              <input type="time" id="one1" class="input" required="" onblur="timeChecker(this);">
-                           </div>
-                           <div class="row">
-                              <div class="col-sm-3"></div>
-                              <div class="col-sm-6">
-                                 <div class="inputfield">
-                                    <input type="submit" name="post_webinar" id="post_webinar" value="POST WEBINAR" class="btn">
-                                 </div>
-							<div class="alert alert-danger" role="alert" id="post-webinar-error" style="display: none;">
-						   </div>
-						    <div class="alert alert-success" role="alert" id="email-sent-msg-user" style="display: none;">
-							<p>Your Webinar has been Posted</p>
-						   </div>
-                              </div>
-                              <div class="col-sm-3"></div>
-                           </div>
-                        </form>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-	  
-	  
-	   <script>
-		$(document).ready(function() {
-			$('#post_webinar').click(function() {				
-				var webinar_topic = document.getElementById("webinar_topic").value;
-				var webinar_desc = document.getElementById("webinar_desc").value.trim();
-				var who_attend = document.getElementById("who_attend").value.trim();
-				var key_takeaways = document.getElementById("key_takeaways").value.trim();
-				var webinar_fees = document.getElementById("webinar_fees").value.trim();
-				var webinar_date = document.getElementById("date").value.trim();
-				var webinar_from_time = document.getElementById("startone1").value.trim();
-				var webinar_to_time = document.getElementById("one1").value.trim();
-				var error = 0;
-
-				if(webinar_topic.length == 0)
-					error = "Please give webinar topic.";
-				else if(webinar_desc.length == 0)
-					error = "Please give Description about webinar.";
-				else if(who_attend.length == 0)
-					error = "Please fill out 'who can attend' field.";	
-				else if(key_takeaways.length == 0)
-					error = "Please fill out key takeaways field.";	
-				else if(webinar_fees.length == 0)
-					error = "Please fill out fees field.";	
-				/* else if(webinar_date.length == 0)
-					error = "Please fill out Date field.";	
-				else if(webinar_from_time.length == 0)
-					error = "Please fill out start time field.";	
-				else if(webinar_to_time.length == 0)
-					error = "Please fill out end time field.";	 */
-				
-					
-				
-				if(error != 0) {
-					document.getElementById("post-webinar-error").innerHTML = error;
-					document.getElementById("post-webinar-error").style.display = "block";
-				}
-				
-				else {
-					$.ajax({
-						url: "post_webinar.php",
-						method: "POST",
-						data: {do:"post_webinar", 
-						webinar_topic:webinar_topic, 
-						webinar_desc: webinar_desc, 
-						who_attend: who_attend, 
-						key_takeaways:key_takeaways, 
-						webinar_fees:webinar_fees, 
-						webinar_date:webinar_date, 
-						webinar_from_time:webinar_from_time, 
-						webinar_to_time:webinar_to_time },
-						
-						success: function(status) {
-							if(status == 1) {
-								
-								window.location.replace("sme_dashboard.php");
-								alert("Your Webinar has been Posted.");
-								/* $.ajax({
-									url: "post_webinar.php",
-									method: "POST",
-									data: {do:"mail"}
-								}); */
-							}
-						}
-					});
-				}
-			});
-		});
-	  </script>
-      <!--end modal for post webinar --->
-	  
-	  
 	  
 	  
       <!-- Start footer -->
