@@ -76,7 +76,7 @@ else{
 					 <li><a class="active" href="#section1" onclick="viewSections();">CLIENT REQUESTS</a></li>
                      <li><a href="#section2">CONSULTATIONS</a></li>
                      <li><a href="#section3">TESTIMONIALS</a></li>
-                     <li><a href="#section4">WEBINARS</a></li>
+                     <li><a href="webinar.php">WEBINARS</a></li>
                      <li class="notifications_humberger"><a href="#section3">NOTIFICATIONS</a></li>
                      <li class="dropdown profile_humberger">
                         <a class="dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
