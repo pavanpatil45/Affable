@@ -1,7 +1,7 @@
 <?php
 include "connection.php";
 	
-//session_start();
+
 if(isset($_SESSION['email'])){
 	$email=$_SESSION['email'];	
 
@@ -18,6 +18,7 @@ if(isset($_SESSION['email'])){
 	$webinars=trim($_POST['webinars']);
 	$sme_fees=trim($_POST['sme_fees']);
 	$review_rating=trim($_POST['review_rating']); 
+	$sme_designation=trim($_POST['sme_designation']);
 	$mode_of_cons = $_POST['MOC'] ;
 	$chk="";  
     foreach($mode_of_cons as $chk1)  
@@ -47,7 +48,7 @@ if(isset($_SESSION['email'])){
 	
 	
 	
-	$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", postal_addr="'.$postal_addr.'", categoryname="'.$categoryname.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", photo_loc="'.$photoName.'", resume_loc="'.$ResumeName.'" WHERE email ="'.$email.'"';              
+	$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", photo_loc="'.$photoName.'", resume_loc="'.$ResumeName.'" WHERE email ="'.$email.'"';              
 	$result=mysqli_query($db, $sql) or die(mysqli_error($db));
 	header("Location:sme_dashboard.php");
 

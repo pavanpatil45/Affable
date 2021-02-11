@@ -83,6 +83,11 @@
 	
 	
 	if($_POST['do'] == "email_ans") {
+		
+	$sme_thoughts=$_POST['sme_thoughts'];
+	//$ans_file = $_POST['ans_file'];
+	$to = $_POST['client_email'];
+	
 	//Uploaded File Details
 	$ans_file = $_FILES['ans_file'];
 	$ans_file_name = $ans_file['name'];
@@ -91,12 +96,12 @@
 	$ans_file_size = $ans_file['size'];
 	
 	//Start Mail Function here
-	$to = $_POST['client_email'];  //client Email
 	$subject = 'Email Consultation by SME';
 	$from = $_SESSION['email'];
 	$aa=filesize($tmp_name);
 	$headers = "From: $from";
-	$msg = "SME's Attachment -";
+	$msg = "\nSME's Thoughts on your Question - ".$sme_thoughts."\n";
+	$msg .= "\n SME's Attachment -\n";
 	$message = strip_tags($msg);
 	
 	$file = fopen($tmp_name,'sme_ans');

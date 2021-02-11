@@ -3,7 +3,7 @@ require_once ('connection.php');
 //session_start();
 if(isset($_SESSION['email'])){
 	$email=$_SESSION['email'];
-	$results = mysqli_query($db,"SELECT name, phone, email, pincode, postal_addr, categoryname, experience, skillset, sme_cert, sme_language, webinars, sme_fees, mode_of_cons, photo_loc, resume_loc, review_rating FROM sme_profile WHERE email = '{$email}'") or die(mysqli_error($db));
+	$results = mysqli_query($db,"SELECT name, phone, email, pincode, postal_addr, categoryname, experience, skillset, sme_cert, sme_language, webinars, sme_fees, mode_of_cons, photo_loc, resume_loc, review_rating, sme_designation FROM sme_profile WHERE email = '{$email}'") or die(mysqli_error($db));
 	$row_cnt=mysqli_num_rows($results);
 	
 	if($row_cnt==1){
@@ -24,6 +24,7 @@ if(isset($_SESSION['email'])){
 		$photo_loc=$row['photo_loc'];
 		$resume_loc=$row['resume_loc'];
 		$review_rating=$row['review_rating'];
+		$sme_designation=$row['sme_designation'];
 		
 	}
 	
@@ -71,7 +72,8 @@ else{
                </button>
                <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                   <ul class="navbar-nav sme_dashboard_navbar">
-                     <li><a class="active" href="#section1" onclick="viewSections();">CLIENT REQUESTS</a></li>
+                     <li>Email: <?= $_SESSION['email'] ?></li>
+					 <li><a class="active" href="#section1" onclick="viewSections();">CLIENT REQUESTS</a></li>
                      <li><a href="#section2">CONSULTATIONS</a></li>
                      <li><a href="#section3">TESTIMONIALS</a></li>
                      <li><a href="#section4">WEBINARS</a></li>
@@ -121,7 +123,7 @@ else{
             <div class="row">
                <div class="col-12 col-lg-6 col-sm-12 client_request">
                  
-				  <p>Email: <?= $_SESSION['email'] ?></p>
+				 
 				  <h1>client requests</h1>
 
 				<?php
@@ -188,15 +190,15 @@ else{
                                  <label>Question</label>
                                  <label style="width: 100%;"><?= htmlentities($request['question']) ?></label>
                               </div>
+							   <?php
+								if($request['status'] != 'Accepted' && $request['status'] != 'Consultation confirmed') {
+							  ?>
                               <div class="inputfield">
                                  <label for="Tooltips" class="error thoughts" id="error_<?= $questionid ?>"></label>
                                  <label>Your thoughts on the matter</label>
                                  <textarea class="textarea" required="" id="SMEthoughts_<?= $questionid ?>"></textarea>
                               </div>
 							  
-							   <?php
-								if($request['status'] != 'Accepted' && $request['status'] != 'Consultation confirmed') {
-							  ?>
 							  
                               <div class="row">
                                  <div class="col-sm-2"></div>
@@ -258,7 +260,7 @@ else{
 
 						<?php						
 							// Retrieving consultaions from table
-							$stmt1 = $conn->prepare("SELECT consultationId, clientEmailId, questionId, mode, date, fromTime FROM consultation WHERE smeEmailId = :email");
+							$stmt1 = $conn->prepare("SELECT consultationId, clientEmailId, questionId, mode, date, fromTime, status FROM consultation WHERE smeEmailId = :email");
 							$stmt1->execute(array(":email" => $_SESSION['email']));
 
 							$consultation_count = 1;
@@ -267,7 +269,7 @@ else{
 								
 								// Retrieving user question from table
 								$stmt2 = $conn->prepare("SELECT category, question FROM userquestion WHERE questionId = :questionId");
-								$stmt2->execute(array(":questionId" => $consultation['questionId']));
+								$stmt2->execute(array(":questionId" => $questionid));
 								$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
 								$category = $row2['category'];
 								$question = $row2['question'];
@@ -312,6 +314,9 @@ else{
                                     <label>Time</label>
                                     <label style="width: 100%;" id="consultation_time_1"><?= htmlentities($consultation['fromTime']) ?></label>
                                  </div>
+								 <?php
+									if($consultation['status'] != "Cancelled") {
+								 ?>
                                  <div class="row">
                                        <div class="col-sm-2"></div>
                                        <div class="col-sm-4">
@@ -321,11 +326,12 @@ else{
                                        </div>
                                        <div class="col-sm-4">
                                           <div class="inputfield">
-                                             <input type="button" value="Cancel" class="btn" id="cancelConsultation_1" onclick="cancelConsultation(this.id);">
+                                              <input type="button" value="Cancel" class="btn" id="cancelConsultation_1" onclick="question_id('<?= $questionid ?>'); cancelConsultation(this.id);">
                                           </div>
                                        </div>
                                        <div class="col-sm-2"></div>
                                     </div>
+									<?php } ?>
                               </form>
                            </div>
                         </div>
@@ -341,6 +347,11 @@ else{
          </div>
       </section>
       <br>
+	  <script>
+	  	function question_id(questionid) {
+			document.getElementById("cancelConst").setAttribute("onclick", "cancel_consultations('" + questionid + "');");
+		}
+	  </script>
       <!-- end client request section -->
 <!--Profile section of SME--->
       <div class="container" id="sme_profile">
@@ -381,6 +392,11 @@ else{
                         <div class="inputfield">
 						<label>Postal Address</label>
                            <label><?php echo $postal_addr;?></label>
+						</div>
+						
+						<div class="inputfield">
+						<label>Designation</label>
+                           <label><?php echo $sme_designation;?></label>
 						</div>
 						
 						
@@ -523,6 +539,11 @@ else{
                            <div class="inputfield">
                               <label>Postal Address</label>
                               <input type="input" class="input"  id="postal_addr" name="postal_addr"  placeholder="Mirpur, near H.P. Gas Godown, Kharagpur, Paschim Medinipur" value="<?php echo $postal_addr;?>">
+                           </div>
+						   
+						   <div class="inputfield">
+                              <label>Designation</label>
+                              <input type="input" class="input"  id="sme_designation" name="sme_designation"  placeholder="Director of Tech Solutions Pvt. Ltd." value="<?php echo $sme_designation;?>">
                            </div>
 						   
 						   
@@ -766,7 +787,7 @@ else{
                                     </label>
                                     <p>chat</p>
                                     <label class="check">
-                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="email" id="email">
+                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="email" id="mail email">
                                     <span class="checkmark"></span>
                                     </label>
                                     <p>email</p>
@@ -841,10 +862,10 @@ else{
 					 
 					        <!--Email reply starts --->
                         <div id="emailResponse">
-                              <label>From: pratitibera99@gmail.com</label><br>
-                              <label>Topic: How can I have my own startup? What is the minimum cost for having one?</label><br>
-                              <label>Question: How can I have my own startup? What is the minimum cost for having one?</label><br>
-                              <textarea class="textarea" required="" id="SMEthoughts" style="width: 100%;outline: none;border: 1px solid #d5dbd9;font-size: 15px;padding: 8px 10px;border-radius: 3px;transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
+                              <label>From: <?= htmlentities($request['email']) ?></label><br>
+                              <label>Topic: <?= htmlentities($request['topic']) ?></label><br>
+                              <label>Question: <?= htmlentities($request['question']) ?></label><br>
+                              <textarea class="textarea" required="" id="sme_thoughts" style="width: 100%;outline: none;border: 1px solid #d5dbd9;font-size: 15px;padding: 8px 10px;border-radius: 3px;transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
 							 <input type="file" name="ans_file" id="ans_file">
 							<br>
 							<div class="text-center">
@@ -891,12 +912,14 @@ else{
 					data: {do:"accept_request", questionid:questionid, answer:answer, mode_of_cons: mode_of_cons},
 					success: function(client_email) {
 						var client_email = client_email.trim();
+						var sme_thoughts = document.getElementById("sme_thoughts").value;
+						var ans_file = document.getElementById("ans_file").value;
 						window.location.replace("sme_dashboard.php");
 						alert("Request accepted.");
 						$.ajax({
 							url: "consultation_slots.php",
 							method: "POST",
-							data: {do:"email_ans", client_email:client_email}
+							data: {do:"email_ans", client_email:client_email, sme_thoughts:sme_thoughts, ans_file:ans_file}
 						});
 					}
 				});
@@ -993,37 +1016,37 @@ else{
                         <form>
                            <div class="inputfield terms">
                               <label class="check">
-                              <input type="checkbox" checked="">
+                                <input type="checkbox" onclick="onlyOneReason(this)" class="cancelReason" id="cancelReason1" checked="">
                               <span class="checkmark"></span>
                               </label>
-                              <p>Got busy with something else</p>
+                               <p id="reason1">Got busy with something else</p>
                            </div>
                            <div class="inputfield terms">
                               <label class="check">
-                              <input type="checkbox">
+                               <input type="checkbox" onclick="onlyOneReason(this)" class="cancelReason" id="cancelReason2">
                               <span class="checkmark"></span>
                               </label>
-                              <p>Clashing with another consultation</p>
+                               <p id="reason2">Clashing with another consultation</p>
                            </div>
                            <div class="inputfield terms">
                               <label class="check">
-                              <input type="checkbox">
+                              <input type="checkbox" onclick="onlyOneReason(this)" class="cancelReason" id="cancelReason3">
                               <span class="checkmark"></span>
                               </label>
-                              <p>Personal constraint</p>
+                              <p id="reason3">Personal constraint</p>
                            </div>
                            <div class="inputfield terms">
                               <label class="check">
-                              <input type="checkbox">
+                              <input type="checkbox" onclick="onlyOneReason(this)" class="cancelReason" id="cancelReason4">
                               <span class="checkmark"></span>
                               </label>
-                              <p>Not listed</p>
+                              <p id="reason4">Not listed</p>
                            </div>
                            <div class="row">
                               <div class="col-sm-4"></div>
                               <div class="col-sm-4">
                                  <div class="inputfield">
-                                    <input type="submit" value="Submit" class="btn">
+                                    <input type="button" value="Submit" id="cancelConst" class="btn">
                                  </div>
                               </div>
                               <div class="col-sm-4"></div>
@@ -1035,6 +1058,39 @@ else{
             </div>
          </div>
       </div>
+	  <script>
+		function onlyOneReason(reasonid) {
+			for(var i=0; i<4; i++)
+				document.getElementsByClassName("cancelReason")[i].checked = false;
+			document.getElementById(reasonid.id).checked = true;
+		}
+
+	  	function cancel_consultations(questionid) {
+			var reason = "";
+			for(var i=0; i<4; i++)
+				if(document.getElementsByClassName("cancelReason")[i].checked) {
+					reason = document.getElementById("reason".concat(i+1)).innerHTML;
+					break
+				}
+
+			$.ajax({
+				url: "cancel_consultations.php",
+				method: "POST",
+				data: {do:"entry", questionid: questionid, reason: reason},
+				success: function(status) {
+					window.location.replace("sme_dashboard.php");
+					if(status.trim() == "1") {
+						alert("The consultation has been cancelled.");
+						$.ajax({
+							url: "cancel_consultations.php",
+							method: "POST",
+							data: {do:"mail", questionid: questionid, reason: reason}
+						});
+					}
+				}
+			});
+		}
+	  </script>
       <!--end modal for cancel consultation --->
 	  
 	  
@@ -1050,7 +1106,7 @@ else{
                   <div class="profile_section">
                      <div class="title">POST A WEBINAR</div>
                      <div class="form">
-                        <form>
+                        <form method="POST" action="post_webinar.php" enctype="multipart/form-data">
 							
                            <div class="inputfield">
                               <label>Webinar topic</label>
@@ -1072,21 +1128,31 @@ else{
                               <label>Fees</label>
                               <input type="text" name="webinar_fees" id="webinar_fees" class="input" required="">
                            </div>
+						   
+						   <div class="inputfield">
+                              <label>Webinar Venue</label>
+                              <input type="text" name="webinar_venue" id="webinar_venue" class="input" placeholder="Zoom call, Google meet, etc." required="">
+                           </div>
+						   
+						   <div class="inputfield">
+                              <label>Course Image</label>
+                              <input type="file" name="course_image" id="course_image" >
+                           </div>
 						  
                            <div class="inputfield">
 						    <label for="Tooltips" class="error" id="iddate"></label>
                               <label>Date</label>
-                              <input type="date" id="date" class="input" required="" onblur="dateChecker(this);">
+                              <input type="date" id="date" name="date" class="input" required="" onblur="dateChecker(this);">
                            </div>
 
                            <div class="inputfield">
                               <label>Start time</label>
-                              <input type="time"  id="startone1" class="input" required="" onblur="timeChecker(this);">
+                              <input type="time"  id="startone1" name="startone1" class="input" required="" onblur="timeChecker(this);">
                            </div>
 						   <label for="Tooltips" class="error" id="idone1"></label>
                            <div class="inputfield">
                               <label>End time</label>
-                              <input type="time" id="one1" class="input" required="" onblur="timeChecker(this);">
+                              <input type="time" id="one1" name="one1" class="input" required="" onblur="timeChecker(this);">
                            </div>
                            <div class="row">
                               <div class="col-sm-3"></div>
@@ -1112,7 +1178,7 @@ else{
 	  
 	  
 	   <script>
-		$(document).ready(function() {
+		/* $(document).ready(function() {
 			$('#post_webinar').click(function() {				
 				var webinar_topic = document.getElementById("webinar_topic").value;
 				var webinar_desc = document.getElementById("webinar_desc").value.trim();
@@ -1122,6 +1188,9 @@ else{
 				var webinar_date = document.getElementById("date").value.trim();
 				var webinar_from_time = document.getElementById("startone1").value.trim();
 				var webinar_to_time = document.getElementById("one1").value.trim();
+				//var course_image = document.getElementById("course_image").value;
+				var course_image = $("#course_image").prop("files")[0];
+				var webinar_venue = document.getElementById("webinar_venue").value.trim();
 				var error = 0;
 
 				if(webinar_topic.length == 0)
@@ -1134,12 +1203,14 @@ else{
 					error = "Please fill out key takeaways field.";	
 				else if(webinar_fees.length == 0)
 					error = "Please fill out fees field.";	
-				/* else if(webinar_date.length == 0)
+				else if(webinar_venue.length == 0)
+					error = "Please fill out Webinar Venue field.";	
+				 else if(webinar_date.length == 0)
 					error = "Please fill out Date field.";	
 				else if(webinar_from_time.length == 0)
 					error = "Please fill out start time field.";	
 				else if(webinar_to_time.length == 0)
-					error = "Please fill out end time field.";	 */
+					error = "Please fill out end time field.";	 
 				
 					
 				
@@ -1160,24 +1231,26 @@ else{
 						webinar_fees:webinar_fees, 
 						webinar_date:webinar_date, 
 						webinar_from_time:webinar_from_time, 
-						webinar_to_time:webinar_to_time },
+						webinar_to_time:webinar_to_time,
+						course_image:course_image,
+						webinar_venue:webinar_venue},
 						
 						success: function(status) {
 							if(status == 1) {
 								
 								window.location.replace("sme_dashboard.php");
 								alert("Your Webinar has been Posted.");
-								/* $.ajax({
+								$.ajax({
 									url: "post_webinar.php",
 									method: "POST",
 									data: {do:"mail"}
-								}); */
+								}); 
 							}
 						}
 					});
 				}
 			});
-		});
+		}); */
 	  </script>
       <!--end modal for post webinar --->
 	  

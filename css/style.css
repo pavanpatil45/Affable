@@ -1321,7 +1321,7 @@ th {
 .home-banner-area .banner-content p {
     font-size: 18px;
     font-weight: 300;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     color: #fff
 }
 
@@ -4620,3 +4620,12 @@ h6 {
   outline: none;
 }
 
+.home-banner-area .banner-content h3 {
+    color: #fff;
+    font-size: 30px;
+    line-height: 70px;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    margin-top: 50px;
+}
