@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2021 at 08:06 AM
+-- Generation Time: Feb 11, 2021 at 05:13 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Database: `sme_portal`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cancelled_consultations`
+--
+
+CREATE TABLE `cancelled_consultations` (
+  `cancelid` int(11) NOT NULL,
+  `questionid` int(11) DEFAULT NULL,
+  `sme_email` varchar(100) DEFAULT NULL,
+  `reason` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -148,18 +161,20 @@ CREATE TABLE `sme_profile` (
   `resume_loc` text DEFAULT NULL,
   `review_rating` double DEFAULT NULL,
   `ID` int(5) NOT NULL,
-  `sme_code` varchar(20) NOT NULL
+  `sme_code` varchar(20) NOT NULL,
+  `sme_designation` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `sme_profile`
 --
 
-INSERT INTO `sme_profile` (`name`, `email`, `phone`, `password`, `verified`, `vkey`, `pincode`, `postal_addr`, `categoryname`, `experience`, `skillset`, `sme_cert`, `sme_language`, `webinars`, `sme_fees`, `mode_of_cons`, `photo_loc`, `resume_loc`, `review_rating`, `ID`, `sme_code`) VALUES
-('pavansme', 'pavanadhao685@gmail.com', 9763243782, '$2y$10$TW7Jk4jBM07b1WxlcDtTq.EdhQxCPmSxLEqKhhkzEqbcuoggB4SQC', 1, 'd796f66605147f8de7079c00b49969f3', NULL, '', 'IT', 0, '', '', '', 'Yes', 0, 'Chat,Email,', '', '', 4, 65, 'SME000065'),
-('sme1', 'sme1@gmail.com', 9983634262, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '435675', '12, kothrud,pune, maharashtra', 'Entrepreneurship', 4, 'Java, Python,C++', 'Google cloud, Linux unhatched', 'English, hindi', 'No', 700, 'Chat,', '', '', 4, 1, 'SME00001'),
-('sme2', 'sme2@gmail.com', 4567234567, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '563213', 'At. Nandura, Maharashtra,12', 'Entrepreneurship', 2, 'Digital Marketing', 'Google Digital Marketing', 'Marathi, Hindi, English', 'Yes', 600, 'Chat,Call,Email', NULL, NULL, 4, 2, 'SME00002'),
-('sme3', 'sme3@gmail.com', 9876535463, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '443456', '34,laxmi nagar, kondhawa, pune', 'RealEstate', 12, 'Knowledge about Economics', 'Real Estate Broker', 'Hindi, English', 'No', 1000, 'Chat,Email', NULL, NULL, 4, 3, 'SME00003');
+INSERT INTO `sme_profile` (`name`, `email`, `phone`, `password`, `verified`, `vkey`, `pincode`, `postal_addr`, `categoryname`, `experience`, `skillset`, `sme_cert`, `sme_language`, `webinars`, `sme_fees`, `mode_of_cons`, `photo_loc`, `resume_loc`, `review_rating`, `ID`, `sme_code`, `sme_designation`) VALUES
+('pavan', 'pavanadhao685@gmail.com', 9763243782, '$2y$10$TW7Jk4jBM07b1WxlcDtTq.EdhQxCPmSxLEqKhhkzEqbcuoggB4SQC', 1, 'd796f66605147f8de7079c00b49969f3', '444444', 'abcd', 'Entrepreneurship', 24, 'HTML, Java, Flutter', 'NDG Linux unhatched, Python Automation.', 'Marathi, Hindi, English', 'Yes', 2000, 'Chat,Email,', '2.jpg', '', 4, 65, 'SME000065', 'Android Developer at Stewart'),
+('sme1', 'sme1@gmail.com', 9983634262, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '435675', '12, kothrud,pune, maharashtra', 'Entrepreneurship', 4, 'Java, Python,C++', 'Google cloud, Linux unhatched', 'English, hindi', 'Yes', 700, 'Chat,Email,', '', '', 4, 1, 'SME00001', 'Android Developer at Stewart'),
+('sme2', 'sme2@gmail.com', 4567234567, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '563213', 'At. Nandura, Maharashtra,12', 'Entrepreneurship', 2, 'Digital Marketing', 'Google Digital Marketing', 'Marathi, Hindi, English', 'Yes', 600, 'Chat,Call,Email', NULL, NULL, 4, 2, 'SME00002', NULL),
+('sme3', 'sme3@gmail.com', 9876535463, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '443456', '34,laxmi nagar, kondhawa, pune', 'RealEstate', 12, 'Knowledge about Economics', 'Real Estate Broker', 'Hindi, English', 'No', 1000, 'Chat,Email', NULL, NULL, 4, 3, 'SME00003', NULL),
+('sme4', 'sme4@gmail.com', 9876535463, '$2y$10$mLyNeSjU9OVHbNMIDdgNceFQPhnMeyyqKae5GsUviZHO8Pf5S2MnS', 1, NULL, '23452', 'nandura, buldhana, nashik43', 'IT', 4, 'Java, Kotlin', 'Certified Android Dev ', 'English, marathi, hindi', 'No', 1100, 'Email,Chat,Call', NULL, NULL, 4, 66, '', NULL);
 
 -- --------------------------------------------------------
 
@@ -177,7 +192,9 @@ CREATE TABLE `sme_webinar` (
   `webinar_date` date DEFAULT NULL,
   `webinar_from_time` time DEFAULT NULL,
   `webinar_to_time` time DEFAULT NULL,
-  `sme_email` varchar(255) DEFAULT NULL
+  `sme_email` varchar(255) DEFAULT NULL,
+  `course_image` text DEFAULT NULL,
+  `webinar_venue` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -228,6 +245,14 @@ CREATE TABLE `userquestion` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cancelled_consultations`
+--
+ALTER TABLE `cancelled_consultations`
+  ADD PRIMARY KEY (`cancelid`),
+  ADD KEY `questionid` (`questionid`),
+  ADD KEY `sme_email` (`sme_email`);
 
 --
 -- Indexes for table `category`
@@ -302,6 +327,12 @@ ALTER TABLE `userquestion`
 --
 
 --
+-- AUTO_INCREMENT for table `cancelled_consultations`
+--
+ALTER TABLE `cancelled_consultations`
+  MODIFY `cancelid` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `consultation`
 --
 ALTER TABLE `consultation`
@@ -323,29 +354,36 @@ ALTER TABLE `declined_requests`
 -- AUTO_INCREMENT for table `sme_answer`
 --
 ALTER TABLE `sme_answer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- AUTO_INCREMENT for table `sme_profile`
 --
 ALTER TABLE `sme_profile`
-  MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `ID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `sme_webinar`
 --
 ALTER TABLE `sme_webinar`
-  MODIFY `webinar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `webinar_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `userquestion`
 --
 ALTER TABLE `userquestion`
-  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `questionid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cancelled_consultations`
+--
+ALTER TABLE `cancelled_consultations`
+  ADD CONSTRAINT `cancelled_consultations_ibfk_1` FOREIGN KEY (`questionid`) REFERENCES `userquestion` (`questionid`),
+  ADD CONSTRAINT `cancelled_consultations_ibfk_2` FOREIGN KEY (`sme_email`) REFERENCES `sme_profile` (`email`);
 
 --
 -- Constraints for table `consultation`
