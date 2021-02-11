@@ -840,36 +840,18 @@ else{
 					 
 					 
 					        <!--Email reply starts --->
-                           <div id="emailResponse">
+                        <div id="emailResponse">
                               <label>From: pratitibera99@gmail.com</label><br>
                               <label>Topic: How can I have my own startup? What is the minimum cost for having one?</label><br>
                               <label>Question: How can I have my own startup? What is the minimum cost for having one?</label><br>
-                              <textarea class="textarea" required="" id="SMEthoughts" style="width: 100%;
-  outline: none;
-  border: 1px solid #d5dbd9;
-  font-size: 15px;
-  padding: 8px 10px;
-  border-radius: 3px;
-  transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
-  
-  <input type="file" name="ans_file" id="ans_file">
-  
-  <br>
-  <div class="text-center">
-                              <button class="btn" id="email_client" style="
-   padding: 8px 10px;
-  font-size: 15px; 
-  border: 0px;
-  background: #F3834B;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 3px;
-  outline: none;">EMAIL CLIENT</button>
-                        </div>
-						
+                              <textarea class="textarea" required="" id="SMEthoughts" style="width: 100%;outline: none;border: 1px solid #d5dbd9;font-size: 15px;padding: 8px 10px;border-radius: 3px;transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
+							 <input type="file" name="ans_file" id="ans_file">
+							<br>
+							<div class="text-center">
+                            <button class="btn" id="email_client" style="padding: 8px 10px;font-size: 15px; border: 0px;background: #F3834B;color: #fff;cursor: pointer;border-radius: 3px;outline: none;">EMAIL CLIENT</button>
+							</div>
 						</div>
-
-                           <br>
+						<br>
                            <!-- email reply ends ---->
 					 
 							<div class="row" id="savebutton">
