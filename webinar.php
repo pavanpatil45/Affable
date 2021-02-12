@@ -142,11 +142,11 @@ else{
                </div>
                <div class="col-sm-3" style="background-color: #38489E;">
                   <h2 style="color: white; margin: auto; padding: 10px; border-bottom: 4px solid white; margin-bottom: 50px; margin-top: 20px;">WEBINAR DETAILS</h2>
-                  <h5 style="color: white; margin-bottom: 10px;">VENUE: <?php echo $webinar_venue;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">DATE: <?php echo $webinar_date;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">EMAIL ID: <?php echo $sme_email;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">STARTS FROM <?php echo $webinar_from_time;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">ENDS AT <?php echo $webinar_to_time;?></h5>
+                  <h5 style="color: white; margin-bottom: 10px;">VENUE:  <?php echo $webinar_venue;?></h5>
+                  <h5 style="color: white; margin-bottom: 10px;">DATE:  <?php echo $webinar_date;?></h5>
+                  <h5 style="color: white; margin-bottom: 10px;">EMAIL ID:  <?php echo $sme_email;?></h5>
+                  <h5 style="color: white; margin-bottom: 10px;">STARTS FROM  <?php echo $webinar_from_time;?></h5>
+                  <h5 style="color: white; margin-bottom: 10px;">ENDS AT  <?php echo $webinar_to_time;?></h5>
                </div>
             </div>
          </div>
