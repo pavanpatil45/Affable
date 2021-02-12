@@ -86,10 +86,11 @@
 		
 	$sme_thoughts=$_POST['sme_thoughts'];
 	//$ans_file = $_POST['ans_file'];
-	$to = $_POST['client_email'];
-	
+	//$to = $_POST['client_email'];
+	$to = "pavanadhao685@gmail.com";
+
 	//Uploaded File Details
-	$ans_file = $_FILES['ans_file'];
+	$ans_file = $_FILES['fileName'];
 	$ans_file_name = $ans_file['name'];
 	$ans_file_type = $ans_file['type'];
 	$tmp_name = $ans_file['tmp_name'];
@@ -100,9 +101,9 @@
 	$from = $_SESSION['email'];
 	$aa=filesize($tmp_name);
 	$headers = "From: $from";
-	$msg = "\nSME's Thoughts on your Question - ".$sme_thoughts."\n";
-	$msg .= "\n SME's Attachment -\n";
-	$message = strip_tags($msg);
+	$message = "SME's Thoughts on your Question - ".$sme_thoughts."<br><br>";
+	$message .= "SME's Attachment - ";
+	//$message = strip_tags($msg);
 	
 	$file = fopen($tmp_name,'sme_ans');
 	$data = fread($file,filesize($tmp_name));

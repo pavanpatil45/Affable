@@ -98,42 +98,6 @@ var mode_id = "";
 } */
 
 
-
-
-function onlyOne(checkbox) {
-	mode_id = checkbox.id;
-	var checkboxes = document.getElementsByName('consultation_mode')
-	checkboxes.forEach((item) => {
-		if (item !== checkbox) item.checked = false
-	})
-
-	if (mode_id == 'chat' || mode_id == 'call') {
-		document.getElementById('savebutton').style.visibility = "visible";
-		if (document.getElementById(mode_id).checked) {
-			document.getElementById('appointment').style.display = "block";
-			document.getElementById('emailResponse').style.display = "none";
-
-		} else {
-			document.getElementById('appointment').style.display = "none";
-			document.getElementById('emailResponse').style.display = "none";
-			
-		}
-	} else {
-		if (document.getElementById(mode_id).checked){
-			document.getElementById('appointment').style.display = "none";
-		document.getElementById('emailResponse').style.display = "block";
-		document.getElementById('savebutton').style.visibility = "hidden";
-
-		}
-		else{
-			document.getElementById('appointment').style.display = "none";
-		document.getElementById('emailResponse').style.display = "block";
-		//document.getElementById('emailResponse').style.display = "none";
-		document.getElementById('savebutton').style.visibility = "hidden";
-		}
-	}
-}
-
 var date_id = "";
 
 function onlyOneDate(checkbox) {

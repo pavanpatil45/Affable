@@ -797,17 +797,17 @@ else{
                                  <div class="inputfield terms appointment">
                                     <label class="label">select mode</label>
                                     <label class="check">
-                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="chat" id="chat">
+                                    <input type="checkbox" onclick="onlyOne1(this);" class="selectmode" name="consultation_mode" value="chat" id="chat">
                                     <span class="checkmark"></span>
                                     </label>
                                     <p>chat</p>
                                     <label class="check">
-                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="email" id="mail email">
+                                    <input type="checkbox" onclick="onlyOne1(this);" class="selectmode" name="consultation_mode" value="email" id="mail email">
                                     <span class="checkmark"></span>
                                     </label>
                                     <p>email</p>
                                     <label class="check">
-                                    <input type="checkbox" onclick="onlyOne(this);" class="selectmode" name="consultation_mode" value="call" id="call">
+                                    <input type="checkbox" onclick="onlyOne1(this);" class="selectmode" name="consultation_mode" value="call" id="call">
                                     <span class="checkmark"></span>
                                     </label>
                                     <p>call</p>
@@ -881,13 +881,14 @@ else{
                               <label>Topic: <?= htmlentities($request['topic']) ?></label><br>
                               <label>Question: <?= htmlentities($request['question']) ?></label><br>
                               <textarea class="textarea" required="" id="sme_thoughts" style="width: 100%;outline: none;border: 1px solid #d5dbd9;font-size: 15px;padding: 8px 10px;border-radius: 3px;transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
-							 <input type="file" name="ans_file" id="ans_file">
+							 <input type="file" name="file" id="file">
 							<br>
-							<div class="text-center">
+							<!--<div class="text-center">
                             <button class="btn" id="email_client" style="padding: 8px 10px;font-size: 15px; border: 0px;background: #F3834B;color: #fff;cursor: pointer;border-radius: 3px;outline: none;">EMAIL CLIENT</button>
-							</div>
+							</div>-->
 						</div>
 						<br>
+						
                            <!-- email reply ends ---->
 					 
 							<div class="row" id="savebutton">
@@ -900,6 +901,40 @@ else{
                               <div class="col-sm-4 col-lg-5"></div>
                            </div>
 						   
+						<script>
+						function onlyOne1(checkbox) {
+						mode_id = checkbox.id;
+						var checkboxes = document.getElementsByName('consultation_mode')
+						checkboxes.forEach((item) => {
+							if (item !== checkbox) item.checked = false
+						})
+
+						if (mode_id == 'chat' || mode_id == 'call') {
+							document.getElementById('savebutton').style.visibility = "visible";
+							if (document.getElementById(mode_id).checked) {
+								document.getElementById('appointment').style.display = "block";
+								document.getElementById('emailResponse').style.display = "none";
+
+							} else {
+								document.getElementById('appointment').style.display = "none";
+								document.getElementById('emailResponse').style.display = "none";
+								
+							}
+						} else {
+							if (document.getElementById(mode_id).checked){
+								document.getElementById('appointment').style.display = "none";
+							document.getElementById('emailResponse').style.display = "block";
+							document.getElementById('savebutton').style.visibility = "visible";
+
+							}
+							else{
+								document.getElementById('appointment').style.display = "none";
+							document.getElementById('emailResponse').style.display = "block";
+							document.getElementById('savebutton').style.visibility = "visible";
+							}
+						}
+					}
+					</script>
 						   
 						   
                         </form>
@@ -928,14 +963,19 @@ else{
 					success: function(client_email) {
 						var client_email = client_email.trim();
 						var sme_thoughts = document.getElementById("sme_thoughts").value;
-						var ans_file = document.getElementById("ans_file").value;
+						//var ans_file = document.getElementById("ans_file").value;
+						var fileInputElement = document.getElementById("file");
+						var fileName = fileInputElement.files[0].name;
+						
+						
 						window.location.replace("sme_dashboard.php");
 						alert("Request accepted.");
 						$.ajax({
 							url: "consultation_slots.php",
 							method: "POST",
-							data: {do:"email_ans", client_email:client_email, sme_thoughts:sme_thoughts, ans_file:ans_file}
+							data: {do:"email_ans", client_email:client_email, sme_thoughts:sme_thoughts, fileName:fileName}
 						});
+						
 					}
 				});
 			}
@@ -1297,6 +1337,7 @@ else{
       <!-- end footer -->
       <!--- Scripts section --->
       <!-- sticky nav -->
+      <script src="js/jquery-2.2.4.min.js"></script>
       <script src="js/parallax.min.js"></script>
       <script src="js/owl.carousel.min.js"></script>
       <script src="js/isotope.pkgd.min.js"></script>
