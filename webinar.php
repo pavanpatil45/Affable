@@ -94,7 +94,6 @@ else{
                   <p><?php echo $webinar_desc;?></p>
                   <!-- <a href="#" class="primary-btn">View project</a> -->
                   <h3>SPEAKER: <?php echo $name;?></h3>
-				  <td><?php echo '<img src="data:image;base64,'.$course_image.'">'?></td>
                   <p><?php echo $sme_designation;?></p>
                </div>
             </div>
@@ -148,6 +147,7 @@ else{
                   <h5 style="color: white; margin-bottom: 10px;">EMAIL ID:  <?php echo $sme_email;?></h5>
                   <h5 style="color: white; margin-bottom: 10px;">STARTS FROM  <?php echo $webinar_from_time;?></h5>
                   <h5 style="color: white; margin-bottom: 10px;">ENDS AT  <?php echo $webinar_to_time;?></h5>
+				  <td><?php echo '<img src="data:image;base64,'.$course_image.'" style="width: 100%; ">'?></td>
                </div>
             </div>
          </div>
