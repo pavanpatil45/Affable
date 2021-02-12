@@ -15,6 +15,7 @@ if(isset($_SESSION['email'])){
 		$postal_addr=$row['postal_addr'];
 		$categoryname=$row['categoryname'];
 		$experience=$row['experience'];
+		$about_sme=$row['about_sme'];
 		$skillset=$row['skillset'];
 		$sme_cert=$row['sme_cert'];
 		$sme_language=$row['sme_language'];

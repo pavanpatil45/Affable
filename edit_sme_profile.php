@@ -11,6 +11,7 @@ if(isset($_SESSION['email'])){
 	$pincode=trim($_POST['pincode']);
 	$postal_addr=trim($_POST['postal_addr']);
 	$categoryname=trim($_POST['categoryname']);
+	$about_sme=trim($_POST['about_sme']);
 	$experience=trim($_POST['experience']);
 	$skillset=trim($_POST['skillset']);
 	$sme_cert=trim($_POST['sme_cert']);
@@ -62,7 +63,7 @@ if(isset($_SESSION['email'])){
 	
 	
 	
-	$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", photo_loc="'.$image.'", resume_loc="'.$ResumeName.'" WHERE email ="'.$email.'"';              
+	$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", about_sme="'.$about_sme.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", photo_loc="'.$image.'", resume_loc="'.$ResumeName.'" WHERE email ="'.$email.'"';              
 	$result=mysqli_query($db, $sql) or die(mysqli_error($db));
 	header("Location:sme_dashboard.php");
 

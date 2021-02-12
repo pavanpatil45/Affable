@@ -3,7 +3,7 @@ require_once ('connection.php');
 //session_start();
 if(isset($_SESSION['email'])){
 	$email=$_SESSION['email'];
-	$results = mysqli_query($db,"SELECT name, phone, email, pincode, postal_addr, categoryname, experience, skillset, sme_cert, sme_language, webinars, sme_fees, mode_of_cons, photo_loc, resume_loc, review_rating, sme_designation FROM sme_profile WHERE email = '{$email}'") or die(mysqli_error($db));
+	$results = mysqli_query($db,"SELECT name, about_sme, phone, email, pincode, postal_addr, categoryname, experience, skillset, sme_cert, sme_language, webinars, sme_fees, mode_of_cons, photo_loc, resume_loc, review_rating, sme_designation FROM sme_profile WHERE email = '{$email}'") or die(mysqli_error($db));
 	$row_cnt=mysqli_num_rows($results);
 	
 	if($row_cnt==1){
@@ -20,6 +20,7 @@ if(isset($_SESSION['email'])){
 		$sme_language=$row['sme_language'];
 		$webinars=$row['webinars'];
 		$sme_fees=$row['sme_fees'];
+		$about_sme=$row['about_sme'];
 		$mode_of_cons=$row['mode_of_cons'];
 		$photo_loc=$row['photo_loc'];
 		$resume_loc=$row['resume_loc'];
@@ -411,6 +412,11 @@ else{
 						<label>Experience in years</label>
                            <label><?php echo $experience;?></label>
 						</div>
+						
+						 <div class="inputfield">
+						<label>About me</label>
+                           <label><?php echo $about_sme;?></label>
+						</div>
 											
   
                      </div>
@@ -491,7 +497,7 @@ else{
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
-                  <div class="profile_section">
+                  <div class="profile_section edit_profile">
                      <div class="title">EDIT YOUR PROFILE</div>
                      <div class="form">
                         
@@ -537,26 +543,26 @@ else{
                               <input type="input" class="input"  id="postal_addr" name="postal_addr"  placeholder="Mirpur, near H.P. Gas Godown, Kharagpur, Paschim Medinipur" value="<?php echo $postal_addr;?>">
                            </div>
 						   
-						   <div class="inputfield">
-                              <label>Designation</label>
-                              <input type="input" class="input"  id="sme_designation" name="sme_designation"  placeholder="Director of Tech Solutions Pvt. Ltd." value="<?php echo $sme_designation;?>">
-                           </div>
+						   
 						   
 						   
                               </div>
                            </div><br>
 						   
-						   
+						   <div class="inputfield">
+                              <label>Designation</label>
+                              <input type="input" class="input"  id="sme_designation" name="sme_designation"  placeholder="Director of Tech Solutions Pvt. Ltd." value="<?php echo $sme_designation;?>">
+                           </div>
 						   
                            <div class="inputfield">
                               <label>Category</label>
                               <div class="custom_select">
-                                 <select name="categoryname" required="">
-                                    <option value="Entrepreneurship">Entrepreneurship</option>
-                                    <option value="Health and Fitness">Health and Fitness</option>
-                                    <option value="IT">IT</option>
-									<option value="RealEstate">RealEstate</option>
-                                    <option value="Others">Others</option>
+                                 <select name="categoryname" class="input" required="">
+                                    <option class="input" value="Entrepreneurship">Entrepreneurship</option>
+                                    <option class="input" value="Health and Fitness">Health and Fitness</option>
+                                    <option class="input" value="IT">IT</option>
+									<option class="input" value="RealEstate">RealEstate</option>
+                                    <option class="input" value="Others">Others</option>
                                  </select>
                               </div>                           
 							  </div>
@@ -570,14 +576,19 @@ else{
 						   
                            <div class="inputfield">
                               <label>Skillset</label>
-                              <input type="input" class="input" id="skillset"   name="skillset" placeholder="Excellent in Frontend Web development using HTML, CSS and JavaScript" value="<?php echo $skillset;?>">
+							  <textarea type="input" name="skillset" id="skillset" class="input" placeholder="Excellent in Frontend Web development using HTML, CSS and JavaScript"><?php echo $skillset;?></textarea>
                            </div>
 						   
 						   
                            <div class="inputfield">
                               <label>Certifications and recognitions</label>
-                              <input type="input" class="input"  id="sme_cert" name="sme_cert" placeholder="Graduate from B.P. Poddar Institute of Management and Technology" value="<?php echo $sme_cert;?>">
+							  <textarea type="input" name="sme_cert" id="sme_cert" class="input" placeholder="Graduate from B.P. Poddar Institute of Management and Technology"><?php echo $sme_cert;?></textarea>
                            </div>
+						   
+						    <div class="inputfield">
+                              <label>About me</label> 
+							<textarea type="input" name="about_sme" id="about_sme" class="input" placeholder="write about yourself"><?php echo $about_sme;?></textarea>
+						   </div>
 						   
 						   
                            <div class="inputfield">
@@ -592,7 +603,8 @@ else{
 							  <label class="check">
                               <input type="radio" name="webinars" value="Yes" checked="">
 							  </label>
-                              <p>Yes</p>
+							  <p>Yes</p>
+                             
                              
 							 <label class="check">
                               <input type="radio" name="webinars" value="No">
@@ -600,6 +612,7 @@ else{
                               <p>No</p>
                              
 							 </div>
+							 
 						   
 						   
                            <div class="inputfield">
@@ -610,21 +623,27 @@ else{
 						   
                            <div class="inputfield">
                               <label>Mode of Consultation</label>
+							  
                               <label class="check">
                               <input type="checkbox" name="MOC[ ]" value="Chat" checked="">
                               <span class="checkmark"></span>
                               </label>
                               <p>Chat</p>
+							  
+							  
                               <label class="check">
                               <input type="checkbox" name="MOC[ ]" value="Email" checked="">
                               <span class="checkmark"></span>
                               </label>
                               <p>Email</p>
+							  
+							  
                               <label class="check">
                               <input type="checkbox" name="MOC[ ]" value="Call">
                               <span class="checkmark"></span>
                               </label>
-                              <p>Call</p>                      
+                              <p>Call</p>  
+							  
 						  </div>
 						   
 						   
