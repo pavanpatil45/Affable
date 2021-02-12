@@ -94,6 +94,7 @@ else{
                   <p><?php echo $webinar_desc;?></p>
                   <!-- <a href="#" class="primary-btn">View project</a> -->
                   <h3>SPEAKER: <?php echo $name;?></h3>
+				  <td><?php echo '<img src="data:image;base64,'.$course_image.'">'?></td>
                   <p><?php echo $sme_designation;?></p>
                </div>
             </div>

@@ -361,7 +361,8 @@ else{
                <form method="POST" action="sme_dashboard.php?email=<?php echo $email?>">
                   <div class="row">
                      <div class="col-sm-2">
-						<img src="Data/photo_loc/<?php echo $photo_loc;?>" style="max-width: 100%;">
+						
+						<?php echo '<img src="data:image;base64,'.$photo_loc.'" style="max-width: 100%;" >'?>
 
                      </div>
                      <div class="col-sm-5">
@@ -410,18 +411,19 @@ else{
 						<label>Experience in years</label>
                            <label><?php echo $experience;?></label>
 						</div>
-						
-						
-                        <div class="inputfield">
-						<label>Skillset</label>
-                           <label><?php echo $skillset;?></label>
-						</div>
-						
-						
+											
+  
                      </div>
 					 
 					  <div class="col-sm-5" style="border-left: 1px solid #38489E;">
 					  
+					  
+					    <div class="inputfield">
+						<label>Skillset</label>
+                           <label><?php echo $skillset;?></label>
+						</div>
+						
+					    
                         <div class="inputfield">
 						<label>Certifications and recognitions</label>
                            <label><?php echo $sme_cert;?></label>
@@ -451,13 +453,7 @@ else{
                            <label><?php echo $mode_of_cons;?></label>
 						</div>
 						
-						
-                        <div class="inputfield">
-						<label>Upload profile photo</label>
-                           <label><?php echo $photo_loc;?></label>
-						</div>
-						
-						
+
                         <div class="inputfield">
 						<label>Upload resume</label>
                            <label><?php echo $resume_loc;?></label>
@@ -507,7 +503,7 @@ else{
 
 						  <div class="row">
 						  <div class="col-sm-3">
-							 <img src="Data/photo_loc/<?php echo $photo_loc;?>" style="max-width: 100%;">
+							 <?php echo '<img src="data:image;base64,'.$photo_loc.'" style="max-width: 100%;" >'?>
 						  </div>
                         
 							<div class="col-sm-9">
