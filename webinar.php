@@ -100,7 +100,8 @@ else{
             </div>
          </div>
       </section>
-      <section class="brands-area">
+     
+      <!-- <section class="brands-area">
          <div class="container no-padding">
             <div class="row">
                <div class="col-sm-6" style="margin: auto; padding: 20px; text-align: left; padding-right: 230px;">
@@ -134,8 +135,11 @@ else{
                </div>
             </div>
          </div>
-      </section>
-      <section>
+</section>
+		 
+		 
+		 
+     <section>
          <div class="container-fluid">
             <div class="row">
                <div class="col-sm-9" style="padding-right: 0px;">
@@ -143,17 +147,253 @@ else{
                </div>
                <div class="col-sm-3" style="background-color: #38489E;">
                   <h2 style="color: white; margin: auto; padding: 10px; border-bottom: 4px solid white; margin-bottom: 50px; margin-top: 20px;">WEBINAR DETAILS</h2>
-                  <h5 style="color: white; margin-bottom: 10px;">VENUE:  <?php echo $webinar_venue;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">DATE:  <?php echo $webinar_date;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">EMAIL ID:  <?php echo $sme_email;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">STARTS FROM  <?php echo $webinar_from_time;?></h5>
-                  <h5 style="color: white; margin-bottom: 10px;">ENDS AT  <?php echo $webinar_to_time;?></h5>
-				  <td><?php echo '<img src="data:image;base64,'.$course_image.'" style="width: 100%; ">'?></td>
+                  <h5 style="color: white; margin-bottom: 10px;">VENUE: Zoom call</h5>
+                  <h5 style="color: white; margin-bottom: 10px;">DATE: 25/08/2020</h5>
+                  <h5 style="color: white; margin-bottom: 10px;">EMAIL ID: remabimal0801@gmail.com</h5>
+                  <h5 style="color: white; margin-bottom: 10px;">STARTS FROM 10:00</h5>
+                  <h5 style="color: white; margin-bottom: 10px;">ENDS AT 15:00</h5>
+               </div>
+            </div>
+         </div>
+         </section> -->
+      <section>
+         <div class="container">
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 40px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 455px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s;">
+                     <h4 style="margin-bottom: 15px;
+                        font-size: 26px; font-family: 'Georgia'; color: black;">About the SME</h4>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 40px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 455px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s; text-align: center;">
+                     <img src="images/SME.jpg" style="width: 80%; height: 490px;">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section>
+         <div class="container">
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 40px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 455px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s; text-align: center;">
+                     <img src="images/target_audience.jpg" style="width: 100%;">
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 40px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 455px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s;">
+                     <h4 style="margin-bottom: 15px;
+                        font-size: 26px; font-family: 'Georgia'; color: black;">Target Audience</h4>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section>
+         <div class="container">
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 40px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 455px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s;">
+                     <h4 style="margin-bottom: 15px;
+                        font-size: 26px; font-family: 'Georgia'; color: black;">Key Takeaways</h4>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                        with 25+ years of experience with a
+                        demonstrated history of training
+                        working professionals in IT sector.
+                        An Enthusiastic Entrepreneur
+                        having zeal to explore more
+                        opportunities in learning and
+                        development.
+                     </p>
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 40px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 455px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s; text-align: center;">
+                     <img src="images/key_takeaways.jpg" style="width: 100%;">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <section>
+         <div class="container-fluid" style="background-color: #f4f4f4;">
+            <div class="grp_box" style="padding: 40px;
+               background: #f5f5f5;
+               margin-bottom: 30px;
+               height: 455px;
+               -webkit-transition: all ease-in-out 0.5s;
+               -o-transition: all ease-in-out 0.5s;
+               transition: all ease-in-out 0.5s; text-align: center;">
+               <h4 style="margin-bottom: 15px;
+                  font-size: 26px; font-family: 'Georgia'; color: black;">The best hire the brightest</h4>
+               <h5 style="margin-bottom: 65px;
+                  font-size: 16px; font-family: 'Georgia'; color: grey;">Over 3,000 customers rely on the resumator to hire the best candidates every year</h5>
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-4">
+                        <img src="images/img1.jpg" style="width: 50%; border-radius: 50%;">
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 12px; font-family: 'Georgia'; color: black;">Management Head</h4>
+                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
+                           with 25+ years of experience with a
+                           demonstrated history of training
+                           working professionals in IT sector.
+                           An Enthusiastic Entrepreneur
+                           having zeal to explore more
+                           opportunities in learning and
+                           development.
+                        </p>
+                     </div>
+                     <div class="col-md-4">
+                        <img src="images/img2.jpg" style="width: 50%; border-radius: 50%;">
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 12px; font-family: 'Georgia'; color: black;">Marketing Head</h4>
+                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
+                           with 25+ years of experience with a
+                           demonstrated history of training
+                           working professionals in IT sector.
+                           An Enthusiastic Entrepreneur
+                           having zeal to explore more
+                           opportunities in learning and
+                           development.
+                        </p>
+                     </div>
+                     <div class="col-md-4">
+                        <img src="images/img3.jpg" style="width: 50%; border-radius: 50%;">
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 12px; font-family: 'Georgia'; color: black;">Development Head</h4>
+                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
+                           with 25+ years of experience with a
+                           demonstrated history of training
+                           working professionals in IT sector.
+                           An Enthusiastic Entrepreneur
+                           having zeal to explore more
+                           opportunities in learning and
+                           development.
+                        </p>
+                     </div>
+                  </div>
                </div>
             </div>
          </div>
       </section>
       <br>
+      <br><br><br><br><br>
       <!-- Start footer -->
       <footer style="background-color: #f2f2f2; padding: 20px;">
          <div class="container">
