@@ -123,21 +123,7 @@
 	// Send the message;
 	$ok = @mail($to, $subject, $message, $headers);
 	
-	if($ok){
-	?>
-		<script type="text/javascript">
-			alert('Your Answer is sent to Client');
-			window.location.href="sme_dashboard.php";
-		</script>
-	<?php
-	}else{
-	?>
-		<script type="text/javascript">
-			alert('Something Wrong..Please Try Again');
-			window.location.href="sme_dashboard.php";
-		</script>
-	<?php
-	}
+
 }
 
 ?>
