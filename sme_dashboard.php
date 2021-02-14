@@ -885,16 +885,16 @@ else{
                            </div>
                            <br>
                      
-							<script>
-								document.getElementById('label1').innerHTML = "HII";
-							</script>
+						<script>
+							document.getElementById('label1').innerHTML = "HII";
+						</script>
 					 
 					 
-					        <!--Email reply starts --->
+					    <!--Email reply starts --->
                         <div id="emailResponse">
-							  <label id="label_user"></label><br>
-							  <label id="label_topic"></label><br>
-							  <label id="label_question"></label><br>
+							  <label>From :&nbsp;</label><label id="label_user"></label><br>
+							  <label>Topic :&nbsp;</label><label id="label_topic"></label><br>
+							  <label>Question :&nbsp;</label><label id="label_question"></label><br>
                               
                               <textarea class="textarea" required="" id="sme_thoughts" style="width: 100%;outline: none;border: 1px solid #d5dbd9;font-size: 15px;padding: 8px 10px;border-radius: 3px;transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
 							 <input type="file" name="file" id="file">
