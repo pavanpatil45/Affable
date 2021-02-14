@@ -169,8 +169,9 @@ else{
 						$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
 						$from = $row3['name'];
 				?>
-				  
+				
 				<button class="accordion"><?= htmlentities($request['topic']) ?></button>
+				
                   <div class="panel">
                      <div class="profile_section">
                         <div class="form">
@@ -178,6 +179,7 @@ else{
 								<div class="inputfield terms">
                                  <label>ID: </label>
                                  <label style="width: 100%;"><?= $questionid ?></label>
+								 
                               </div>
                               <div class="inputfield terms">
                                  <label>From: </label>
@@ -186,6 +188,7 @@ else{
                               <div class="inputfield terms">
                                  <label>Category: </label>
                                  <label style="width: 100%;"><?= htmlentities($categoryname) ?></label>
+								 
                               </div>
                               <div class="inputfield">
                                  <label>Question</label>
@@ -194,13 +197,18 @@ else{
 							   <?php
 								if($request['status'] != 'Accepted' && $request['status'] != 'Consultation confirmed') {
 							  ?>
+							  
                               <div class="inputfield">
                                  <label for="Tooltips" class="error thoughts" id="error_<?= $questionid ?>"></label>
                                  <label>Your thoughts on the matter</label>
                                  <textarea class="textarea" required="" id="SMEthoughts_<?= $questionid ?>"></textarea>
-                              </div>
+
+								<input id="topic_<?= $questionid ?>" value="<?= htmlentities($request['topic']) ?>" style="display: none;">
+								<input id="question_<?= $questionid ?>" value="<?= htmlentities($request['question']) ?>" style="display: none;">
+                              	<input id="user_<?= $questionid ?>" value="<?= htmlentities($request['email']) ?>" style="display: none;">
+							 </div>
 							  
-							  
+
                               <div class="row">
                                  <div class="col-sm-2"></div>
                                  <div class="col-sm-4">
@@ -221,12 +229,17 @@ else{
                         </div>
                      </div>
                   </div> 
+				  
 				<?php } ?>
                </div>
 			   
 			   <script>
 					function thoughtChecker(questionid) {
 						var smethoughts = document.getElementById('SMEthoughts_'.concat(questionid));
+						document.getElementById('label_user').innerHTML = document.getElementById('user_'.concat(questionid)).value;
+						document.getElementById('label_topic').innerHTML = document.getElementById('topic_'.concat(questionid)).value;
+						document.getElementById('label_question').innerHTML = document.getElementById('question_'.concat(questionid)).value;
+						
 						if (smethoughts.value != '') {
 							document.getElementById('appointment').style.display = "none";
 							for(var i=0; i<3; i++)
@@ -587,7 +600,7 @@ else{
 						   
 						    <div class="inputfield">
                               <label>About me</label> 
-							<textarea type="input" name="about_sme" id="about_sme" class="input" placeholder="write about yourself"><?php echo $about_sme;?></textarea>
+							<textarea type="input" name="about_sme" id="about_sme" class="input" placeholder="write about yourself..."><?php echo $about_sme;?></textarea>
 						   </div>
 						   
 						   
@@ -872,14 +885,17 @@ else{
                            </div>
                            <br>
                      
-					 
+							<script>
+								document.getElementById('label1').innerHTML = "HII";
+							</script>
 					 
 					 
 					        <!--Email reply starts --->
                         <div id="emailResponse">
-                              <label>From: <?= htmlentities($request['email']) ?></label><br>
-                              <label>Topic: <?= htmlentities($request['topic']) ?></label><br>
-                              <label>Question: <?= htmlentities($request['question']) ?></label><br>
+							  <label id="label_user"></label><br>
+							  <label id="label_topic"></label><br>
+							  <label id="label_question"></label><br>
+                              
                               <textarea class="textarea" required="" id="sme_thoughts" style="width: 100%;outline: none;border: 1px solid #d5dbd9;font-size: 15px;padding: 8px 10px;border-radius: 3px;transition: all 0.3s ease; height: 120px; resize: none;" placeholder="Your thoughts..."></textarea>
 							 <input type="file" name="file" id="file">
 							<br>
@@ -895,7 +911,7 @@ else{
                               <div class="col-sm-4 col-lg-5"></div>
                               <div class="col-sm-4 col-lg-2">
                                  <div class="inputfield">
-                                    <input type="button" id="saveBtn" value="SAVE" class="btn" onclick="finalValidation();">
+                                    <input type="button" id="saveBtn" value="SUBMIT" class="btn" onclick="finalValidation();">
                                  </div>
                               </div>
                               <div class="col-sm-4 col-lg-5"></div>
@@ -961,21 +977,30 @@ else{
 					method: "POST",
 					data: {do:"accept_request", questionid:questionid, answer:answer, mode_of_cons: mode_of_cons},
 					success: function(client_email) {
-						var client_email = client_email.trim();
-						var sme_thoughts = document.getElementById("sme_thoughts").value;
-						//var ans_file = document.getElementById("ans_file").value;
-						var fileInputElement = document.getElementById("file");
-						var fileName = fileInputElement.files[0].name;
 						
+						var client_email = client_email.trim();
+						var fd = new FormData();
+						var files = $('#file')[0].files[0];
+						var sme_thoughts = document.getElementById("sme_thoughts").value;
+						var topic = document.getElementById('topic_'.concat(questionid)).value;
+						var question = document.getElementById('question_'.concat(questionid)).value;
+						
+						fd.append('file',files);
+						fd.append('sme_thoughts',sme_thoughts);
+						fd.append('client_email',client_email);
+						fd.append('question',question);
+						fd.append('topic',topic);
 						
 						window.location.replace("sme_dashboard.php");
-						alert("Request accepted.");
 						$.ajax({
-							url: "consultation_slots.php",
-							method: "POST",
-							data: {do:"email_ans", client_email:client_email, sme_thoughts:sme_thoughts, fileName:fileName}
+								url: 'email_response.php',
+								type: 'post',
+								data: fd,
+								contentType: false,
+								processData: false
+								
 						});
-						
+						alert("Email Sent");
 					}
 				});
 			}
@@ -1231,82 +1256,7 @@ else{
          </div>
       </div>
 	  
-	  
-	   <script>
-		/* $(document).ready(function() {
-			$('#post_webinar').click(function() {				
-				var webinar_topic = document.getElementById("webinar_topic").value;
-				var webinar_desc = document.getElementById("webinar_desc").value.trim();
-				var who_attend = document.getElementById("who_attend").value.trim();
-				var key_takeaways = document.getElementById("key_takeaways").value.trim();
-				var webinar_fees = document.getElementById("webinar_fees").value.trim();
-				var webinar_date = document.getElementById("date").value.trim();
-				var webinar_from_time = document.getElementById("startone1").value.trim();
-				var webinar_to_time = document.getElementById("one1").value.trim();
-				//var course_image = document.getElementById("course_image").value;
-				var course_image = $("#course_image").prop("files")[0];
-				var webinar_venue = document.getElementById("webinar_venue").value.trim();
-				var error = 0;
 
-				if(webinar_topic.length == 0)
-					error = "Please give webinar topic.";
-				else if(webinar_desc.length == 0)
-					error = "Please give Description about webinar.";
-				else if(who_attend.length == 0)
-					error = "Please fill out 'who can attend' field.";	
-				else if(key_takeaways.length == 0)
-					error = "Please fill out key takeaways field.";	
-				else if(webinar_fees.length == 0)
-					error = "Please fill out fees field.";	
-				else if(webinar_venue.length == 0)
-					error = "Please fill out Webinar Venue field.";	
-				 else if(webinar_date.length == 0)
-					error = "Please fill out Date field.";	
-				else if(webinar_from_time.length == 0)
-					error = "Please fill out start time field.";	
-				else if(webinar_to_time.length == 0)
-					error = "Please fill out end time field.";	 
-				
-					
-				
-				if(error != 0) {
-					document.getElementById("post-webinar-error").innerHTML = error;
-					document.getElementById("post-webinar-error").style.display = "block";
-				}
-				
-				else {
-					$.ajax({
-						url: "post_webinar.php",
-						method: "POST",
-						data: {do:"post_webinar", 
-						webinar_topic:webinar_topic, 
-						webinar_desc: webinar_desc, 
-						who_attend: who_attend, 
-						key_takeaways:key_takeaways, 
-						webinar_fees:webinar_fees, 
-						webinar_date:webinar_date, 
-						webinar_from_time:webinar_from_time, 
-						webinar_to_time:webinar_to_time,
-						course_image:course_image,
-						webinar_venue:webinar_venue},
-						
-						success: function(status) {
-							if(status == 1) {
-								
-								window.location.replace("sme_dashboard.php");
-								alert("Your Webinar has been Posted.");
-								$.ajax({
-									url: "post_webinar.php",
-									method: "POST",
-									data: {do:"mail"}
-								}); 
-							}
-						}
-					});
-				}
-			});
-		}); */
-	  </script>
       <!--end modal for post webinar --->
 	  
 	  
