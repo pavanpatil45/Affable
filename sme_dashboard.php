@@ -206,6 +206,8 @@ else{
 								<input id="topic_<?= $questionid ?>" value="<?= htmlentities($request['topic']) ?>" style="display: none;">
 								<input id="question_<?= $questionid ?>" value="<?= htmlentities($request['question']) ?>" style="display: none;">
                               	<input id="user_<?= $questionid ?>" value="<?= htmlentities($request['email']) ?>" style="display: none;">
+								<input id="sme_name" value="<?php echo $name;?>" style="display: none;">
+								
 							 </div>
 							  
 
@@ -984,12 +986,14 @@ else{
 						var sme_thoughts = document.getElementById("sme_thoughts").value;
 						var topic = document.getElementById('topic_'.concat(questionid)).value;
 						var question = document.getElementById('question_'.concat(questionid)).value;
+						var sme_name = document.getElementById('sme_name').value;
 						
 						fd.append('file',files);
 						fd.append('sme_thoughts',sme_thoughts);
 						fd.append('client_email',client_email);
 						fd.append('question',question);
 						fd.append('topic',topic);
+						fd.append('sme_name',sme_name);
 						
 						window.location.replace("sme_dashboard.php");
 						$.ajax({

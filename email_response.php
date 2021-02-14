@@ -1,10 +1,10 @@
 <?php
 	
-	//$to = $_POST['client_email'];
-	$to = "pavanadhao685@gmail.com";
+	$to = $_POST['client_email'];
 	$topic=$_POST['topic'];
 	$question=$_POST['question'];
 	$sme_thoughts=$_POST['sme_thoughts'];
+	$sme_name=$_POST['sme_name'];
 	
 	//Uploaded File Details
 	$ans_file = $_FILES['file'];
@@ -20,6 +20,7 @@
 	$headers = "From: $from";
 	$message = "<b>Topic</b> - ".$topic."<br>";
 	$message .= "<b>Your Question</b> - ".$question."<br>";
+	$message .= "<b>Answered by</b> - ".$sme_name."<br>";
 	$message .= "<b>sme's Answer</b> - ".$sme_thoughts."<br>";
 	$message .= "<b>sme's Attachment</b> - ";
 	
