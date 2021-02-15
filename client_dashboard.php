@@ -223,7 +223,7 @@
 
 					<?php						
 						// Retrieving consultaions from table
-						$stmt1 = $conn->prepare("SELECT consultationId, smeEmailId, questionId, mode, date, fromTime, status FROM consultation WHERE clientEmailId = :email");
+						$stmt1 = $conn->prepare("SELECT consultationId, smeEmailId, questionId, mode, date, fromTime FROM consultation WHERE clientEmailId = :email AND status <> 'Cancelled'");
 						$stmt1->execute(array(":email" => $_SESSION['email']));
 
 						$consultation_count = 1;
@@ -277,13 +277,11 @@
                                     <label>Time</label>
                                     <label style="width: 100%;"><?= htmlentities($consultation['fromTime']) ?></label>
                                  </div>
-								 <?php
-									if($consultation['status'] != "Cancelled") {
-								 ?>
+								
                                  <div class="inputfield">
                                      <input type="submit" value="Click to connect" class="btn" disabled="">
                                  </div>
-								 <?php } ?>
+							
                               </form>
                            </div>
                         </div>
@@ -299,6 +297,53 @@
 
 		 </div>
       </section>
+	  
+	   <!-- Start FAQ section -->
+      <section id="section4">
+         <div class="container faqs">
+            <h1>Frequently Asked Questions</h1>
+            <div class="accordion">
+               <div class="contentBx">
+                  <div class="label">How is the weather in Oblast, Russia ?</div>
+                  <div class="content">
+                     <p>We connect you to Subject Matter Experts from various areas of expertise who will answer your questions and help you in taking right decisions in all your phases of life.</p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">How can I apply for a scholarship in Kemerovo state medical university?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">Does the Kemerovo State Medical University provide post graduate courses?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">What is Kemerovo State Medical University fee structure?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">What is Kemerovo state medical college admission procedure?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">What is Kemerovo state medical university ranking ?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- end FAQ section -->
+	  
       <br>
       <!-- end client request section -->
       <!-- modal for user change password --->

@@ -1,10 +1,13 @@
 <?php
+	include "connection.php";
 	
 	$to = $_POST['client_email'];
 	$topic=$_POST['topic'];
 	$question=$_POST['question'];
 	$sme_thoughts=$_POST['sme_thoughts'];
 	$sme_name=$_POST['sme_name'];
+	$sme_email=$_POST['sme_email'];
+	$Qid=$_POST['Qid'];
 	
 	//Uploaded File Details
 	$ans_file = $_FILES['file'];
@@ -41,5 +44,20 @@
 
 	// Send the message;
 	$ok = @mail($to, $subject, $message, $headers);
+	
+	
+	
+	$sql = "INSERT INTO consultation(clientEmailId, smeEmailId, questionId, mode, status)";
+		$sql .= " VALUES(:clientEmailId, :smeEmailId, :questionId, :mode, 'Consultation done through Email')";
+		$stmt2 = $conn->prepare($sql);
+		$stmt2->execute(array(
+			":clientEmailId" => $to,
+			":smeEmailId" => $sme_email,
+			":questionId" => $Qid,
+			":mode" => "Email"
+			
+			
+		));
+
 
 ?>

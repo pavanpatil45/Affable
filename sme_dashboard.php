@@ -75,8 +75,8 @@ else{
                   <ul class="navbar-nav sme_dashboard_navbar">
                      <li>Email: <?= $_SESSION['email'] ?></li>
 					 <li><a class="active" href="#section1" onclick="viewSections();">CLIENT REQUESTS</a></li>
-                     <li><a href="#section2">CONSULTATIONS</a></li>
-                     <li><a href="#section3">TESTIMONIALS</a></li>
+                     <li><a href="#section1">CONSULTATIONS</a></li>
+                     <li><a href="#section2">TESTIMONIALS</a></li>
                      <li><a href="webinar.php">WEBINARS</a></li>
                      <li class="notifications_humberger"><a href="#section3">NOTIFICATIONS</a></li>
                      <li class="dropdown profile_humberger">
@@ -153,7 +153,7 @@ else{
 						if($row4['cnt'] == 1)
 							continue;
 
-						// Checking whether SME has declined request
+						/* // Checking whether SME has declined request
 						$stmt5 = $conn->prepare("SELECT count(*) AS dcnt FROM declined_requests WHERE questionid = :questionid AND sme_email = :email");
 						$stmt5->execute(array(
 							":questionid" => $questionid,
@@ -161,7 +161,7 @@ else{
 						));
 						$row5 = $stmt5->fetch(PDO::FETCH_ASSOC);
 						if($row5['dcnt'] == 1)
-							continue;
+							continue; */
 
 						// Retrieving client name from table
 						$stmt3 = $conn->prepare("SELECT name FROM user WHERE email = :email");
@@ -207,6 +207,8 @@ else{
 								<input id="question_<?= $questionid ?>" value="<?= htmlentities($request['question']) ?>" style="display: none;">
                               	<input id="user_<?= $questionid ?>" value="<?= htmlentities($request['email']) ?>" style="display: none;">
 								<input id="sme_name" value="<?php echo $name;?>" style="display: none;">
+								<input id="sme_email" value="<?php echo $email;?>" style="display: none;">
+								<input id="Qid" value="<?php echo $questionid;?>" style="display: none;">
 								
 							 </div>
 							  
@@ -219,9 +221,11 @@ else{
                                     </div>
                                  </div>
                                  <div class="col-sm-4">
+								 <!--
 								 	<div class="inputfield">
 										<input type="button" value="DECLINE" class="btn" onclick="decline_req('<?= $questionid ?>');" style="background-color: #F3834B">
 									</div>
+									-->
                                  </div>
                                  <div class="col-sm-2"></div>
                               </div>
@@ -238,7 +242,7 @@ else{
 			   <script>
 					function thoughtChecker(questionid) {
 						var smethoughts = document.getElementById('SMEthoughts_'.concat(questionid));
-						document.getElementById('label_user').innerHTML = document.getElementById('user_'.concat(questionid)).value;
+						//document.getElementById('label_user').innerHTML = document.getElementById('user_'.concat(questionid)).value;
 						document.getElementById('label_topic').innerHTML = document.getElementById('topic_'.concat(questionid)).value;
 						document.getElementById('label_question').innerHTML = document.getElementById('question_'.concat(questionid)).value;
 						
@@ -262,10 +266,10 @@ else{
 						}
 					}
 					
-					function decline_req(questionid) {
+					/* function decline_req(questionid) {
 						document.getElementById("confirmBtn").setAttribute("onclick", "decline_confirm('" + questionid + "');");
 						$('#declineRequest').modal('show');
-					}
+					} */
 					
 					
 				</script>
@@ -276,7 +280,7 @@ else{
 
 						<?php						
 							// Retrieving consultaions from table
-							$stmt1 = $conn->prepare("SELECT consultationId, clientEmailId, questionId, mode, date, fromTime, status FROM consultation WHERE smeEmailId = :email");
+							$stmt1 = $conn->prepare("SELECT consultationId, clientEmailId, questionId, mode, date, fromTime FROM consultation WHERE smeEmailId = :email AND status <> 'Cancelled'");
 							$stmt1->execute(array(":email" => $_SESSION['email']));
 
 							$consultation_count = 1;
@@ -330,9 +334,7 @@ else{
                                     <label>Time</label>
                                     <label style="width: 100%;" id="consultation_time_1"><?= htmlentities($consultation['fromTime']) ?></label>
                                  </div>
-								 <?php
-									if($consultation['status'] != "Cancelled") {
-								 ?>
+								
                                  <div class="row">
                                        <div class="col-sm-2"></div>
                                        <div class="col-sm-4">
@@ -347,7 +349,7 @@ else{
                                        </div>
                                        <div class="col-sm-2"></div>
                                     </div>
-									<?php } ?>
+								
                               </form>
                            </div>
                         </div>
@@ -362,6 +364,128 @@ else{
             </div>
          </div>
       </section>
+	  
+	  
+	  
+	  
+	   <section id="section2">
+         <div class="container-fluid" style="background-color: #f4f4f4;">
+            <div class="grp_box" style="padding: 40px;
+               background: #f5f5f5;
+               margin-bottom: 30px;
+               height: 650px;
+               -webkit-transition: all ease-in-out 0.5s;
+               -o-transition: all ease-in-out 0.5s;
+               transition: all ease-in-out 0.5s; text-align: center;">
+               <h4 style="margin-bottom: 15px;
+                  font-size: 26px; font-family: 'Georgia'; color: black;">The best hire the brightest
+                  <span type="button" data-toggle="modal" data-target="#edit_profile"><i class="fas fa-pen" style="margin-left: 10px;"></i></span>
+               </h4>
+               <h5 style="margin-bottom: 65px;
+                  font-size: 16px; font-family: 'Georgia'; color: grey;">Over 3,000 customers rely on the resumator to hire the best candidates every year</h5>
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-4">
+                        <img src="images/img1.jpg" style="width: 50%; border-radius: 50%;">
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 12px; font-family: 'Georgia'; color: black;">Management Head</h4>
+                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
+                           with 25+ years of experience with a
+                           demonstrated history of training
+                           working professionals in IT sector.
+                           An Enthusiastic Entrepreneur
+                           having zeal to explore more
+                           opportunities in learning and
+                           development.
+                        </p>
+                     </div>
+                     <div class="col-md-4">
+                        <img src="images/img2.jpg" style="width: 50%; border-radius: 50%;">
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 12px; font-family: 'Georgia'; color: black;">Marketing Head</h4>
+                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
+                           with 25+ years of experience with a
+                           demonstrated history of training
+                           working professionals in IT sector.
+                           An Enthusiastic Entrepreneur
+                           having zeal to explore more
+                           opportunities in learning and
+                           development.
+                        </p>
+                     </div>
+                     <div class="col-md-4">
+                        <img src="images/img3.jpg" style="width: 50%; border-radius: 50%;">
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
+                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+                           font-size: 12px; font-family: 'Georgia'; color: black;">Development Head</h4>
+                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
+                           with 25+ years of experience with a
+                           demonstrated history of training
+                           working professionals in IT sector.
+                           An Enthusiastic Entrepreneur
+                           having zeal to explore more
+                           opportunities in learning and
+                           development.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- Start FAQ section -->
+      <section>
+         <div class="container faqs">
+            <h1>Frequently Asked Questions</h1>
+            <div class="accordion">
+               <div class="contentBx">
+                  <div class="label">How is the weather in Oblast, Russia ?</div>
+                  <div class="content">
+                     <p>We connect you to Subject Matter Experts from various areas of expertise who will answer your questions and help you in taking right decisions in all your phases of life.</p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">How can I apply for a scholarship in Kemerovo state medical university?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">Does the Kemerovo State Medical University provide post graduate courses?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">What is Kemerovo State Medical University fee structure?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">What is Kemerovo state medical college admission procedure?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+               <div class="contentBx">
+                  <div class="label">What is Kemerovo state medical university ranking ?</div>
+                  <div class="content">
+                     <p></p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- end FAQ section -->
+	  
+	  
+	  
       <br>
 	  <script>
 	  	function question_id(questionid) {
@@ -894,7 +1018,7 @@ else{
 					 
 					    <!--Email reply starts --->
                         <div id="emailResponse">
-							  <label>From :&nbsp;</label><label id="label_user"></label><br>
+							<!--  <label>From :&nbsp;</label><label id="label_user"></label><br>-->
 							  <label>Topic :&nbsp;</label><label id="label_topic"></label><br>
 							  <label>Question :&nbsp;</label><label id="label_question"></label><br>
                               
@@ -987,6 +1111,8 @@ else{
 						var topic = document.getElementById('topic_'.concat(questionid)).value;
 						var question = document.getElementById('question_'.concat(questionid)).value;
 						var sme_name = document.getElementById('sme_name').value;
+						var sme_email = document.getElementById('sme_email').value;
+						var Qid = document.getElementById('Qid').value;
 						
 						fd.append('file',files);
 						fd.append('sme_thoughts',sme_thoughts);
@@ -994,6 +1120,8 @@ else{
 						fd.append('question',question);
 						fd.append('topic',topic);
 						fd.append('sme_name',sme_name);
+						fd.append('sme_email',sme_email);
+						fd.append('Qid',Qid);
 						
 						window.location.replace("sme_dashboard.php");
 						$.ajax({
@@ -1070,7 +1198,7 @@ else{
             </div>
          </div>
       </div>
-	  <script>
+	  <!-- <script>
 		function decline_confirm(questionid) {
 			$.ajax({
 				url: "consultation_slots.php",
@@ -1084,7 +1212,7 @@ else{
 				}
 			});
 		}
-	  </script>
+	  </script> -->
       <!--end modal for request decline confirmation --->
 	  
 	  

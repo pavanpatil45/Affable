@@ -163,50 +163,32 @@ else{
                   <div class="grp_box" style="padding: 40px;
                      background: #f5f5f5;
                      margin-bottom: 30px;
-                     height: 455px;
+                     height: 550px;
                      -webkit-transition: all ease-in-out 0.5s;
                      -o-transition: all ease-in-out 0.5s;
                      transition: all ease-in-out 0.5s;">
                      <h4 style="margin-bottom: 15px;
                         font-size: 26px; font-family: 'Georgia'; color: black;">About the SME</h4>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
-                     </p>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
-                     </p>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
-                     </p>
+                     <p style="font-size: 16px; margin-bottom: 1rem;">
+					
+
+					<?php echo $about_sme;?>
+                    
+
+
+					</p>
+                    
                   </div>
                </div>
                <div class="col-md-6">
-                  <div class="grp_box" style="padding: 40px;
+                  <div class="grp_box" style="padding: 20px;
                      background: #f5f5f5;
                      margin-bottom: 30px;
-                     height: 455px;
+                     height: 550px;
                      -webkit-transition: all ease-in-out 0.5s;
                      -o-transition: all ease-in-out 0.5s;
                      transition: all ease-in-out 0.5s; text-align: center;">
-                     <img src="images/SME.jpg" style="width: 80%; height: 490px;">
+                     <img src="images/SME.jpg" style="width: 70%; height: 490px;">
                   </div>
                </div>
             </div>
@@ -237,32 +219,12 @@ else{
                      <h4 style="margin-bottom: 15px;
                         font-size: 26px; font-family: 'Georgia'; color: black;">Target Audience</h4>
                      <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
+                       
+					   
+					   <?php echo $who_attend;?>
+					   
                      </p>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
-                     </p>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
-                     </p>
+                    
                   </div>
                </div>
             </div>
@@ -282,32 +244,12 @@ else{
                      <h4 style="margin-bottom: 15px;
                         font-size: 26px; font-family: 'Georgia'; color: black;">Key Takeaways</h4>
                      <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
+                       
+					   
+					   <?php echo $key_takeaways;?>
+					   
                      </p>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
-                     </p>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
-                        with 25+ years of experience with a
-                        demonstrated history of training
-                        working professionals in IT sector.
-                        An Enthusiastic Entrepreneur
-                        having zeal to explore more
-                        opportunities in learning and
-                        development.
-                     </p>
+                    
                   </div>
                </div>
                <div class="col-md-6">
@@ -329,7 +271,7 @@ else{
             <div class="grp_box" style="padding: 40px;
                background: #f5f5f5;
                margin-bottom: 30px;
-               height: 455px;
+               height: 650px;
                -webkit-transition: all ease-in-out 0.5s;
                -o-transition: all ease-in-out 0.5s;
                transition: all ease-in-out 0.5s; text-align: center;">
@@ -392,8 +334,51 @@ else{
             </div>
          </div>
       </section>
+	  
+	  
+	  
+      <section>
+         <div class="container">
+            <div class="row">
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 40px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 500px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s;">
+                     <h4 style="margin-bottom: 15px;
+                        font-size: 26px; font-family: 'Georgia'; color: black;"><?php echo $webinar_topic;?></h4>
+                        <br>
+                     <p style="font-size: 20px; margin-bottom: 1rem;">DATE: <?php echo $webinar_date;?></p>
+                     <p style="font-size: 20px; margin-bottom: 1rem;">TIME: <?php echo $webinar_from_time;?> - <?php echo $webinar_to_time;?></p>
+                     <br>
+                     <p style="font-size: 20px; margin-bottom: 1rem;">FEES: <?php echo $webinar_fees;?> INR</p>
+                     <p style="font-size: 20px; margin-bottom: 1rem;">CONTACT DETAILS: +91<?php echo $phone;?></p>
+                     <br>
+                     <p style="font-size: 20px; margin-bottom: 1rem;">VENUE: <?php echo $webinar_venue;?></p>
+                     <br>
+                     <a href="#"><button class="btn" style="background-color: black; color: white; padding: 8px;">REGISTER HERE</button></a>
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="grp_box" style="padding: 20px;
+                     background: #f5f5f5;
+                     margin-bottom: 30px;
+                     height: 500px;
+                     -webkit-transition: all ease-in-out 0.5s;
+                     -o-transition: all ease-in-out 0.5s;
+                     transition: all ease-in-out 0.5s; text-align: center;">
+                     <img src="images/webinar_topic.jpg" style="width: 80%; height: 450px;">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
       <br>
-      <br><br><br><br><br>
+	  
+      
       <!-- Start footer -->
       <footer style="background-color: #f2f2f2; padding: 20px;">
          <div class="container">
