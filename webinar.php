@@ -188,7 +188,7 @@ else{
                      -webkit-transition: all ease-in-out 0.5s;
                      -o-transition: all ease-in-out 0.5s;
                      transition: all ease-in-out 0.5s; text-align: center;">
-                     <img src="images/SME.jpg" style="width: 70%; height: 490px;">
+					 <?php echo '<img src="data:image;base64,'.$photo_loc.'" style="max-width: 100%;" >'?>
                   </div>
                </div>
             </div>
