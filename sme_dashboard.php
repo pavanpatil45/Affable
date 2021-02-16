@@ -123,21 +123,28 @@ else{
                <div class="col-sm-9">
             <div class="row">
                <div class="col-12 col-lg-6 col-sm-12 client_request">
-                 
-				 
-				  <h1>client requests</h1>
-
+              <h1>client requests</h1>
+	  
 				<?php
 					// Retrieving sme category from table
 					$stmt1 = $conn->prepare("SELECT categoryname FROM sme_profile WHERE email = :email");
 					$stmt1->execute(array(":email" => $_SESSION['email']));
 					$row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 					$categoryname = $row1['categoryname'];
+					
+					if (empty($categoryname)){ ?>
+					
+					<div class="alert alert-danger" role="alert">
+					<p><center>Please Update your Profile to start receiving Client requests</center></p>
+					</div>
+					<?php
+					}
+					
 
 					// Retrieving user requests from table
 					$stmt2 = $conn->prepare("SELECT questionid, topic, question, email, status FROM userquestion WHERE category = :categoryname");
 					$stmt2->execute(array(":categoryname" => $categoryname));
-
+					
 					while($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 						$request = $row2;
 						$questionid = $request['questionid'];
@@ -274,7 +281,7 @@ else{
 					
 				</script>
 				
-
+					
                      <div class="col-12 col-sm-6 client_request">
                         <h1>consultations</h1>
 
@@ -366,8 +373,8 @@ else{
       </section>
 	  
 	  
-	  
-	  
+	 
+	
 	   <section id="section2">
          <div class="container-fluid" style="background-color: #f4f4f4;">
             <div class="grp_box" style="padding: 40px;

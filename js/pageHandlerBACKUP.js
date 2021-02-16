@@ -111,7 +111,7 @@ function onlyOneDate(checkbox) {
 
 function finalValidation() {
 	console.log("final");
-	if (mode_id === '') {
+	if (mode_id == '') {
 		alert("Choose one mode");
 		document.getElementById('finalValidate').checked = false;
 	} else {
@@ -129,7 +129,7 @@ function finalValidation() {
 			var start3 = document.getElementById('startthree').value;
 			var end3 = document.getElementById('three').value;
 
-			if (date1.length !== 0 && date2.length !== 0 && date3.length !== 0 && start1.length !== 0 && end1.length !== 0 && start2.length !== 0 && end2.length !== 0 && start3.length !== 0 && end3.length !== 0) {
+			if (date1.length != 0 && date2.length != 0 && date3.length != 0 && start1.length != 0 && end1.length != 0 && start2.length != 0 && end2.length != 0 && start3.length != 0 && end3.length != 0) {
 				var today = new Date();
 				var dd = today.getDate();
 				var mm = today.getMonth() + 1;
@@ -147,7 +147,7 @@ function finalValidation() {
 				var checkround1 = compare_dates(new Date(date1), new Date(today));
 				var checkround2 = compare_dates(new Date(date2), new Date(today));
 				var checkround3 = compare_dates(new Date(date3), new Date(today));
-				if (checkround1 === true && checkround2 === true && checkround3 === true) {
+				if (checkround1 == true && checkround2 == true && checkround3 == true) {
 					var split1a = start1.split(":");
 					var split1b = end1.split(":");
 					var split2a = start2.split(":");
@@ -196,7 +196,7 @@ function dateChecker(data) {
 	var date = document.getElementById(data.id).value;
 	var date_error = "id" + data.id;
 	console.log(date_error);
-	if (date.length !== 0) {
+	if (date.length != 0) {
 		var today = new Date();
 		var dd = today.getDate();
 		var mm = today.getMonth() + 1;
@@ -214,7 +214,7 @@ function dateChecker(data) {
 		console.log(date, today);
 		var checkround = compare_dates(new Date(date), new Date(today));
 		console.log(checkround);
-		if (checkround === false) {
+		if (checkround == false) {
 			$('#' + date_error).text('Please give a future date');
 			$('#' + date_error).fadeIn('slow');
 			setTimeout(function () {
@@ -280,9 +280,9 @@ function cancelConsultation(id) {
 	today = yyyy + '-' + mm + '-' + dd;
 
 	var check_duration = compare_duration(new Date(fixed_date), new Date(today));
-	if (check_duration === true) {
+	if (check_duration == true) {
 		var check_duration2 = compare_duration2(new Date(fixed_date), new Date(today));
-		if (check_duration2 === true) {
+		if (check_duration2 == true) {
 			alert("Cancel allowed");
 			$('#cancelConsultation').modal('show');
 		} else {
