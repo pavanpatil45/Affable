@@ -28,50 +28,201 @@ if(isset($_SESSION['email'])){
        }  
 	
 
-	//FOR STORING PATH IMAGE
 	
-	/* $photo_loc=trim($_POST['photo_loc']);
-	$targetPhotoDir = "Data/photo_loc/";
-	$photoName = basename($_FILES["photo_loc"]["name"]);
-	$targetPhotoPath = $targetPhotoDir . $photoName;
-	$PhotoType = pathinfo($targetPhotoPath,PATHINFO_EXTENSION);
-	$allowPhotoTypes = array('jpg','png','jpeg');
-	if(in_array($PhotoType, $allowPhotoTypes))
-		move_uploaded_file($_FILES["photo_loc"]["tmp_name"], $targetPhotoPath); */
-	
-	
-	//FOR STORING BLOB IMAGE
-	$imageName=$_FILES["photo_loc"]["name"];
-	$imageType=$_FILES["photo_loc"]["type"];
-	$imageTempLoc=$_FILES["photo_loc"]["tmp_name"];
-	$imageSize=$_FILES["photo_loc"]["size"];
-	$PhotoType = pathinfo($imageName,PATHINFO_EXTENSION);
-	$allowPhotoTypes = array('jpg','png','jpeg','jfif');
-	if(in_array($PhotoType, $allowPhotoTypes))
-		$image=base64_encode(file_get_contents($imageTempLoc));
+	$query1 = "SELECT photo_loc FROM sme_profile WHERE email='{$email}'";
+	$result1 = mysqli_query($db, $query1);
+	$row1 = false;
+	if (mysqli_num_rows($result1) > 0) {
+		$row1 = mysqli_fetch_assoc($result1);
+	}
 		
-		
-		
-	$resume_loc=trim($_POST['resume_loc']);
-	$targetResumeDir = "sme_resume/";
-	$ResumeName = basename($_FILES["resume_loc"]["name"]);
-	$targetResumePath = $targetResumeDir . $ResumeName;
-	$ResumeType = pathinfo($targetResumePath,PATHINFO_EXTENSION);
-	$allowResumeTypes = array('pdf','doc','docx');
-	if(in_array($ResumeType, $allowResumeTypes))
-		move_uploaded_file($_FILES["resume_loc"]["tmp_name"], $targetResumePath);
+	$query2 = "SELECT resume_loc FROM sme_profile WHERE email='{$email}'";
+	$result2 = mysqli_query($db, $query2);
+	$row2 = false;
+	if (mysqli_num_rows($result2) > 0) {
+		$row2 = mysqli_fetch_assoc($result2);
+	}
 	
-	
-	
-	$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", about_sme="'.$about_sme.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", photo_loc="'.$image.'", resume_loc="'.$ResumeName.'" WHERE email ="'.$email.'"';              
-	$result=mysqli_query($db, $sql) or die(mysqli_error($db));
-	header("Location:sme_dashboard.php");
 
+
+	if((file_exists($_FILES['photo_loc']['tmp_name'])) && (file_exists($_FILES['resume_loc']['tmp_name']))){
+
+		
+	$fileinfo1 = pathinfo($_FILES['resume_loc']['name']);
+		//getting the file extension 
+		 $extension1 = $fileinfo1['extension'];
+		if (($extension1 != "pdf") && ($extension1 != "doc") && ($extension1 != "docx") )
+			{
+				echo '<script>
+						alert("Unknown Document Format. types allowed - pdf / doc / docx");
+						window.location.replace("sme_dashboard.php");
+				</script>';
+			}
+		else{
+		
+			$temp1 = explode(".", $_FILES["resume_loc"]["name"]);
+			$newfilename1 = round(microtime(true)) . '.' . end($temp1);
+			if(!(is_null($row2['resume_loc']))){
+			unlink($row2['resume_loc']); //Delete old resume
+			}
+			
+			$filename2 = "images/sme_resume/". $newfilename1;
+			move_uploaded_file($_FILES["resume_loc"]["tmp_name"], $filename2);
+		}
+	
+	
+
+		$fileinfo = pathinfo($_FILES['photo_loc']['name']);
+		//getting the file extension 
+		 $extension = $fileinfo['extension'];
+		if (($extension != "jpg") && ($extension != "jpeg") && ($extension != "jfif"))
+			{
+				echo '<script>
+						alert("Unknown Image Format. types allowed - jpg / jpeg / jfif ");
+						window.location.replace("sme_dashboard.php");
+				</script>';
+			}
+		else{
+				$uploadedfile = $_FILES['photo_loc']['tmp_name'];
+				$src = imagecreatefromjpeg($uploadedfile);
+				list($width,$height)=getimagesize($uploadedfile);
+				
+				//set new width
+				$newwidth1=350;
+				$newheight1=($height/$width)*$newwidth1;
+				$tmp1=imagecreatetruecolor($newwidth1,$newheight1);
+						
+				imagecopyresampled($tmp1,$src,0,0,0,0,$newwidth1,$newheight1,$width,$height);
+
+				//new random name        
+				$temp = explode(".", $_FILES["photo_loc"]["name"]);
+				$newfilename = round(microtime(true)) . '.' . end($temp);
+				 
+
+				if(!(is_null($row1['photo_loc'])) && ($row1['photo_loc']!= "images/Dimensions/d_profile.jpg" ) ){
+				unlink($row1['photo_loc']); //Delete old photo
+				}
+				$filename1 = "images/profile_img/". $newfilename;
+							
+				imagejpeg($tmp1,$filename1,100);
+				
+				imagedestroy($src);
+				imagedestroy($tmp1);
+				//insert in database
+				$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", about_sme="'.$about_sme.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", photo_loc="'.$filename1.'", resume_loc="'.$filename2.'", review_rating= 4 WHERE email ="'.$email.'"';           
+				$result=mysqli_query($db, $sql) or die(mysqli_error($db));
+
+				echo '<script>
+						alert("Your Profile is Updated Successfully! .");
+						window.location.replace("sme_dashboard.php");
+					</script>';
+			}	
+	}
+	
+	elseif(file_exists($_FILES['resume_loc']['tmp_name'])){
+
+		
+	$fileinfo1 = pathinfo($_FILES['resume_loc']['name']);
+		//getting the file extension 
+		 $extension1 = $fileinfo1['extension'];
+		if (($extension1 != "pdf") && ($extension1 != "doc") && ($extension1 != "docx") )
+			{
+				echo '<script>
+						alert("Unknown Document Format. types allowed - pdf / doc / docx");
+						window.location.replace("sme_dashboard.php");
+				</script>';
+			}
+		else{
+		
+			$temp1 = explode(".", $_FILES["resume_loc"]["name"]);
+			$newfilename1 = round(microtime(true)) . '.' . end($temp1);
+			if(!(is_null($row2['resume_loc']))){
+			unlink($row2['resume_loc']); //Delete old resume
+			}
+			
+			$filename2 = "images/sme_resume/". $newfilename1;
+			move_uploaded_file($_FILES["resume_loc"]["tmp_name"], $filename2);
+		}
+		
+				//insert in database
+				$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", about_sme="'.$about_sme.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", resume_loc="'.$filename2.'", review_rating= 4 WHERE email ="'.$email.'"';           
+				$result=mysqli_query($db, $sql) or die(mysqli_error($db));
+
+				echo '<script>
+						alert("Your Profile is Updated Successfully! .");
+						window.location.replace("sme_dashboard.php");
+					</script>';
+	}
+
+
+
+
+
+	elseif(file_exists($_FILES['photo_loc']['tmp_name'])){
+
+		$fileinfo = pathinfo($_FILES['photo_loc']['name']);
+		//getting the file extension 
+		 $extension = $fileinfo['extension'];
+		if (($extension != "jpg") && ($extension != "jpeg") && ($extension != "jfif"))
+			{
+				echo '<script>
+						alert("Unknown Image Format. types allowed - jpg / jpeg / jfif ");
+						window.location.replace("sme_dashboard.php");
+				</script>';
+			}
+		else{
+				$uploadedfile = $_FILES['photo_loc']['tmp_name'];
+				$src = imagecreatefromjpeg($uploadedfile);
+				list($width,$height)=getimagesize($uploadedfile);
+				
+				//set new width
+				$newwidth1=350;
+				$newheight1=($height/$width)*$newwidth1;
+				$tmp1=imagecreatetruecolor($newwidth1,$newheight1);
+						
+				imagecopyresampled($tmp1,$src,0,0,0,0,$newwidth1,$newheight1,$width,$height);
+
+				//new random name        
+				$temp = explode(".", $_FILES["photo_loc"]["name"]);
+				$newfilename = round(microtime(true)) . '.' . end($temp);
+				 
+
+				if(!(is_null($row1['photo_loc'])) && ($row1['photo_loc']!= "images/Dimensions/d_profile.jpg" ) ){
+				unlink($row1['photo_loc']); //Delete old photo
+				}
+				$filename1 = "images/profile_img/". $newfilename;
+							
+				imagejpeg($tmp1,$filename1,100);
+				
+				imagedestroy($src);
+				imagedestroy($tmp1);
+				//insert in database
+				$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", about_sme="'.$about_sme.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'", photo_loc="'.$filename1.'",  review_rating= 4 WHERE email ="'.$email.'"';           
+				$result=mysqli_query($db, $sql) or die(mysqli_error($db));
+
+				echo '<script>
+						alert("Your Profile is Updated Successfully! .");
+						window.location.replace("sme_dashboard.php");
+					</script>';
+			}	
+	}
+
+			
+
+	else{
+			//insert in database
+			$sql='UPDATE sme_profile set name="'.$name.'",  phone="'.$phone.'", about_sme="'.$about_sme.'", postal_addr="'.$postal_addr.'", pincode="'.$pincode.'", categoryname="'.$categoryname.'", sme_designation="'.$sme_designation.'", experience="'.$experience.'", skillset="'.$skillset.'", sme_cert="'.$sme_cert.'", sme_language="'.$sme_language.'", webinars="'.$webinars.'", sme_fees="'.$sme_fees.'", mode_of_cons="'.$chk.'",  review_rating= 4 WHERE email ="'.$email.'"';         
+			$result=mysqli_query($db, $sql) or die(mysqli_error($db));
+
+			echo '<script>
+					alert("Your Profile is Updated Successfully! .");
+					window.location.replace("sme_dashboard.php");
+				</script>';
+		}		
 }
 else{
 	header("Location:index.php");
 	exit;
 } 
-
-
+		
 ?>

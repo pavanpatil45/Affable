@@ -1,9 +1,31 @@
 <?php
 require_once ('connection.php');
-if(isset($_SESSION['email'])){
-	$email=$_SESSION['email'];
+if(isset($_GET['webinar_id'])) {
+     
+	$webinar_id= $_GET['webinar_id'];
+	
+
+	$results1 = mysqli_query($db,"SELECT * FROM sme_webinar WHERE webinar_id = '{$webinar_id}'") or die(mysqli_error($db));
+	$row_cnt1=mysqli_num_rows($results1);
+	
+	if($row_cnt1==1){
+		$row1=mysqli_fetch_array($results1);
+		$sme_email=$row1['sme_email'];
+		$webinar_topic=$row1['webinar_topic'];
+		$webinar_desc=$row1['webinar_desc'];
+		$who_attend=$row1['who_attend'];
+		$key_takeaways=$row1['key_takeaways'];
+		$webinar_fees=$row1['webinar_fees'];
+		$webinar_date=$row1['webinar_date'];
+		$webinar_from_time=$row1['webinar_from_time'];
+		$webinar_to_time=$row1['webinar_to_time'];
+		$course_image=$row1['course_image'];
+		$webinar_venue=$row1['webinar_venue'];
+	}
+
+
 	//SELECT sme_webinar.webinar_id, sme_webinar.webinar_topic, sme_webinar.webinar_desc, sme_webinar.who_attend, sme_webinar.key_takeaways, sme_webinar.webinar_fees, sme_webinar.webinar_date, sme_webinar.webinar_from_time, sme_webinar.webinar_to_time, sme_webinar.course_image,  sme_profile.name, sme_profile.phone, sme_profile.email, sme_profile.pincode, sme_profile.postal_addr, sme_profile.categoryname, sme_profile.experience, sme_profile.skillset, sme_profile.sme_cert, sme_profile.sme_language, sme_profile.webinars, sme_profile.sme_fees, sme_profile.mode_of_cons, sme_profile.photo_loc, sme_profile.resume_loc, sme_profile.sme_designation, sme_profile.review_rating FROM sme_webinar inner join sme_profile on sme_webinar.sme_email=sme_profile.email"
-	$results = mysqli_query($db,"SELECT * FROM sme_profile WHERE email = '{$email}'") or die(mysqli_error($db));
+	$results = mysqli_query($db,"SELECT * FROM sme_profile WHERE email = '{$sme_email}'") or die(mysqli_error($db));
 	$row_cnt=mysqli_num_rows($results);
 	
 	if($row_cnt==1){
@@ -29,24 +51,7 @@ if(isset($_SESSION['email'])){
 		
 	}
 	
-	$results1 = mysqli_query($db,"SELECT * FROM sme_webinar WHERE sme_email = '{$email}'") or die(mysqli_error($db));
-	$row_cnt1=mysqli_num_rows($results1);
 	
-	if($row_cnt1==1){
-		$row1=mysqli_fetch_array($results1);
-		$sme_email=$row1['sme_email'];
-		$webinar_id=$row1['webinar_id'];
-		$webinar_topic=$row1['webinar_topic'];
-		$webinar_desc=$row1['webinar_desc'];
-		$who_attend=$row1['who_attend'];
-		$key_takeaways=$row1['key_takeaways'];
-		$webinar_fees=$row1['webinar_fees'];
-		$webinar_date=$row1['webinar_date'];
-		$webinar_from_time=$row1['webinar_from_time'];
-		$webinar_to_time=$row1['webinar_to_time'];
-		$course_image=$row1['course_image'];
-		$webinar_venue=$row1['webinar_venue'];
-	}
 	
 	
 }
@@ -79,12 +84,17 @@ else{
       <link rel="stylesheet" href="css/owl.carousel.css">
       <!--Flickity carousel --->
       <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+	   <!-- Chatbot-->
+      <link rel="stylesheet" href="css/jquery.convform.css">
       <!--Page css -->
       <link rel="stylesheet" href="css/style.css">
       <style>
       </style>
    </head>
    <body data-spy="scroll" data-target=".navbar" data-offset="50">
+		
+	  
+	  
       <section class="home-banner-area relative" id="home" data-parallax="scroll" data-image-src="images/webinar_cover.png">
          <div class="overlay-bg overlay"></div>
          <h1 class="template-name">AFFABLE</h1>
@@ -188,7 +198,7 @@ else{
                      -webkit-transition: all ease-in-out 0.5s;
                      -o-transition: all ease-in-out 0.5s;
                      transition: all ease-in-out 0.5s; text-align: center;">
-					 <?php echo '<img src="data:image;base64,'.$photo_loc.'" style="max-width: 100%;" >'?>
+					 <?php echo '<img src="'.$photo_loc.'" style="max-width: 100%;" >'?>
                   </div>
                </div>
             </div>
@@ -218,7 +228,7 @@ else{
                      transition: all ease-in-out 0.5s;">
                      <h4 style="margin-bottom: 15px;
                         font-size: 26px; font-family: 'Georgia'; color: black;">Target Audience</h4>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                     <p style="font-size: 16px; margin-bottom: 1rem;">
                        
 					   
 					   <?php echo $who_attend;?>
@@ -243,7 +253,7 @@ else{
                      transition: all ease-in-out 0.5s;">
                      <h4 style="margin-bottom: 15px;
                         font-size: 26px; font-family: 'Georgia'; color: black;">Key Takeaways</h4>
-                     <p style="font-size: 16px; margin-bottom: 1rem;">A Passionate Java Full Stack Trainer
+                     <p style="font-size: 16px; margin-bottom: 1rem;">
                        
 					   
 					   <?php echo $key_takeaways;?>
@@ -266,7 +276,22 @@ else{
             </div>
          </div>
       </section>
-      <section>
+      
+	  
+	  
+	   <style>
+	  .image-cropper {
+			width: 180px;
+			height: 180px;
+			position: relative;
+			overflow: hidden;
+			border-radius: 100%;
+		}
+		
+	  </style>
+
+
+	   <section id="section2">
          <div class="container-fluid" style="background-color: #f4f4f4;">
             <div class="grp_box" style="padding: 40px;
                background: #f5f5f5;
@@ -276,59 +301,52 @@ else{
                -o-transition: all ease-in-out 0.5s;
                transition: all ease-in-out 0.5s; text-align: center;">
                <h4 style="margin-bottom: 15px;
-                  font-size: 26px; font-family: 'Georgia'; color: black;">The best hire the brightest</h4>
+                  font-size: 26px; font-family: 'Georgia'; color: black;">The best hire the brightest
+               </h4>
                <h5 style="margin-bottom: 65px;
                   font-size: 16px; font-family: 'Georgia'; color: grey;">Over 3,000 customers rely on the resumator to hire the best candidates every year</h5>
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-4">
-                        <img src="images/img1.jpg" style="width: 50%; border-radius: 50%;">
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 12px; font-family: 'Georgia'; color: black;">Management Head</h4>
-                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
-                           with 25+ years of experience with a
-                           demonstrated history of training
-                           working professionals in IT sector.
-                           An Enthusiastic Entrepreneur
-                           having zeal to explore more
-                           opportunities in learning and
-                           development.
-                        </p>
-                     </div>
-                     <div class="col-md-4">
-                        <img src="images/img2.jpg" style="width: 50%; border-radius: 50%;">
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 12px; font-family: 'Georgia'; color: black;">Marketing Head</h4>
-                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
-                           with 25+ years of experience with a
-                           demonstrated history of training
-                           working professionals in IT sector.
-                           An Enthusiastic Entrepreneur
-                           having zeal to explore more
-                           opportunities in learning and
-                           development.
-                        </p>
-                     </div>
-                     <div class="col-md-4">
-                        <img src="images/img3.jpg" style="width: 50%; border-radius: 50%;">
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 12px; font-family: 'Georgia'; color: black;">Development Head</h4>
-                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
-                           with 25+ years of experience with a
-                           demonstrated history of training
-                           working professionals in IT sector.
-                           An Enthusiastic Entrepreneur
-                           having zeal to explore more
-                           opportunities in learning and
-                           development.
-                        </p>
-                     </div>
+               
+						
+							<?php 
+								$query5 = "SELECT * FROM testimonial WHERE sme_email = '{$email}' ORDER BY testimonial_id desc LIMIT 3";
+								$select_test = mysqli_query($db, $query5);
+								 $rowcount5=mysqli_num_rows($select_test);
+									
+								if($rowcount5==0)
+								{
+								 echo "<center><h4>No Testimonials added yet<h4></center>";
+								}
+								 else{
+									 ?>
+									<div class="container">
+									<div class="row">
+									<?php 
+									 
+									while($row5 = mysqli_fetch_assoc($select_test))
+									{
+										$att_photo = $row5['att_photo'];
+										$att_audio = $row5['att_audio'];
+										$att_name = $row5['att_name'];
+										$att_desig = $row5['att_desig'];
+										$testimony = $row5['testimony'];
+										
+										
+									?>
+									<div class="col-md-4">
+										
+										<img src="<?php echo $att_photo;?>" class="image-cropper">
+										<h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+										   font-size: 20px; font-family: 'Georgia'; color: black;"><?php echo $att_name;?></h4>
+										<h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+										   font-size: 12px; font-family: 'Georgia'; color: black;"><?php echo $att_desig;?></h4>
+										<p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">
+										<?php echo $testimony;?>
+										</p>
+									</div>
+										
+									<?php }} ?>
+						
+                   
                   </div>
                </div>
             </div>
@@ -370,7 +388,7 @@ else{
                      -webkit-transition: all ease-in-out 0.5s;
                      -o-transition: all ease-in-out 0.5s;
                      transition: all ease-in-out 0.5s; text-align: center;">
-                     <?php echo '<img src="data:image;base64,'.$course_image.'" style="max-width: 100%;" >'?>
+                     <?php echo '<img src="'.$course_image.'" style="max-width: 100%;" >'?>
                   </div>
                </div>
             </div>
@@ -410,7 +428,9 @@ else{
       <script src="js/jquery.magnific-popup.min.js"></script>
       <script src="js/jquery.sticky.js"></script>
       <script src="js/main.js"></script>
-      <script src="js/pageHandler.js"></script>
+      <script src="pageHandler.js"></script>
+	  <script src="check.js"></script>
+	    <script src="js/jquery.convform.js"></script>
       <!-- For carousel --->
       <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>

@@ -1,4 +1,6 @@
-
+<?php
+include "connection.php";
+?>
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
    <head>
@@ -6,8 +8,10 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <meta charset="UTF-8">
       <!-- Site Title -->
-      <title>AFFABLE || HOME</title>
+      <title>SME4U || HOME</title>
       <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700|Roboto:400,500" rel="stylesheet">
+      <script src="https://apis.google.com/js/platform.js" async defer></script>
+      <meta name="google-signin-client_id" content="370809489217-rleeu324u6co1dknrkunps5ci9fq2fr5.apps.googleusercontent.com">
       <!--fontawesome-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap">
@@ -19,17 +23,77 @@
       <link rel="stylesheet" href="css/owl.carousel.css">
       <!--Flickity carousel --->
       <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+	   <!-- Chatbot-->
+      <link rel="stylesheet" href="css/jquery.convform.css">
       <!--Page css -->
 	  <link rel="stylesheet" href="css/style.css">
 	  <!--jQuery Script-->
 	  <script src="js/jquery-2.2.4.min.js"></script>
 	</head>
-   <body data-spy="scroll" data-target=".navbar" data-offset="50">
+   <body onload="startApp()" data-spy="scroll" data-target=".navbar" data-offset="50">
+		
+		
+	 <div class="chat_icon">
+	 <!--<img src="images\chatbot.png" style="width: 80px; height: 80px; border-radius: 50%;">-->
+	 <img src="images\chatbot.png" style="width: 80px; height: 80px;">
+	</div>
+     <div class="chat_box">
+			 <div style="height: 10vh; background: #F3834B; border-top-left-radius: 15px; border-top-right-radius: 15px; padding: 15px; color: white; font-weight: bold;">
+				Need assistance? Let's chat!
+			 </div>
+			 <div class="my-conv-form-wrapper">
+				<form class="hidden" method="POST" action="chatbot_data_index.php">
+				  
+
+				  <select  data-conv-question="Hello! How can I help you" name="user_type" id="user_type">
+					  <option value="Client" id="Client_css">Client ?</option>
+					  <option value="SME" id="SME_css">SME ?</option>
+				   </select>
+				   
+  
+				 <select data-conv-question="Please, select category" name="category" id="category">
+				 
+				 <?php
+					$stmt = $conn->prepare("SELECT categoryName FROM category ORDER BY categoryName");
+					$stmt->execute();
+					while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+						echo "<option>".htmlentities($row['categoryName'])."</option>";
+				 ?>
+				 </select>
+				   
+				   
+				   <input name="name" id="name" type="text"  data-conv-question="Please, Enter your name">
+				   
+				   <input type="text" data-conv-question="Hi {name}, <br> It's a pleasure to meet you." data-no-answer="true">
+				   
+				   <input id="email" data-conv-question="Enter your e-mail" data-pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" type="email" name="email" required placeholder="What's your e-mail?">
+				   
+				   
+					
+					<div data-conv-fork="user_type">
+					  <div data-conv-case="Client">
+						 <input name="request_details" id="request_details" type="text" data-conv-question="Please, put forth your request">    
+					  </div>
+				   </div>
+				   
+				   
+				   <select data-conv-question="Please Confirm">
+					  <option type="submit" id="confirm_chat" name="confirm_chat">Confirm</option>
+				   </select>
+				</form>
+		
+			 </div>
+		  </div>
+		
+		
+		
+		  
+		  
       <!-- Start Header Area -->
       <header class="default-header">
          <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
-               <a class="navbar-brand" href="index.html">
+               <a class="navbar-brand" href="index.php">
                   <!-- <img src="img/logo.png" alt=""> -->
                </a>
                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -38,12 +102,16 @@
                </button>
                <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
                   <ul class="navbar-nav">
-                     <li type="button" data-toggle="collapse" data-target="#navbarSupportedContent"><a class="active" href="#section1">Who are we</a></li>
-                     <li type="button" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section2">How it works</a></li>
-                     <li type="button" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section3">SME Community</a></li>
-                     <li type="button" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section4">FAQ</a></li>
-                     <li type="button" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section5">Write to us</a></li>
-                     <li class="dropdown">
+                     
+					 <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a class="active" href="#home">Home</a></li>
+                     <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section1">Who are we</a></li>
+                     <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section2">How it works</a></li>
+                     <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section3">SME Community</a></li>
+                     <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section4">FAQ</a></li>
+                     <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#section5">Write to us</a></li>
+                      <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#" data-toggle="modal" data-target="#signInUser" onclick="hideuserOTPsection();">User Signin</a></li>
+                     <li type="link" data-toggle="collapse" data-target="#navbarSupportedContent"><a href="#" data-toggle="modal" data-target="#signInSME" onclick="hidesmeOTPsection();">SME Signin</a></li>
+                     <!-- <li class="dropdown">
                         <a class="dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                         Sign In
                         </a>
@@ -60,7 +128,7 @@
                            <a class="dropdown-item" href="#" type="button"  id="userRegister" data-toggle="modal" data-target="#registerUser">Register as user</a>
                            <a class="dropdown-item" href="#" type="button" id="smeRegister" data-toggle="modal" data-target="#registerSME">Register as SME</a>
                         </div>
-                     </li>
+                     </li>-->
                   </ul>
                </div>
             </div>
@@ -72,17 +140,15 @@
          <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-               <!-- <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h2 class="modal_title">Join Affable</h2>
-                  </div> -->
+               
                <div class="modal-body">
+			    <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="signup_section">
-                     <button type="button" class="facebook_button">
+                    <!-- <button type="button" class="facebook_button">
                         <span><i class="fab fa-facebook-square"></i></span>
                         <p>Continue with Facebook</p>
-                     </button>
-                     <button type="button" class="google_button">
+                     </button> -->
+                      <button type="button customGPlusSignIn" class="google_button" id="customBtn_UserReg">
                         <span><i class="fab fa-google"></i></span>
                         <p>Continue with Google</p>
                      </button>
@@ -124,7 +190,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>Already a member?<span><button class="link_button" onclick="location.href='index.php?userSignIn=1';">Sign In</button></span></p>
+                        <p>Already a member?<span><button class="link_button" type="button" id="userSignin" onclick="userSignin();">Sign In</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -171,17 +237,15 @@
          <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-               <!-- <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h2 class="modal_title">Join Affable</h2>
-                  </div> -->
+               
                <div class="modal-body">
+			    <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="signup_section">
-                     <button type="button" class="facebook_button">
+                    <!-- <button type="button" class="facebook_button">
                         <span><i class="fab fa-facebook-square"></i></span>
                         <p>Continue with Facebook</p>
-                     </button>
-                     <button type="button" class="google_button">
+                     </button> -->
+                     <button type="button customGPlusSignIn" class="google_button" id="customBtn_SMEReg">
                         <span><i class="fab fa-google"></i></span>
                         <p>Continue with Google</p>
                      </button>
@@ -221,7 +285,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>Already a member?<span><button class="link_button" onclick="location.href='index.php?smeSignIn=1';">Sign In</button></span></p>
+                        <p>Already a member?<span><button class="link_button" type="button" id="SMESignin" onclick="SMESignin();">Sign In</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -270,16 +334,15 @@
          <div class="modal-dialog" id="otp_modal_dialogue_user">
             <!-- Modal content-->
             <div class="modal-content" id="signIn_modal_content_user">
-               <!--  <div class="modal-header">
-                  <h2 class="modal_title">SignIn</h2>
-                  </div> -->
+                
                <div class="modal-body signin_modal_body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="signup_section">
-                     <button type="button" class="facebook_button">
+                   <!--  <button type="button" class="facebook_button">
                         <span><i class="fab fa-facebook-square"></i></span>
                         <p>Continue with Facebook</p>
-                     </button>
-                     <button type="button" class="google_button">
+                     </button> -->
+                     <button type="button customGPlusSignIn" class="google_button" id="customBtn_UserLogin">
                         <span><i class="fab fa-google"></i></span>
                         <p>Continue with Google</p>
                      </button>
@@ -320,7 +383,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>New member?<span><button class="link_button" onclick="location.href='index.php?userRegister=1';">Register</button></span></p>
+                         <p>New member?<span><button class="link_button" type="button" id="userSignup" onclick="userSignup();">Register</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -446,16 +509,15 @@
          <div class="modal-dialog" id="otp_modal_dialogue_sme">
             <!-- Modal content-->
             <div class="modal-content" id="signIn_modal_content_sme">
-               <!--  <div class="modal-header">
-                  <h2 class="modal_title">SignIn</h2>
-                  </div> -->
+             
                <div class="modal-body signin_modal_body">
+			    <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="signup_section">
-                     <button type="button" class="facebook_button">
+                   <!--  <button type="button" class="facebook_button">
                         <span><i class="fab fa-facebook-square"></i></span>
                         <p>Continue with Facebook</p>
-                     </button>
-                     <button type="button" class="google_button">
+                     </button> -->
+                     <button type="button customGPlusSignIn" class="google_button" id="customBtn_SMELogin">
                         <span><i class="fab fa-google"></i></span>
                         <p>Continue with Google</p>
                      </button>
@@ -496,7 +558,7 @@
                   </div>
                   <footer class="modal_content_footer">
                      <div class="modal_content_footer_body">
-                        <p>New member?<span><button class="link_button" onclick="location.href='index.php?smeRegister=1';">Register</button></span></p>
+                         <p>New member?<span><button class="link_button" type="button" id="SMESignup" onclick="SMESignup();">Register</button></span></p>
                      </div>
                   </footer>
                </div>
@@ -610,25 +672,35 @@
 	  </script>
       <!-- end modal for SME login --->
       <!-- start banner Area -->
-      <section class="home-banner-area relative" id="home" data-parallax="scroll" data-image-src="images/header-bg.jpg">
+       <section class="home-banner-area relative" id="home" data-parallax="scroll" data-image-src="images/bg4.jpg">
          <div class="overlay-bg overlay"></div>
-         <h1 class="template-name">AFFABLE</h1>
+         <h1 class="template-name">SME4U</h1>
          <div class="container">
-            <div class="row fullscreen">
-               <div class="banner-content col-lg-12">
-                  <p>Building for society</p>
-                  <h1>
-                     Get services from SME <br>
-                     based on your requirement
-                  </h1>
-                  <!-- <a href="#" class="primary-btn">View project</a> -->
-               </div>
+          
+		  <div class="row fullscreen">
+            <div class="banner-content col-lg-12">
+               <h3 class="ml3" style="color:orange;font-weight: normal;">Roof for SME</h3>
+                <h1 class="ml11">
+                  <span class="text-wrapper">
+                  <span class="line line1"></span>
+                  <span class="letters">Your SME is just a click away</span>
+                  </span>
+               </h1>
+               <div class="row link_wrapper">
+                  <div class="" id="SMERegister">
+                     <a class="link" href="#" type="link" data-toggle="modal" data-target="#registerSME">SME</a>
+                  </div>
+                  <div class="" id="UserRegister">
+                     <a class="link" href="#" type="link" data-toggle="modal" data-target="#registerUser">USER</a>
+                  </div>
+				</div>
             </div>
          </div>
       </section>
       <!-- End banner Area -->
+	  
       <!-- Start brands Area -->
-      <section class="brands-area">
+     <!-- <section class="brands-area">
          <div class="container no-padding">
             <div class="brand-wrap section-gap">
                <div class="row align-items-center active-brand-carusel justify-content-start no-gutters">
@@ -650,27 +722,31 @@
                </div>
             </div>
          </div>
-      </section>
+      </section>-->
       <!-- End brands Area -->
       <!-- Start About Area -->
       <section class="about-area section-gap" id="section1">
+	  
+	 <!--  <div><br></br></div>
+      <div><br></br></div>-->
+	  
          <div class="container">
             <div class="row align-items-center justify-content-center">
                <div class="col-lg-7 col-md-12 about-left">
-                  <img class="img-fluid" src="images/about.png" alt="">
+                  <img class="img-fluid" src="images/bg7.jpg" alt="">
                </div>
                <div class="col-lg-5 col-md-12 about-right">
-                  <div class="section-title text-left">
-                     <h2>Who are we?</h2>
-                     <h4>We are here to make it easier for you</h4>
+                  <div class="section-title text-center">
+                     <h2>Who are we</h2>
+                     <h4>We make your life easier</h4>
                      <!-- <h2>We are here <br /> to make it easier for you</h2> -->
                   </div>
                   <div>
-                     <p>
+                     <p class="text-center">
                         We connect you to Subject Matter Experts from various areas of expertise who will answer your questions and help you in taking right decisions in all your phases of life.
                      </p>
                   </div>
-                  <a href="#" class="primary-btn">Read More</a>
+                <!--  <a href="#" class="primary-btn">Read More</a> -->
                </div>
             </div>
          </div>
@@ -683,30 +759,30 @@
             <div class="row feature_inner">
                <div class="col-lg-3 col-md-6">
                   <div class="feature-item">
-                     <img src="images/how_it_works_1.jpg">
+                     <img src="images/newimages/joinus.jpg">
                      <h4>Register first</h4>
-                     <p>Register with us with your details, post the gist of your question</p>
+                     <p>Register with us with your details first time, post your request for consultation</p>
                   </div>
                </div>
                <div class="col-lg-3 col-md-6">
                   <div class="feature-item">
                      <img src="images/how_it_works_2.jpg">
-                     <h4>Initiate payment</h4>
-                     <p>Pay the consultation fee as mentioned</p>
+                     <h4> SME provides consultation slots</h4>
+                     <p>Client confirms convenient slot</p>
                   </div>
                </div>
                <div class="col-lg-3 col-md-6">
                   <div class="feature-item">
                      <img src="images/how_it_works_3.jpg">
                      <h4>Avail consultation</h4>
-                     <p>We will connect SME that matches your question</p>
+                     <p>Make payment and proceed with consultation</p>
                   </div>
                </div>
                <div class="col-lg-3 col-md-6">
                   <div class="feature-item">
                      <img src="images/how_it_works_4.jpg">
                      <h4>Share feedback</h4>
-                     <p>You can chat , email or talk to SME</p>
+                     <p>help us in serving better</p>
                   </div>
                </div>
             </div>
@@ -716,123 +792,243 @@
       <!-- Start SME section -->
       <section id="section3">
          <div class="container-fluid">
+		 <div><br></br></div>
+         <div><br></br></div>
             <div class="popular">
                <h1>SME Community</h1>
                <div class="popular-carousel" data-flickity='{ "autoPlay": true, "prevNextButtons": false, "wrapAround": true, "pageDots": false }' data-wow-delay="0.2s">
                   <div class="single-item">
                      <div class="img">
-                        <img src="images/service.jpg">
+					 
+					 
+                        <div class="flip-3d">
+                           <figure>
+                              <img src="images/newimages/realestate1.jpg" alt>
+                              <figcaption>Real Estate</figcaption>
+                           </figure>
+                        </div>
+						
+						
+                     </div>
+                     <div class="info">
+                     </div>
+                  </div>
+                  <div class="single-item">
+				  
+				  
+                     <div class="img">
+                         <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/realestate2.jpg" alt>
+                    <figcaption>Real Estate</figcaption>
+                    </figure>
+                    </div>
+                     </div>
+					 
+					 
+                     <div class="info">
+                     </div>
+                  </div>
+                  <div class="single-item">
+                     <div class="img">
+					 
+					 
+                        <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/health1.jpg" alt>
+                    <figcaption>Health</figcaption>
+                    </figure>
+                    </div>
+					
+					
                      </div>
                      <div class="info">
                      </div>
                   </div>
                   <div class="single-item">
                      <div class="img">
-                        <img src="images/service1.jpg">
+					 
+					 
+                         <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/health2.jpg" alt>
+                    <figcaption>Health</figcaption>
+                    </figure>
+                    </div>
+					
+					
+                     </div>
+                     <div class="info">
+                     </div>
+                  </div>
+                  <div class="single-item">
+				  
+				  
+                     <div class="img">
+                         <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/entre1.jpg" alt>
+                    <figcaption style="font-size:22px;">Entrepreneurship</figcaption>
+                    </figure>
+                    </div>
+					
+					
                      </div>
                      <div class="info">
                      </div>
                   </div>
                   <div class="single-item">
                      <div class="img">
-                        <img src="images/service2.jpg">
+					 
+					 
+                        <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/entre2.jpg" alt>
+                    <figcaption style="font-size:22px;">Entrepreneurship</figcaption>
+                    </figure>
+                    </div>
+					
+					
                      </div>
                      <div class="info">
                      </div>
                   </div>
                   <div class="single-item">
+				  
+				  
                      <div class="img">
-                        <img src="images/service3.jpg">
+                        <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/it1.jpg" alt>
+                    <figcaption>IT and Software development</figcaption>
+                    </figure>
+                    </div>
                      </div>
+					 
+					 
                      <div class="info">
                      </div>
                   </div>
                   <div class="single-item">
                      <div class="img">
-                        <img src="images/service4.jpg">
+					 
+					 
+                         <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/newimage1.jpg" alt>
+                    <figcaption>Demo</figcaption>
+                    </figure>
+                    </div>
+					
+					
                      </div>
                      <div class="info">
                      </div>
                   </div>
                   <div class="single-item">
+				  
+				  
                      <div class="img">
-                        <img src="images/service5.jpg">
+                         <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/bridge.jpg" alt>
+                    <figcaption>Construction</figcaption>
+                    </figure>
+                    </div>
                      </div>
+					 
+					 
                      <div class="info">
                      </div>
                   </div>
                   <div class="single-item">
+				  
+				  
                      <div class="img">
-                        <img src="images/service6.jpg">
+                        <div class="flip-3d">
+                    <figure>
+                    <img src="images/newimages/newimage3.jpg" alt>
+                    <figcaption>Ispum</figcaption>
+                    </figure>
+                    </div>
                      </div>
-                     <div class="info">
-                     </div>
-                  </div>
-                  <div class="single-item">
-                     <div class="img">
-                        <img src="images/service7.jpg">
-                     </div>
-                     <div class="info">
-                     </div>
-                  </div>
-                  <div class="single-item">
-                     <div class="img">
-                        <img src="images/service8.jpg">
-                     </div>
-                     <div class="info">
-                     </div>
-                  </div>
-                  <div class="single-item">
-                     <div class="img">
-                        <img src="images/service9.jpg">
-                     </div>
+					 
+					 
                      <div class="info">
                      </div>
                   </div>
                </div>
             </div>
+			
+			  <div><br></br></div>
+            <div><br></br></div>
+            <div><br></br></div>
+            <div><br></br></div>
+			
          </div>
       </section>
       <!-- end SME section -->
       <!-- Start FAQ section -->
-      <section id="section4">
+       <section id="section4">
+     <div><br></br></div>
          <div class="container faqs">
             <h1>Frequently Asked Questions</h1>
             <div class="accordion">
                <div class="contentBx">
-                  <div class="label">How is the weather in Oblast, Russia ?</div>
+                  <div class="label">What is this portal all about?</div>
                   <div class="content">
-                     <p>We connect you to Subject Matter Experts from various areas of expertise who will answer your questions and help you in taking right decisions in all your phases of life.</p>
+                     <p>This is a Portal that maintains profiles of SMEs (Subject Matter Experts) from different areas who are willing to answer questions from clients through chatting, email or call that helps clients to take wise decisions in different phases of their lives.</p>
                   </div>
                </div>
                <div class="contentBx">
-                  <div class="label">How can I apply for a scholarship in Kemerovo state medical university?</div>
+                  <div class="label">Who can be a SME or what is the criteria to become a SME?</div>
                   <div class="content">
-                     <p></p>
+                     <p>We have certain categories or areas for which for which any professional who claims to be a SME can register and create a profile. </p>
                   </div>
                </div>
                <div class="contentBx">
-                  <div class="label">Does the Kemerovo State Medical University provide post graduate courses?</div>
+                  <div class="label">What are the benefits for SME? 
+                  </div>
                   <div class="content">
-                     <p></p>
+                     <p>
+                         SME gets an opportunity to earn through consultation
+                         
+                     </p>
                   </div>
                </div>
                <div class="contentBx">
-                  <div class="label">What is Kemerovo State Medical University fee structure?</div>
+                  <div class="label">What are the benefits for client or user?</div>
                   <div class="content">
-                     <p></p>
+                     <p>
+                         Our SMEs answer your questions with a consultation and help you in taking rational and wise decisions
+                         
+                     </p>
                   </div>
                </div>
                <div class="contentBx">
-                  <div class="label">What is Kemerovo state medical college admission procedure?</div>
+                  <div class="label">What will be the mode of Consultation?</div>
                   <div class="content">
-                     <p></p>
+                     <p>
+                         Online chatting or call or through email
+                     </p>
                   </div>
                </div>
                <div class="contentBx">
-                  <div class="label">What is Kemerovo state medical university ranking ?</div>
+                  <div class="label">Will there be a review consultation?</div>
                   <div class="content">
-                     <p></p>
+                     <p>
+                         Yes we provide that option as well.
+                         
+                     </p>
+                  </div>
+               </div>
+                <div class="contentBx">
+                  <div class="label">What if we are not satisfied with the answers provided by SME?</div>
+                  <div class="content">
+                     <p>
+                        There will be an online survey conducted after every consultation where you can express your views based on which necessary action will be taken, in genuine conditions consultation fees will be refunded.
+                         
+                     </p>
                   </div>
                </div>
             </div>
@@ -855,7 +1051,7 @@
                ></div>
             <div class="row">
                <div class="col-lg-4">
-                  <img src="images/write_to_us.jpg" style="max-width: 100%;">
+                  <img src="images/newimages/writetous.jpg" style="max-width: 100%;">
                </div>
                <div class="col-lg-5">
                   <form class="contact_form" id="contactForm" novalidate="novalidate">
@@ -1012,12 +1208,15 @@
       <!--- Scripts section --->
       <!-- sticky nav -->
       <script src="js/parallax.min.js"></script>
+	  <script src="js/jquery.convform.js"></script>
       <script src="js/owl.carousel.min.js"></script>
       <script src="js/isotope.pkgd.min.js"></script>
       <script src="js/jquery.magnific-popup.min.js"></script>
       <script src="js/jquery.sticky.js"></script>
       <script src="js/main.js"></script>
-      <script src="js/pageHandler.js"></script>
+      <script src="pageHandler.js"></script>
+	  <script src="check.js"></script>
+	  
       <!-- For carousel --->
       <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
@@ -1063,5 +1262,64 @@
              }
          }
       </script>
+	  
+	  
+	  
+	   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+               <script>
+                  var textWrapper = document.querySelector('.ml3');
+                  textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+
+                  anime.timeline({loop: true})
+                  .add({
+                  targets: '.ml3 .letter',
+                  opacity: [0,1],
+                  easing: "easeInOutQuad",
+                  duration: 2250,
+                  delay: (el, i) => 150 * (i+1)
+                  }).add({
+                  targets: '.ml3',
+                  opacity: 0,
+                  duration: 1000,
+                  easing: "easeOutExpo",
+                  delay: 1000
+                  });
+               </script>
+               <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+               <script>
+                  var textWrapper = document.querySelector('.ml11 .letters');
+                  textWrapper.innerHTML = textWrapper.textContent.replace(/([^\x00-\x80]|\w)/g, "<span class='letter'>$&</span>");
+
+                  anime.timeline({loop: true})
+                    .add({
+                      targets: '.ml11 .line',
+                      scaleY: [0,1],
+                      opacity: [0.5,1],
+                      easing: "easeOutExpo",
+                      duration: 700
+                    })
+                    .add({
+                      targets: '.ml11 .line',
+                      translateX: [0, document.querySelector('.ml11 .letters').getBoundingClientRect().width + 10],
+                      easing: "easeOutExpo",
+                      duration: 700,
+                      delay: 100
+                    }).add({
+                      targets: '.ml11 .letter',
+                      opacity: [0,1],
+                      easing: "easeOutExpo",
+                      duration: 600,
+                      offset: '-=775',
+                      delay: (el, i) => 34 * (i+1)
+                    }).add({
+                      targets: '.ml11',
+                      opacity: 0,
+                      duration: 1000,
+                      easing: "easeOutExpo",
+                      delay: 1000
+                    });
+
+               </script>
+	  
    </body>
 </html>

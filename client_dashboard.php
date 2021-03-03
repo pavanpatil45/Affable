@@ -2,6 +2,12 @@
 	include "connection.php";
 	if(!isset($_SESSION['email']))
 		header("Location: index.php");
+	else {
+		$stmt = $conn->prepare("SELECT name FROM user WHERE email = :email");
+		$stmt->execute(array(":email" => $_SESSION['email']));
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		$_SESSION['user'] = $row['name'];
+	}	
 
 	if(isset($_SESSION['questionid']))
 		unset($_SESSION['questionid']);
@@ -27,12 +33,45 @@
       <link rel="stylesheet" href="css/owl.carousel.css">
       <!--Flickity carousel --->
       <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+	  <!-- Chatbot-->
+      <link rel="stylesheet" href="css/jquery.convform.css">
       <!--Page css -->
       <link rel="stylesheet" href="css/style.css">
       <!--jQuery Script-->
       <script src="js/jquery-2.2.4.min.js"></script>
+	  <script src="chat_app_scripts.js"></script>
+      <style>
+         ::placeholder {
+ color: #38489E;
+         opacity: 1; /* Firefox */
+         }
+         :-ms-input-placeholder { /* Internet Explorer 10-11 */
+         color: #38489E;
+         }
+         ::-ms-input-placeholder { /* Microsoft Edge */
+         color: #38489E;
+         } 
+      </style>
+	  <style>
+
+		a.user1Attach {
+			color: #87898f;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		a.user2Attach {
+			color: #fff;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		span.date-time {
+			font-size: 0.8rem;
+			
+		}
+	  </style>
    </head>
    <body data-spy="scroll" data-target=".navbar" data-offset="50">
+	
       <!-- Start Header Area -->
       <header class="default-header" style="background-color: #38489E;">
          <nav class="navbar navbar-expand-lg navbar-light">
@@ -94,15 +133,18 @@
                </div>
                <div class="col-sm-9">
                   <div class="row">
-					<div class="col-sm-6 client_request">
-					<p>Email: <?= $_SESSION['email'] ?></p>
-					<h1>requests</h1>
 					
+					<div class="col-sm-6 client_request">
 					<?php						
 						// Retrieving user requests from table
 						$stmt1 = $conn->prepare("SELECT questionid, category, topic, question, status FROM userquestion WHERE email = :email");
 						$stmt1->execute(array(":email" => $_SESSION['email']));
-
+						
+						if(($stmt1->rowcount())>0) {
+						?>
+						
+						<h1>requests</h1>
+						<?php
 						while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
 							$request = $row1;
 							$questionid = $request['questionid'];
@@ -158,23 +200,23 @@
                                        <label>Category: </label>
                                        <label style="width: 100%;"><?= htmlentities($request['category']) ?></label>
                                     </div>
-                                    <div class="inputfield">
+                                    <div class="inputfield terms">
                                        <label>Question</label>
                                        <label style="width: 100%;"><?= htmlentities($request['question']) ?></label>
                                     </div>
-                                    <div class="inputfield">
+                                    <div class="inputfield terms">
                                        <label>Seen by</label>
                                        <label style="width: 100%;"><?= htmlentities($seen_by) ?></label>
                                     </div>
-                                    <div class="inputfield">
+                                    <div class="inputfield terms">
                                        <label>Status</label>
                                        <label style="width: 100%;"><?= htmlentities($request['status']) ?></label>
                                     </div>
-                                    <div class="inputfield">
+                                    <div class="inputfield terms">
                                        <label>SME's reply</label>
                                        <label style="width: 100%;"><?= htmlentities($answer) ?></label>
                                     </div>
-                                    <div class="inputfield">
+                                    <div class="inputfield terms">
                                        <label>Consultation status</label>
                                        <label style="width: 100%;"><?= htmlentities($status) ?></label>
                                     </div>
@@ -187,7 +229,10 @@
                               </div>
 							</div>
                         </div>
-					<?php } ?>
+					<?php 
+					}
+					}
+					?>
 					</div>
 
 					<script>
@@ -218,33 +263,41 @@
 						}
 					</script>
 
-					 <div class="col-sm-6 client_request">
-                     <h1>consultations</h1>
-
+					
+					<div class="col-sm-6 client_request">
+					<h1 id="sme_cons_heading" style="display: none;">consultations</h1>
 					<?php						
 						// Retrieving consultaions from table
-						$stmt1 = $conn->prepare("SELECT consultationId, smeEmailId, questionId, mode, date, fromTime FROM consultation WHERE clientEmailId = :email AND status <> 'Cancelled'");
+						$stmt1 = $conn->prepare("SELECT consultationId, smeEmailId, questionId, mode, date, fromTime FROM consultation WHERE clientEmailId = :email AND status <> 'Cancelled' AND status <> 'followup'");
 						$stmt1->execute(array(":email" => $_SESSION['email']));
-
+						if(($stmt1->rowcount())>0) {
+						?>
+						 <script>
+							$('#sme_cons_heading').show();
+						</script>	
+						<?php
 						$consultation_count = 1;
 						while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
 							$consultation = $row1;
+							$questionId = $consultation['questionId'];
+							$smeEmailId = $consultation['smeEmailId'];
 							
 							// Retrieving user question from table
 							$stmt2 = $conn->prepare("SELECT category, question FROM userquestion WHERE questionId = :questionId");
-							$stmt2->execute(array(":questionId" => $consultation['questionId']));
+							$stmt2->execute(array(":questionId" => $questionId));
 							$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
 							$category = $row2['category'];
 							$question = $row2['question'];
 
 							// Retrieving sme name from table
-							$stmt3 = $conn->prepare("SELECT name FROM sme_profile WHERE email = :email");
-							$stmt3->execute(array(":email" => $consultation['smeEmailId']));
+							$stmt3 = $conn->prepare("SELECT name, sme_code FROM sme_profile WHERE email = :email");
+							$stmt3->execute(array(":email" => $smeEmailId));
 							$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
 							$sme = $row3['name'];
+							$sme_code = $row3['sme_code'];
 					?>		
 
-                     <button class="accordion">Consultation ID <?= $consultation_count ?></button>
+                     <button class="accordion">Consultation <?= $consultation_count ?></button>
                      <div class="panel">
                         <div class="profile_section">
                            <div class="form">
@@ -257,30 +310,29 @@
                                     <label>Category: </label>
                                     <label style="width: 100%;"><?= htmlentities($category) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Question</label>
                                     <label style="width: 100%;"><?= htmlentities($question) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>SME</label>
                                     <label style="width: 100%;"><?= htmlentities($sme) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Mode</label>
                                     <label style="width: 100%;"><?= htmlentities($consultation['mode']) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Date</label>
                                     <label style="width: 100%;"><?= htmlentities($consultation['date']) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Time</label>
                                     <label style="width: 100%;"><?= htmlentities($consultation['fromTime']) ?></label>
                                  </div>
 								
                                  <div class="inputfield">
-                                     <input type="submit" value="Click to connect" class="btn" disabled="">
-                                 </div>
+								<input type="button" value="Click to connect" class="btn" data-toggle="modal" data-target="#connectToChat" data-backdrop="static" data-keyboard="false" onclick="chat('<?= $smeEmailId ?>', '<?= $sme_code ?>', '<?= $questionId ?>');">                                 </div>
 							
                               </form>
                            </div>
@@ -289,13 +341,113 @@
 					<?php 
 							$consultation_count++;
 						}
+						}
 					?>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					<?php						
+						// Retrieving followups from table
+							$stmt22 = $conn->prepare("SELECT * FROM followup WHERE client_email = :email");
+							$stmt22->execute(array(":email" => $_SESSION['email']));
+							
+							if(($stmt22->rowcount())>0) {
+						?>
+						 <script>
+							$('#sme_cons_heading').show();
+						</script>	
+						<?php
+						$followup_count = 1;
+						while($row22 = $stmt22->fetch(PDO::FETCH_ASSOC)) {
+								$followup_date = $row22['followup_date'];
+								$followup_starttime = $row22['starttime'];
+								$followup_endtime=$row22['endtime'];
+								$followup_cid=$row22['consultationid'];
+								$followup_smeEmail=$row22['sme_email'];
+								
+								
+							// Retrieving details consultation  from table
+								$stmt33 = $conn->prepare("SELECT * FROM consultation WHERE consultationId = :cid1");
+								$stmt33->execute(array(":cid1" => $followup_cid));
+								$row33 = $stmt33->fetch(PDO::FETCH_ASSOC);
+								$c_mode = $row33['mode'];
+								$c_qid = $row33['questionId'];
+								
+								
+							// Retrieving user question from table
+							$stmt2 = $conn->prepare("SELECT category, question FROM userquestion WHERE questionId = :questionId");
+							$stmt2->execute(array(":questionId" => $c_qid));
+							$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+							$category = $row2['category'];
+							$question = $row2['question'];
+
+							// Retrieving sme name from table
+							$stmt3 = $conn->prepare("SELECT name, sme_code FROM sme_profile WHERE email = :email");
+							$stmt3->execute(array(":email" => $followup_smeEmail));
+							$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+							$sme = $row3['name'];
+							$sme_code1 = $row3['sme_code'];
+					?>		
+
+                     <button class="accordion">Followup <?= $followup_count ?></button>
+                     <div class="panel">
+                        <div class="profile_section">
+                           <div class="form">
+                              <form>
+                                 <div class="inputfield terms">
+                                    <label>Consultation ID: </label>
+                                    <label style="width: 100%;"><?php echo $followup_cid; ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Category: </label>
+                                    <label style="width: 100%;"><?= htmlentities($category) ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Question</label>
+                                    <label style="width: 100%;"><?= htmlentities($question) ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>SME</label>
+                                    <label style="width: 100%;"><?= htmlentities($sme) ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Mode</label>
+                                    <label style="width: 100%;"><?php echo $c_mode; ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Date</label>
+                                    <label style="width: 100%;"><?php echo $followup_date; ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Time</label>
+                                    <label style="width: 100%;"><?php echo $followup_starttime; ?></label>
+                                 </div>
+								
+                                 <div class="inputfield">
+								<input type="button" value="Click to connect" class="btn" data-toggle="modal" data-target="#connectToChat" data-backdrop="static" data-keyboard="false" onclick="chat('<?= $followup_smeEmail ?>', '<?= $sme_code1 ?>', '<?= $c_qid ?>');">                                 </div>
+							
+                              </form>
+                           </div>
+                        </div>
+                     </div>
+					<?php 
+							$followup_count++;
+						}
+						}
+					?>
+					
+					
                   </div>
                </div>
             </div>
          </div>
 
-		 </div>
       </section>
 	  
 	   <!-- Start FAQ section -->
@@ -352,6 +504,8 @@
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
+			  
                   <div class="profile_section">
                      <div class="title">CHANGE PASSWORD</div>
                      <div class="form">
@@ -441,6 +595,7 @@
           
         </div> -->
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
 			   <div class="profile_section" style="padding: 10px;">
                      <div class="title">POST YOUR REQUEST</div>
                      <div class="form">
@@ -545,6 +700,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="profile_section choose_slot">
                      <div class="title" id="sme-code"></div>
                      <div class="subtitle" id="user-question"></div>
@@ -629,6 +785,85 @@
 		}
 	  </script>
       <!--end modal for choose slot --->
+      <!-- modal for chat connect --->
+      <div class="modal fade" id="connectToChat" role="dialog">
+         <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body" style="padding: 0px;">
+                 
+				 
+				  <div class="chat_modal container-fluid">
+                     <div class="row header_row">
+                        <div class="col-3 col-sm-3">
+                           <img src="images/img1.jpg">
+                        </div>
+                        <div class="col-8 col-sm-8">
+                           <h4><span id="chatModalLabel"></span>
+                            
+                              <button class="btn" type="button" data-dismiss="modal">Close</button>
+                           </h4>
+                        </div>
+                        <div class="col-1 col-sm-1" style="padding: 15px;">
+                           <div class="dropdown">
+                              <span class="fas fa-ellipsis-v"></span>
+                              <div class="dropdown-content">
+                                <a href="#" id="export-chat">Export chat</a>
+                                 <a href="#" id="clr-msgs">Clear chat</a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="chat_body" id="chats"></div>
+                     <div class="row footer_row">
+                        <div class="col-9 col-sm-9" style="padding: 0px;">
+                           <textarea placeholder="Write a message" id="msg" onkeydown="return (event.keyCode!=13);"></textarea>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                            <label for="attachedFile"><i class="fas fa-paperclip"></i></label>
+                           <input type="file" name="attachedFile" id="attachedFile"/>
+                           <a href="#" id="send-msg"><i class="fas fa-paper-plane"></i></a>
+                        </div>
+                     </div>
+					  <a href="" id="exportLink" style="display: none;" download></a>
+                  </div>
+               </div>
+            </div>
+         </div>
+
+               
+         
+      </div>
+      <!--end modal for chat connect --->
+	  
+	  
+	   <!-- modal for disconnect chat --->
+      <div class="modal fade" id="disconnectChatModal" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-body" style="text-align: center;">
+					<p style="color: #38489E; font-size: 18px; font-weight: bold;">Are you sure you want to disconnect?</p>
+					<button class="btn" onclick="closeChat();" style="background-color: #F3834B;">Disconnect</button>
+				</div>
+			</div>
+		</div>
+      </div>
+	  
+	  
+	  
+	  <!-- modal for clear chat --->
+      <div class="modal fade" id="clrChatsModal" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-body" style="text-align: center;">
+					<p style="color: #38489E; font-size: 18px; font-weight: bold;">Are you sure you want to clear chats?</p>
+					<button class="btn" id="confirm-clr-msgs" style="background-color: #F3834B;">Clear</button>
+				</div>
+			</div>
+		</div>
+	  
       <!-- Start footer -->
 	  <br><br>
       <footer style="background-color: #f2f2f2">
@@ -655,12 +890,15 @@
       <!--- Scripts section --->
       <!-- sticky nav -->
       <script src="js/parallax.min.js"></script>
+	  <script src="js/jquery.convform.js"></script>
       <script src="js/owl.carousel.min.js"></script>
       <script src="js/isotope.pkgd.min.js"></script>
       <script src="js/jquery.magnific-popup.min.js"></script>
       <script src="js/jquery.sticky.js"></script>
       <script src="js/main.js"></script>
-      <script src="js/pageHandler.js"></script>
+      <script src="pageHandler.js"></script>
+	  <script src="check.js"></script>
+	  
       <!-- For carousel --->
       <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>

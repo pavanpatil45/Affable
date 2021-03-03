@@ -15,6 +15,6 @@
 	$header = "MIME-Version: 1.0 \r\n";
 	$header .= "Content-Type: text/html; charset=UTF-8 \r\n";
 	
-	mail(RECIPIENT_EMAIL, $subject, $body, $header);
+	mail($email, $subject, $body, $header);
 	echo 1;
 ?>

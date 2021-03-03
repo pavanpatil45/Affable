@@ -1,8 +1,75 @@
-$('.chat_icon').click(function() {
-		$('.chat_box').toggleClass('active');
-	});
+$('.chat_icon').click(function () {
+	$('.chat_box').toggleClass('active');
+});
 
-	$('.my-conv-form-wrapper').convform({selectInputStyle: 'disable'})
+$('.my-conv-form-wrapper').convform({
+	selectInputStyle: 'disable'
+})
+
+var googleUser = {};
+
+var startApp = function (page) {
+	gapi.load('auth2', function () {
+		// Retrieve the singleton for the GoogleAuth library and set up the client.
+		auth2 = gapi.auth2.init({
+			client_id: '1020161679527-t9736hq9ahb33ilojdrb0qsuac9g2mc8.apps.googleusercontent.com',
+			cookiepolicy: 'single_host_origin',
+			// Request scopes in addition to 'profile' and 'email'
+			//scope: 'additional_scope'
+		});
+		attachSignin(document.getElementById('customBtn'));
+    });
+  // console.log(pageidentifier);
+};
+
+
+var element1 = document.getElementById("SMERegister");
+console.log(element1);
+var element2 = document.getElementById("UserRegister");
+console.log(element2);
+if(screen.width < 992){
+	console.log(screen.width);
+   element1.classList.add("col-6");
+   element1.classList.add("col-sm-6");
+   element1.classList.add("d-flex");
+   element1.classList.add("justify-content-center");
+
+   element2.classList.add("col-6");
+   element2.classList.add("col-sm-6");
+   element2.classList.add("d-flex");
+   element2.classList.add("justify-content-center");
+
+}
+
+
+function attachSignin(element) {
+
+   auth2.attachClickHandler(element, {},
+		function (googleUser) {
+			var profile = googleUser.getBasicProfile();
+			console.log(profile);
+			val = 0;
+			var account = "google";
+			var account_image = profile.getImageUrl();
+			var email = profile.getEmail();
+			var name = profile.getName();
+			console.log(account, account_image, email, name);
+		},
+		function (error) {
+			// alert(JSON.stringify(error, undefined, 2));
+			swal({
+				title: 'Oops !!!',
+				text: 'Your authorisation has failed',
+				imageUrl: 'https://firebasestorage.googleapis.com/v0/b/putatoeapp/o/Tshirt%2F1231601715117658?alt=media&token=4f3ed340-9128-4b40-89bd-f0336876b52b',
+				imageSize: '200x200',
+				imageAlt: 'custom image',
+				timer: 3000,
+				showConfirmButton: false
+			})
+		}
+	);
+}
+
 
 
 //Function to hide sign in methods and display otp box
@@ -68,7 +135,7 @@ function viewSections() {
 	document.getElementById('sme_profile').setAttribute('style', 'display: none;');
 }
 
-function thoughtChecker() {
+/* function thoughtChecker() {
 	var smethoughts = document.getElementById('SMEthoughts');
 	if (smethoughts.value != '') {
 		$('#acceptClientRequest').modal('show');
@@ -79,11 +146,13 @@ function thoughtChecker() {
 			$('.error').fadeOut('slow');
 		}, 3000);
 	}
-}
+} */
 
 var mode_id = "";
 
-function onlyOne(checkbox) {
+
+
+/* function onlyOne(checkbox) {
 	mode_id = checkbox.id;
 	var checkboxes = document.getElementsByName('consultation_mode')
 	checkboxes.forEach((item) => {
@@ -91,45 +160,35 @@ function onlyOne(checkbox) {
 	})
 
 	if (mode_id == 'chat' || mode_id == 'call') {
-		document.getElementById('savebutton').style.visibility = "visible";
 		if (document.getElementById(mode_id).checked) {
 			document.getElementById('appointment').style.display = "block";
 			document.getElementById('emailResponse').style.display = "none";
-
 		} else {
 			document.getElementById('appointment').style.display = "none";
-			document.getElementById('emailResponse').style.display = "none";
-			
 		}
 	} else {
-		if (document.getElementById(mode_id).checked){
-			document.getElementById('appointment').style.display = "none";
+		document.getElementById('appointment').style.display = "none";
 		document.getElementById('emailResponse').style.display = "block";
-		document.getElementById('savebutton').style.visibility = "hidden";
-
-		}
-		else{
-			document.getElementById('appointment').style.display = "none";
-		document.getElementById('emailResponse').style.display = "none";
-		document.getElementById('savebutton').style.visibility = "hidden";
-		}
+		document.getElementById('savebutton').style.display = "none";
 	}
-}
+} */
+
 
 var date_id = "";
 
 function onlyOneDate(checkbox) {
+ //   alert('here');
 	date_id = checkbox.id;
-	var checkboxes = document.getElementsByName('date_choice')
+	var checkboxes = document.getElementsByName('date_choice');
 	checkboxes.forEach((item) => {
-		if (item !== checkbox) item.checked = false
-	})
-	// alert(date_id);
+		if (item !== checkbox) item.checked = false;
+	});
+//	alert(date_id);
 }
 
 function finalValidation() {
 	console.log("final");
-	if (mode_id == '') {
+	if (mode_id === '') {
 		alert("Choose one mode");
 		document.getElementById('finalValidate').checked = false;
 	} else {
@@ -147,7 +206,7 @@ function finalValidation() {
 			var start3 = document.getElementById('startthree').value;
 			var end3 = document.getElementById('three').value;
 
-			if (date1.length != 0 && date2.length != 0 && date3.length != 0 && start1.length != 0 && end1.length != 0 && start2.length != 0 && end2.length != 0 && start3.length != 0 && end3.length != 0) {
+			if (date1.length !== 0 && date2.length !== 0 && date3.length !== 0 && start1.length !== 0 && end1.length !== 0 && start2.length !== 0 && end2.length !== 0 && start3.length !== 0 && end3.length !== 0) {
 				var today = new Date();
 				var dd = today.getDate();
 				var mm = today.getMonth() + 1;
@@ -165,7 +224,7 @@ function finalValidation() {
 				var checkround1 = compare_dates(new Date(date1), new Date(today));
 				var checkround2 = compare_dates(new Date(date2), new Date(today));
 				var checkround3 = compare_dates(new Date(date3), new Date(today));
-				if (checkround1 == true && checkround2 == true && checkround3 == true) {
+				if (checkround1 === true && checkround2 === true && checkround3 === true) {
 					var split1a = start1.split(":");
 					var split1b = end1.split(":");
 					var split2a = start2.split(":");
@@ -205,129 +264,29 @@ function finalValidation() {
 	}
 }
 
-var compare_dates = function (check1, check2) {
-	if (check1 > check2) return true;
-	else return false;
+
+
+function userSignin(){
+	document.getElementById('userSignin').setAttribute('data-dismiss', 'modal');
+	document.getElementById('userSignin').setAttribute('data-target', '#signInUser');
+	document.getElementById('userSignin').setAttribute('data-toggle', 'modal');
+
 }
-
-function dateChecker(data) {
-	var date = document.getElementById(data.id).value;
-	var date_error = "id" + data.id;
-	console.log(date_error);
-	if (date.length != 0) {
-		var today = new Date();
-		var dd = today.getDate();
-		var mm = today.getMonth() + 1;
-		var yyyy = today.getFullYear();
-
-		if (dd < 10) {
-			dd = '0' + dd;
-		}
-
-		if (mm < 10) {
-			mm = '0' + mm;
-		}
-
-		today = yyyy + '-' + mm + '-' + dd;
-		console.log(date, today);
-		var checkround = compare_dates(new Date(date), new Date(today));
-		console.log(checkround);
-		if (checkround == false) {
-			$('#' + date_error).text('Please give a future date');
-			$('#' + date_error).fadeIn('slow');
-			setTimeout(function () {
-				$('#' + date_error).fadeOut('slow');
-			}, 3000);
-
-
-			document.getElementById(data.id).value = "";
-		}
-	}
-
+function SMESignin(){
+	document.getElementById('SMESignin').setAttribute('data-dismiss', 'modal');
+	document.getElementById('SMESignin').setAttribute('data-target', '#signInSME');
+	document.getElementById('SMESignin').setAttribute('data-toggle', 'modal');
 
 }
 
-function timeChecker(data) {
-	console.log(data.id);
-	time_error = "id" + data.id;
-	var end = document.getElementById(data.id).value;
-	var start = document.getElementById("start" + data.id).value;
-	var splitstart = start.split(":");
-	var splitend = end.split(":");
-	if (parseInt(splitstart[0]) < parseInt(splitend[0])) {
-		// alert("success");
-	} else if (parseInt(splitstart[0]) == parseInt(splitend[0])) {
-		$('#' + time_error).text('Duration must be atleast for an hour');
-		$('#' + time_error).fadeIn('slow');
-		setTimeout(function () {
-			$('#' + time_error).fadeOut('slow');
-		}, 3000);
-
-		document.getElementById(data.id).value = "";
-		document.getElementById("start" + data.id).value = "";
-
-	} else {
-		$('#' + time_error).text('Start time is ahead of end time');
-		$('#' + time_error).fadeIn('slow');
-		setTimeout(function () {
-			$('#' + time_error).fadeOut('slow');
-		}, 3000);
-
-		document.getElementById(data.id).value = "";
-		document.getElementById("start" + data.id).value = "";
-	}
+function userSignup(){
+	document.getElementById('userSignup').setAttribute('data-dismiss', 'modal');
+	document.getElementById('userSignup').setAttribute('data-target', '#registerUser');
+	document.getElementById('userSignup').setAttribute('data-toggle', 'modal');
 }
 
-function cancelConsultation(id) {
-	//$('#cancelConsultation').modal('show');
-	var datesplit = id.split("_");
-	var fixed_date = document.getElementById('consultation_' + datesplit[1]).innerHTML;
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth() + 1;
-	var yyyy = today.getFullYear();
-
-	if (dd < 10) {
-		dd = '0' + dd;
-	}
-
-	if (mm < 10) {
-		mm = '0' + mm;
-	}
-
-	today = yyyy + '-' + mm + '-' + dd;
-
-	var check_duration = compare_duration(new Date(fixed_date), new Date(today));
-	if (check_duration == true) {
-		var check_duration2 = compare_duration2(new Date(fixed_date), new Date(today));
-		if (check_duration2 == true) {
-			alert("Cancel allowed");
-			$('#cancelConsultation').modal('show');
-		} else {
-			var consultation_time = document.getElementById('consultation_time_' + datesplit[1]).innerHTML;
-			var timeplit = consultation_time.split(":");
-			var d = new Date();
-			var h = d.getHours();
-			var timediff = parseInt(timeplit) - h;
-			if (timediff > 7) {
-				alert("cancel allowed");
-				$('#cancelConsultation').modal('show');
-			} else {
-				alert("cancel not allowed");
-
-			}
-		}
-	} else {
-		alert("cancel not allowed");
-
-	}
-}
-
-var compare_duration = function (check1, check2) {
-	if (check1 >= check2) return true;
-	else return false;
-}
-var compare_duration2 = function (check1, check2) {
-	if (check1 > check2) return true;
-	else return false;
-}
+function SMESignup(){
+	document.getElementById('SMESignup').setAttribute('data-dismiss', 'modal');
+	document.getElementById('SMESignup').setAttribute('data-target', '#registerSME');
+	document.getElementById('SMESignup').setAttribute('data-toggle', 'modal');
+} 

@@ -3,11 +3,13 @@ require_once ('connection.php');
 //session_start();
 if(isset($_SESSION['email'])){
 	$email=$_SESSION['email'];
-	$results = mysqli_query($db,"SELECT name, about_sme, phone, email, pincode, postal_addr, categoryname, experience, skillset, sme_cert, sme_language, webinars, sme_fees, mode_of_cons, photo_loc, resume_loc, review_rating, sme_designation FROM sme_profile WHERE email = '{$email}'") or die(mysqli_error($db));
+	$results = mysqli_query($db,"SELECT sme_code, name, about_sme, phone, email, pincode, postal_addr, categoryname, experience, skillset, sme_cert, sme_language, webinars, sme_fees, mode_of_cons, photo_loc, resume_loc, review_rating, sme_designation FROM sme_profile WHERE email = '{$email}'") or die(mysqli_error($db));
+
 	$row_cnt=mysqli_num_rows($results);
 	
 	if($row_cnt==1){
 		$row=mysqli_fetch_array($results);
+		$sme_code = $row['sme_code'];
 		$name=$row['name'];
 		$phone=$row['phone'];
 		$email=$row['email'];
@@ -28,6 +30,7 @@ if(isset($_SESSION['email'])){
 		$sme_designation=$row['sme_designation'];
 		
 	}
+	$_SESSION['user'] = $sme_code;
 	
 }
 else{
@@ -55,11 +58,44 @@ else{
       <link rel="stylesheet" href="css/owl.carousel.css">
       <!--Flickity carousel --->
       <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+	   <!-- Chatbot-->
+      <link rel="stylesheet" href="css/jquery.convform.css">
       <!--Page css -->
       <link rel="stylesheet" href="css/style.css">
 	  <script src="js/jquery-2.2.4.min.js"></script>
+	  <script src="chat_app_scripts.js"></script>
+      <style>
+         ::placeholder {
+		color: #38489E;
+         opacity: 1; /* Firefox */
+         }
+         :-ms-input-placeholder { /* Internet Explorer 10-11 */
+         color: #38489E;
+         }
+         ::-ms-input-placeholder { /* Microsoft Edge */
+         color: #38489E;
+         } 
+      </style>
+	  <style>
+	  	
+		a.user1Attach {
+			color: #87898f;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		a.user2Attach {
+			color: #fff;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		span.date-time {
+			font-size: 0.8rem;
+			
+		}
+	  </style>
 </head>
-   <body onload="sme_dashboard();" data-spy="scroll" data-target=".navbar" data-offset="50">
+   <body data-spy="scroll" data-target=".navbar">
+     
 
       <!-- Start Header Area -->
       <header class="default-header" style="background-color: #38489E;">
@@ -77,7 +113,71 @@ else{
 					 <li><a class="active" href="#section1" onclick="viewSections();">CLIENT REQUESTS</a></li>
                      <li><a href="#section1">CONSULTATIONS</a></li>
                      <li><a href="#section2">TESTIMONIALS</a></li>
-                     <li><a href="webinar.php">WEBINARS</a></li>
+					 
+					 
+					 
+					 <div class="bs-example">
+						<div class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> MY WEBINARS</a>
+							<div class="dropdown-menu">
+								<table>
+								<?php 
+								$query = "SELECT * FROM sme_webinar WHERE sme_email = '{$email}'";
+								 $select_webinar = mysqli_query($db, $query);
+								 $rowcount=mysqli_num_rows($select_webinar);
+									
+								if($rowcount==0)
+								{
+								 echo "<a class='dropdown-item'>No Webinars Posted</a>";
+								}
+								 else{
+									 
+									while($row9 = mysqli_fetch_assoc($select_webinar))
+									{
+										$webinar_id = $row9['webinar_id'];
+										$webinar_topic = $row9['webinar_topic'];
+										$webinar_desc=$row9['webinar_desc'];
+										$who_attend=$row9['who_attend'];
+										$key_takeaways=$row9['key_takeaways'];
+										$webinar_fees=$row9['webinar_fees'];
+										$webinar_date=$row9['webinar_date'];
+										$webinar_from_time=$row9['webinar_from_time'];
+										$webinar_to_time=$row9['webinar_to_time'];
+										$course_image=$row9['course_image'];
+										$webinar_venue=$row9['webinar_venue'];
+										
+									?>
+										<tr>
+										<style>hr { margin: 0.3em auto; }</style>
+										<td><a class="dropdown-item" href="webinar.php?webinar_id= <?php echo $webinar_id ?>" target="_blank"><?php echo $webinar_topic ?></a><hr></td>
+										<td><a class="dropdown-item" data-toggle="modal" data-target="#editWebinar" onclick="getWebinar('<?= $webinar_id ?>');"><span class="fas fa-edit fa-lg"></span></a><hr></td>
+										<td><a class="dropdown-item" onclick="deletewebinar('<?= $webinar_id ?>');"><span class="fas fa-trash-alt fa-lg"></span></a><hr></td>
+											
+										<input id="webinar_id" value="<?php echo $webinar_id; ?>" style="display: none;">
+										<input id="webinar_topic_<?php echo $webinar_id; ?>" value="<?php echo $webinar_topic; ?>" style="display: none;">
+										<input id="webinar_desc_<?php echo $webinar_id; ?>" value="<?php echo $webinar_desc; ?>" style="display: none;">
+										<input id="who_attend_<?php echo $webinar_id; ?>" value="<?php echo $who_attend; ?>" style="display: none;">
+										<input id="key_takeaways_<?php echo $webinar_id; ?>" value="<?php echo $key_takeaways; ?>" style="display: none;">
+										<input id="webinar_fees_<?php echo $webinar_id; ?>" value="<?php echo $webinar_fees; ?>" style="display: none;">
+										<input id="webinar_date_<?php echo $webinar_id; ?>" value="<?php echo $webinar_date; ?>" style="display: none;">
+										<input id="webinar_from_time_<?php echo $webinar_id; ?>" value="<?php echo $webinar_from_time; ?>" style="display: none;">
+										<input id="webinar_to_time_<?php echo $webinar_id; ?>" value="<?php echo $webinar_to_time; ?>" style="display: none;">
+										<input id="webinar_venue_<?php echo $webinar_id; ?>" value="<?php echo $webinar_venue; ?>" style="display: none;">
+										<input id="course_image_<?php echo $webinar_id; ?>" value="<?php echo $course_image; ?>" style="display: none;">
+										
+										
+										</tr>
+										
+									<?php }} ?>
+							</table>		
+							</div>
+						</div>
+					</div>
+					
+					 
+					 
+					 
+                    
                      <li class="notifications_humberger"><a href="#section3">NOTIFICATIONS</a></li>
                      <li class="dropdown profile_humberger">
                         <a class="dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -95,7 +195,7 @@ else{
                         <i class="fas fa-user-circle fa-2x"></i>
                         </a>
                         <div class="dropdown-menu" style="background-color: #f7f7f7;">
-                           <div class="dropdown-item" href="#" onclick="viewSMEprofile();">View Profile</div>
+                           <a class="dropdown-item" href="#sme_profile">View Profile</a>
                            <a class="dropdown-item" href="#" type="button" data-toggle="modal" data-target="#passwordChangeSME">Change Password</a>
                            <a class="dropdown-item" href="logout.php">Logout</a>
                         </div>
@@ -108,6 +208,7 @@ else{
       <!-- End Header Area -->
       <!-- Start client request section -->
        <br><br><br>
+	   
       <section class="section-gap" id="section1">
          <div class="container-fluid">
 		 <div class="row">
@@ -122,27 +223,39 @@ else{
                </div>
                <div class="col-sm-9">
             <div class="row">
-               <div class="col-12 col-lg-6 col-sm-12 client_request">
-              <h1>client requests</h1>
-	  
-				<?php
+               
+			   <div class="col-12  client_request">
+			   <?php
 					// Retrieving sme category from table
 					$stmt1 = $conn->prepare("SELECT categoryname FROM sme_profile WHERE email = :email");
 					$stmt1->execute(array(":email" => $_SESSION['email']));
 					$row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
 					$categoryname = $row1['categoryname'];
-					
 					if (empty($categoryname)){ ?>
-					
+					<br><br><br><br><br><br>
 					<div class="alert alert-danger" role="alert">
-					<p><center>Please Update your Profile to start receiving Client requests</center></p>
+					<h4><center>Please Update your Profile to start receiving Client requests</center></h4>
 					</div>
 					<?php
 					}
+					?>
+				</div>
 					
+					<script>
+					/* function hideheading() {
+					  var x = document.getElementById("client_request_heading");
+					  x.style.display = "none";
+					} */
+					</script>
+					
+					
+					
+					<div class="col-12 col-lg-6 col-sm-12 client_request">
+					<h1 id="client_request_heading" style="display: none;">client requests</h1>
+					<?php
 
 					// Retrieving user requests from table
-					$stmt2 = $conn->prepare("SELECT questionid, topic, question, email, status FROM userquestion WHERE category = :categoryname");
+					$stmt2 = $conn->prepare("SELECT questionid, topic, question, email, status FROM userquestion WHERE category = :categoryname ");
 					$stmt2->execute(array(":categoryname" => $categoryname));
 					
 					while($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
@@ -159,7 +272,11 @@ else{
 						$row4 = $stmt4->fetch(PDO::FETCH_ASSOC);
 						if($row4['cnt'] == 1)
 							continue;
-
+						?>
+						<script>
+						$('#client_request_heading').show();
+						</script>
+						<?php
 						/* // Checking whether SME has declined request
 						$stmt5 = $conn->prepare("SELECT count(*) AS dcnt FROM declined_requests WHERE questionid = :questionid AND sme_email = :email");
 						$stmt5->execute(array(
@@ -197,7 +314,7 @@ else{
                                  <label style="width: 100%;"><?= htmlentities($categoryname) ?></label>
 								 
                               </div>
-                              <div class="inputfield">
+                              <div class="inputfield terms">
                                  <label>Question</label>
                                  <label style="width: 100%;"><?= htmlentities($request['question']) ?></label>
                               </div>
@@ -243,10 +360,45 @@ else{
                      </div>
                   </div> 
 				  
-				<?php } ?>
+				<?php 
+				}
+				?>
                </div>
 			   
+			   
+			   
 			   <script>
+					function getWebinar(webinarid) {
+						document.getElementById('webinar_id1').value = document.getElementById('webinar_id').value;
+						document.getElementById('webinar_topic1').value = document.getElementById('webinar_topic_'.concat(webinarid)).value;
+						document.getElementById('webinar_desc1').value = document.getElementById('webinar_desc_'.concat(webinarid)).value;
+						document.getElementById('who_attend1').value = document.getElementById('who_attend_'.concat(webinarid)).value;
+						document.getElementById('key_takeaways1').value = document.getElementById('key_takeaways_'.concat(webinarid)).value;
+						document.getElementById('webinar_fees1').value = document.getElementById('webinar_fees_'.concat(webinarid)).value;
+						document.getElementById('date11').value = document.getElementById('webinar_date_'.concat(webinarid)).value;
+						document.getElementById('startone11').value = document.getElementById('webinar_from_time_'.concat(webinarid)).value;
+						document.getElementById('one11').value = document.getElementById('webinar_to_time_'.concat(webinarid)).value;
+						document.getElementById('webinar_venue1').value = document.getElementById('webinar_venue_'.concat(webinarid)).value;
+						document.getElementById('course_image1').value = document.getElementById('course_image_'.concat(webinarid)).value;
+						document.getElementById('del_web_name').innerHTML = document.getElementById('webinar_topic_'.concat(webinarid)).value;
+					}
+					
+					
+					
+				
+			   
+					function deletewebinar(webinarid) {
+						document.getElementById('del_web_name').innerHTML = document.getElementById('webinar_topic_'.concat(webinarid)).value;
+						document.getElementById("del_web").setAttribute("onclick", "confirm_delete_webinar('" + webinarid + "');");
+						$('#deletewebinar').modal('show');
+					} 
+			   
+			   
+			   
+			   
+			   
+			   
+		
 					function thoughtChecker(questionid) {
 						var smethoughts = document.getElementById('SMEthoughts_'.concat(questionid));
 						//document.getElementById('label_user').innerHTML = document.getElementById('user_'.concat(questionid)).value;
@@ -281,63 +433,84 @@ else{
 					
 				</script>
 				
-					
-                     <div class="col-12 col-sm-6 client_request">
-                        <h1>consultations</h1>
-
+							
+							
+                    
+						<div class="col-12 col-sm-6 client_request">
+						<h1 id="sme_cons_heading" style="display: none;">consultations</h1>
 						<?php						
 							// Retrieving consultaions from table
-							$stmt1 = $conn->prepare("SELECT consultationId, clientEmailId, questionId, mode, date, fromTime FROM consultation WHERE smeEmailId = :email AND status <> 'Cancelled'");
+							$stmt1 = $conn->prepare("SELECT consultationId, clientEmailId, questionId, mode, date, fromTime FROM consultation WHERE smeEmailId = :email AND status <> 'Cancelled' AND status <> 'followup'");
 							$stmt1->execute(array(":email" => $_SESSION['email']));
-
+							
+							if(($stmt1->rowcount())>0) {
+								
+							?>	
+							<script>
+							$('#sme_cons_heading').show();
+							</script>
+							<?php
+							
 							$consultation_count = 1;
 							while($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
 								$consultation = $row1;
+								$questionId = $consultation['questionId'];
+								$clientEmailId = $consultation['clientEmailId'];
+								$cid = $consultation['consultationId'];
 								
 								// Retrieving user question from table
 								$stmt2 = $conn->prepare("SELECT category, question FROM userquestion WHERE questionId = :questionId");
-								$stmt2->execute(array(":questionId" => $questionid));
+								$stmt2->execute(array(":questionId" => $questionId));
 								$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
 								$category = $row2['category'];
 								$question = $row2['question'];
 
 								// Retrieving client name from table
 								$stmt3 = $conn->prepare("SELECT name FROM user WHERE email = :email");
-								$stmt3->execute(array(":email" => $consultation['clientEmailId']));
+								$stmt3->execute(array(":email" => $clientEmailId));
 								$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
 								$client = $row3['name'];
+								
 						?>
 
-                        <button class="accordion">Consultation ID <?= $consultation_count ?></button>
+                        <button class="accordion">Consultation <?= $consultation_count ?></button>
                      <div class="panel">
                         <div class="profile_section">
                            <div class="form">
                               <form>
+							  
+							  <input id="f_cid" value="<?= $cid ?>" style="display: none;">
+							  <input id="f_qid_<?php echo $cid; ?>" value="<?php echo $questionId; ?>" style="display: none;">
+							  <input id="f_sme_email_<?php echo $cid; ?>" value="<?php echo $_SESSION['email']; ?>" style="display: none;">
+							  <input id="f_client_email_<?php echo $cid; ?>" value="<?php echo $clientEmailId; ?>" style="display: none;">
+							  <input id="f_name_<?php echo $cid; ?>" value="<?php echo $client; ?>" style="display: none;">
+							  
+							  
                                  <div class="inputfield terms">
                                     <label>Consultation ID: </label>
-                                    <label style="width: 100%;"><?= $consultation['consultationId'] ?></label>
+                                    <label style="width: 100%;"><?= $cid ?></label>
                                  </div>
                                  <div class="inputfield terms">
                                     <label>Category: </label>
                                     <label style="width: 100%;"><?= htmlentities($category) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Question</label>
                                     <label style="width: 100%;"><?= htmlentities($question) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Client</label>
                                     <label style="width: 100%;"><?= htmlentities($client) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Mode</label>
                                     <label style="width: 100%;"><?= htmlentities($consultation['mode']) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Date</label>
                                     <label style="width: 100%;" id="consultation_1"><?= htmlentities($consultation['date']) ?></label>
                                  </div>
-                                 <div class="inputfield">
+                                 <div class="inputfield terms">
                                     <label>Time</label>
                                     <label style="width: 100%;" id="consultation_time_1"><?= htmlentities($consultation['fromTime']) ?></label>
                                  </div>
@@ -346,12 +519,12 @@ else{
                                        <div class="col-sm-2"></div>
                                        <div class="col-sm-4">
                                           <div class="inputfield">
-                                             <input type="submit" value="Connect" class="btn" disabled="">
-                                          </div>
+											<input type="button" value="Connect" class="btn" data-toggle="modal" data-target="#connectToChat" data-backdrop="static" data-keyboard="false" onclick=" chat('<?= $clientEmailId ?>', '<?= htmlentities($client) ?>', '<?= $questionId ?>');  followupdata('<?= $cid ?>');">                                          
+											</div>
                                        </div>
                                        <div class="col-sm-4">
                                           <div class="inputfield">
-                                              <input type="button" value="Cancel" class="btn" id="cancelConsultation_1" onclick="question_id('<?= $questionid ?>'); cancelConsultation(this.id);">
+                                              <input type="button" value="Cancel" class="btn" id="cancelConsultation_1" onclick="question_id('<?= $questionId ?>'); cancelConsultation(this.id);">
                                           </div>
                                        </div>
                                        <div class="col-sm-2"></div>
@@ -364,89 +537,249 @@ else{
 						<?php 
 								$consultation_count++;
 							}
+							}
 						?>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						<?php
+							
+							// Retrieving followups from table
+							$stmt22 = $conn->prepare("SELECT * FROM followup WHERE sme_email = :email");
+							$stmt22->execute(array(":email" => $_SESSION['email']));
+							
+							
+							
+							if(($stmt22->rowcount())>0) {
+							?>	
+							<script>
+							$('#sme_cons_heading').show();
+							</script>
+							<?php	
+							
+							
+							$followup_count = 1;
+							while($row22 = $stmt22->fetch(PDO::FETCH_ASSOC)) {
+								$followup_date = $row22['followup_date'];
+								$followup_starttime = $row22['starttime'];
+								$followup_endtime=$row22['endtime'];
+								$followup_cid=$row22['consultationid'];
+								$followup_smeEmail=$row22['sme_email'];
+								$clientEmailId=$row22['client_email'];
+								
+								// Retrieving details consultation  from table
+								$stmt33 = $conn->prepare("SELECT * FROM consultation WHERE consultationId = :cid1");
+								$stmt33->execute(array(":cid1" => $followup_cid));
+								$row33 = $stmt33->fetch(PDO::FETCH_ASSOC);
+								$c_mode = $row33['mode'];
+								$questionId = $row33['questionId'];
+								
+								
+								// Retrieving user question from table
+								$stmt2 = $conn->prepare("SELECT category, question, email FROM userquestion WHERE questionId = :questionId");
+								$stmt2->execute(array(":questionId" => $questionId));
+								$row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+								$category = $row2['category'];
+								$question = $row2['question'];
+								$client_email = $row2['email'];
+
+								// Retrieving client name from table
+								$stmt3 = $conn->prepare("SELECT name FROM user WHERE email = :email");
+								$stmt3->execute(array(":email" => $client_email));
+								$row3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+								$client = $row3['name'];
+								
+						?>
+
+                        <button class="accordion">Followup <?= $followup_count ?></button>
+                     <div class="panel">
+                        <div class="profile_section">
+                           <div class="form">
+                              <form>
+							  
+							<input id="f_sme_email1_<?php echo $followup_cid; ?>" value="<?php echo $_SESSION['email']; ?>" style="display: none;">
+							  <input id="f_client_email1_<?php echo $followup_cid; ?>" value="<?php echo $clientEmailId; ?>" style="display: none;">
+							  <input id="f_name1_<?php echo $followup_cid; ?>" value="<?php echo $client; ?>" style="display: none;">
+							 
+
+							  
+							  
+							  
+                                 <div class="inputfield terms">
+                                    <label>Consultation ID: </label>
+                                    <label style="width: 100%;"><?= $followup_cid ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Category: </label>
+                                    <label style="width: 100%;"><?= htmlentities($category) ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Question</label>
+                                    <label style="width: 100%;"><?= htmlentities($question) ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Client</label>
+                                    <label style="width: 100%;"><?= htmlentities($client) ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Mode</label>
+                                    <label style="width: 100%;"><?php echo $c_mode; ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Date</label>
+                                    <label style="width: 100%;" id="consultation_1"><?php echo $followup_date; ?></label>
+                                 </div>
+                                 <div class="inputfield terms">
+                                    <label>Time</label>
+                                    <label style="width: 100%;" id="consultation_time_1"><?php echo $followup_starttime; ?></label>
+                                 </div>
+								
+                                 <div class="row">
+                                       <div class="col-sm-2"></div>
+                                       <div class="col-sm-4">
+                                          <div class="inputfield">
+											<input type="button" value="Connect" class="btn" data-toggle="modal" data-target="#connectToChat" data-backdrop="static" data-keyboard="false" onclick=" chat('<?= $clientEmailId ?>', '<?= htmlentities($client) ?>', '<?= $questionId ?>');  followupdata1('<?= $followup_cid ?>');">                                          
+											</div>
+                                       </div>
+                                       <div class="col-sm-4">
+                                          <div class="inputfield">
+                                              <input type="button" value="Cancel" class="btn" id="cancelConsultation_1" onclick="question_id('<?= $questionId ?>'); cancelConsultation(this.id);">
+                                          </div>
+                                       </div>
+                                       <div class="col-sm-2"></div>
+                                    </div>
+								
+                              </form>
+                           </div>
+                        </div>
                      </div>
+						<?php 
+								$followup_count++;
+							}
+							}
+							
+						?>
+						
+					
+
+
+					
+                     </div>
+					 
+					 
+					 
                   </div>
                </div>
             </div>
          </div>
       </section>
-	  
-	  
+	  <script>
 	 
-	
+	  function followupdata(cid){
+		document.getElementById('followup_cid').value = cid
+		document.getElementById('followup_sme_email').value = document.getElementById('f_sme_email_'.concat(cid)).value;
+		document.getElementById('followup_client_email').value = document.getElementById('f_client_email_'.concat(cid)).value;
+		document.getElementById('followup_user_name').innerHTML = document.getElementById('f_name_'.concat(cid)).value;
+		 
+	  }
+	  
+	    function followupdata1(cid1){
+		document.getElementById('followup_cid').value = cid1
+		document.getElementById('followup_sme_email').value = document.getElementById('f_sme_email1_'.concat(cid1)).value;
+		document.getElementById('followup_client_email').value = document.getElementById('f_client_email1_'.concat(cid1)).value;
+		document.getElementById('followup_user_name').innerHTML = document.getElementById('f_name1_'.concat(cid1)).value;
+		 
+	  } 
+	  </script>
+	  <style>
+	  .image-cropper {
+			width: 180px;
+			height: 180px;
+			position: relative;
+			overflow: hidden;
+			border-radius: 100%;
+		}
+		
+	  </style>
+
+
 	   <section id="section2">
          <div class="container-fluid" style="background-color: #f4f4f4;">
-            <div class="grp_box" style="padding: 40px;
+            <div class="grp_box" style="
                background: #f5f5f5;
-               margin-bottom: 30px;
-               height: 650px;
+                padding-top: 60px;
+               height: 600px;
                -webkit-transition: all ease-in-out 0.5s;
                -o-transition: all ease-in-out 0.5s;
                transition: all ease-in-out 0.5s; text-align: center;">
                <h4 style="margin-bottom: 15px;
                   font-size: 26px; font-family: 'Georgia'; color: black;">The best hire the brightest
-                  <span type="button" data-toggle="modal" data-target="#edit_profile"><i class="fas fa-pen" style="margin-left: 10px;"></i></span>
+                  <span type="button" data-toggle="modal" data-target="#edit_testimonials"><i class="fas fa-pen" style="margin-left: 10px;"></i></span>
                </h4>
-               <h5 style="margin-bottom: 65px;
+               <h5 style="margin-bottom: 45px;
                   font-size: 16px; font-family: 'Georgia'; color: grey;">Over 3,000 customers rely on the resumator to hire the best candidates every year</h5>
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-4">
-                        <img src="images/img1.jpg" style="width: 50%; border-radius: 50%;">
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 12px; font-family: 'Georgia'; color: black;">Management Head</h4>
-                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
-                           with 25+ years of experience with a
-                           demonstrated history of training
-                           working professionals in IT sector.
-                           An Enthusiastic Entrepreneur
-                           having zeal to explore more
-                           opportunities in learning and
-                           development.
-                        </p>
-                     </div>
-                     <div class="col-md-4">
-                        <img src="images/img2.jpg" style="width: 50%; border-radius: 50%;">
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 12px; font-family: 'Georgia'; color: black;">Marketing Head</h4>
-                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
-                           with 25+ years of experience with a
-                           demonstrated history of training
-                           working professionals in IT sector.
-                           An Enthusiastic Entrepreneur
-                           having zeal to explore more
-                           opportunities in learning and
-                           development.
-                        </p>
-                     </div>
-                     <div class="col-md-4">
-                        <img src="images/img3.jpg" style="width: 50%; border-radius: 50%;">
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 20px; font-family: 'Georgia'; color: black;">Sanjay Agarwal</h4>
-                        <h4 style="margin-bottom: 15px; margin-top: 1.5rem;
-                           font-size: 12px; font-family: 'Georgia'; color: black;">Development Head</h4>
-                        <p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">A Passionate Java Full Stack Trainer
-                           with 25+ years of experience with a
-                           demonstrated history of training
-                           working professionals in IT sector.
-                           An Enthusiastic Entrepreneur
-                           having zeal to explore more
-                           opportunities in learning and
-                           development.
-                        </p>
-                     </div>
+              
+						
+							<?php 
+								$query5 = "SELECT * FROM testimonial WHERE sme_email = '{$email}' ORDER BY testimonial_id desc LIMIT 3";
+								$select_test = mysqli_query($db, $query5);
+								 $rowcount5=mysqli_num_rows($select_test);
+									
+								if($rowcount5==0)
+								{
+								 echo "<center><h4>Testimonials not Added yet<h4></center>";
+								}
+								
+								 else{
+									?>
+									<div class="container">
+									<div class="row">
+									<?php 
+									 
+									while($row5 = mysqli_fetch_assoc($select_test))
+									{
+										$att_photo = $row5['att_photo'];
+										$att_audio = $row5['att_audio'];
+										$att_name = $row5['att_name'];
+										$att_desig = $row5['att_desig'];
+										$testimony = $row5['testimony'];
+										
+										
+									?>
+									<div class="col-md-4">
+										
+										
+									
+										<img src="<?php echo $att_photo;?>" class="image-cropper">
+										<h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+										   font-size: 20px; font-family: 'Georgia'; color: black;"><?php echo $att_name;?></h4>
+										<h4 style="margin-bottom: 15px; margin-top: 1.5rem;
+										   font-size: 12px; font-family: 'Georgia'; color: black;"><?php echo $att_desig;?></h4>
+										<p style="font-size: 16px; margin-bottom: 1rem; margin-top: 1.5rem;">
+										<?php echo $testimony;?>
+										</p>
+									</div>
+										
+									<?php }} ?>
+						
+                   
                   </div>
                </div>
             </div>
          </div>
       </section>
+	  
       <!-- Start FAQ section -->
-      <section>
+      <section id="section3">
          <div class="container faqs">
             <h1>Frequently Asked Questions</h1>
             <div class="accordion">
@@ -488,6 +821,7 @@ else{
                </div>
             </div>
          </div>
+						 
       </section>
       <!-- end FAQ section -->
 	  
@@ -500,7 +834,7 @@ else{
 		}
 	  </script>
       <!-- end client request section -->
-<!--Profile section of SME--->
+	<!--Profile section of SME--->
       <div class="container" id="sme_profile">
          <div class="profile_section">
             <div class="title">YOUR PROFILE<span type="button" data-toggle="modal" data-target="#edit_profile"><i class="fas fa-pen" style="margin-left: 10px;"></i></span></div>
@@ -509,7 +843,7 @@ else{
                   <div class="row">
                      <div class="col-sm-2">
 						
-						<?php echo '<img src="data:image;base64,'.$photo_loc.'" style="max-width: 100%;" >'?>
+						<?php echo '<img src="'.$photo_loc.'" style="max-width: 100%;" >'?>
 
                      </div>
                      <div class="col-sm-5">
@@ -605,15 +939,37 @@ else{
                            <label><?php echo $mode_of_cons;?></label>
 						</div>
 						
-
-                        <div class="inputfield">
-						<label>Upload resume</label>
-                           <label><?php echo $resume_loc;?></label>
+						<?php 
+						if(is_null($resume_loc)){
+						?>	
+							
+						<div class="inputfield">
+						<label>Uploaded resume</label> 
+						<label>No File is Uploaded</label>
 						</div>
+						<?php
+						}
+						else{
+						?>
+						
+						<div class="inputfield">
+						<label>Uploaded resume</label> 
+						<a href="<?php echo $resume_loc;?>" download>Download Resume</a>
+						</div>
+						
+						<?php
+						}
+						?>
+						
+						
+						
+                        
+						
+						
 						
 						 <div class="inputfield">
 						<label>Review Rating</label>
-                           <label><?php echo $review_rating;?></label>
+                        <label><?php echo $review_rating;?></label>
 						</div>
 						
 						
@@ -635,7 +991,20 @@ else{
          </div>
       <!--Profile section of SME end--->
 	  
-	  
+	  <style>
+::placeholder {
+  color: grey;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: grey;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: grey;
+}
+</style>
 
       <!-- modal for SME profile edit --->
       <div class="modal fade" id="edit_profile" role="dialog">
@@ -643,6 +1012,7 @@ else{
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="profile_section edit_profile">
                      <div class="title">EDIT YOUR PROFILE</div>
                      <div class="form">
@@ -655,7 +1025,7 @@ else{
 
 						  <div class="row">
 						  <div class="col-sm-3">
-							 <?php echo '<img src="data:image;base64,'.$photo_loc.'" style="max-width: 100%;" >'?>
+							 <?php echo '<img src="'.$photo_loc.'" style="max-width: 100%;" >'?>
 						  </div>
                         
 							<div class="col-sm-9">
@@ -663,12 +1033,12 @@ else{
 							  
                        <div class="inputfield">
 						<label>Name</label>
-                          <input type="input" class="input" id="name" name="name" value="<?php echo $name;?>"  >
+                          <input type="input" class="input" id="name" name="name" value="<?php echo $name;?>"  required="">
 						</div>
 						
                         <div class="inputfield">
 						<label>Phone Number</label>
-                          <input type="input" class="input"  id="phone" name="phone" value="<?php echo $phone;?>" >
+                          <input type="input" class="input"  id="phone" name="phone" value="<?php echo $phone;?>" required="">
 						</div>
 						
 						
@@ -680,13 +1050,13 @@ else{
 						
                            <div class="inputfield">
                               <label>Pincode</label>
-                              <input type="input" class="input"  id="pincode" name="pincode"  placeholder="721301" value="<?php echo $pincode;?>">
+                              <input type="input" class="input"  id="pincode" name="pincode"  placeholder="721301" value="<?php echo $pincode;?>" required="">
                            </div>
 						   
 						   
                            <div class="inputfield">
                               <label>Postal Address</label>
-                              <input type="input" class="input"  id="postal_addr" name="postal_addr"  placeholder="Mirpur, near H.P. Gas Godown, Kharagpur, Paschim Medinipur" value="<?php echo $postal_addr;?>">
+                              <input type="input" class="input"  id="postal_addr" name="postal_addr"  placeholder="Mirpur, near H.P. Gas Godown, Kharagpur, Paschim Medinipur" value="<?php echo $postal_addr;?>" required="">
                            </div>
 						   
 						   
@@ -697,38 +1067,45 @@ else{
 						   
 						   <div class="inputfield">
                               <label>Designation</label>
-                              <input type="input" class="input"  id="sme_designation" name="sme_designation"  placeholder="Director of Tech Solutions Pvt. Ltd." value="<?php echo $sme_designation;?>">
+                              <input type="input" class="input"  id="sme_designation" name="sme_designation"  placeholder="Director of Tech Solutions Pvt. Ltd." value="<?php echo $sme_designation;?>" required="">
                            </div>
 						   
                            <div class="inputfield">
                               <label>Category</label>
                               <div class="custom_select">
-                                 <select name="categoryname" class="input" required="">
-                                    <option class="input" value="Entrepreneurship">Entrepreneurship</option>
-                                    <option class="input" value="Health and Fitness">Health and Fitness</option>
-                                    <option class="input" value="IT">IT</option>
-									<option class="input" value="RealEstate">RealEstate</option>
-                                    <option class="input" value="Others">Others</option>
-                                 </select>
+                                 <select name="categoryname" class="input" required="" >
+								 <option><?php echo $categoryname;?></option>
+							 <?php
+								$stmt = $conn->prepare("SELECT categoryName FROM category ORDER BY categoryName");
+								$stmt->execute();
+								while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+									echo "<option>".htmlentities($row['categoryName'])."</option>";
+							 ?>
+							 </select>
                               </div>                           
 							  </div>
 						   
 						   
+						    
+						   
+						   
+						   
+						   
                            <div class="inputfield">
                               <label>Experience in years</label>
-                              <input type="input" class="input"  id="experience" name="experience" placeholder="7" value="<?php echo $experience;?>">
+                              <input type="input" class="input"  id="experience" name="experience" placeholder="7" value="<?php echo $experience;?>" required="">
                            </div>
 						   
 						   
                            <div class="inputfield">
                               <label>Skillset</label>
-							  <textarea type="input" name="skillset" id="skillset" class="input" placeholder="Excellent in Frontend Web development using HTML, CSS and JavaScript"><?php echo $skillset;?></textarea>
+							  <textarea type="input" name="skillset" id="skillset" class="input" placeholder="Excellent in Frontend Web development using HTML, CSS and JavaScript" required=""><?php echo $skillset;?></textarea>
                            </div>
 						   
 						   
                            <div class="inputfield">
                               <label>Certifications and recognitions</label>
-							  <textarea type="input" name="sme_cert" id="sme_cert" class="input" placeholder="Graduate from B.P. Poddar Institute of Management and Technology"><?php echo $sme_cert;?></textarea>
+							  <textarea type="input" name="sme_cert" id="sme_cert" class="input" placeholder="Graduate from B.P. Poddar Institute of Management and Technology" required=""><?php echo $sme_cert;?></textarea>
                            </div>
 						   
 						    <div class="inputfield">
@@ -739,7 +1116,7 @@ else{
 						   
                            <div class="inputfield">
                               <label>Languages known</label>
-                              <input type="input" class="input"   id="sme_language" name="sme_language"  placeholder="English, Hindi, Bengali" value="<?php echo $sme_language;?>">
+                              <input type="input" class="input"   id="sme_language" name="sme_language"  placeholder="English, Hindi, Bengali" value="<?php echo $sme_language;?>" required="">
                            </div>
 						   
 						   
@@ -763,7 +1140,7 @@ else{
 						   
                            <div class="inputfield">
                               <label>Consultation Fees per hour</label>
-                              <input type="input" class="input"  id="sme_fees" name="sme_fees" value="<?php echo $sme_fees;?>">
+                              <input type="input" class="input"  id="sme_fees" name="sme_fees" placeholder="In rupees" value="<?php echo $sme_fees;?>">
                            </div>
 						   
 						   
@@ -792,20 +1169,28 @@ else{
 							  
 						  </div>
 						   
-						   
-                           <!-- <div class="inputfield">
-                              <label>Upload profile photo</label>
-                              <input class="input" type="file" id="myFile" name="filename" required="">
-                           </div> -->
+						 
                            <div class="inputfield">
                               <label>Upload resume</label>
-                              <input type="file"  id="resume_loc" name="resume_loc" value="<?php echo $resume_loc;?>">
+                              <input type="file"  id="resume_loc" name="resume_loc">
+							  
                            </div>
 						   
 						   
                            <div class="inputfield">
                               <label>Upload profile photo</label>
-                              <input type="file" id="photo_loc" name="photo_loc" value="<?php echo $photo_loc;?>">
+                              <input type="file" id="photo_loc" name="photo_loc">
+							  
+							  <a class="trigger_popup_fricc">Profile photo template</a>
+								<div class="hover_bkgr_fricc">
+								<span class="helper"></span>
+								<div>
+									<div class="popupCloseButton">&times;</div>
+									<p>Upload Profile photo in this dimension. to get best fit on webinar page.</p>
+									<img src="images/Dimensions/portrait.jpg" style="max-width: 100%;" >
+								</div>
+								</div>
+							  
                            </div>
 						   
 						   
@@ -837,6 +1222,203 @@ else{
       </div>
 
  <!--end modal for SME profile edit --->
+ 
+					<style>/* Popup box BEGIN */
+							.hover_bkgr_fricc1{
+								
+								cursor:pointer;
+								display:none;
+								height:100%;
+								position:fixed;
+								text-align:center;
+								top:0;
+								width:100%;
+								z-index:10000;
+							}
+							.hover_bkgr_fricc1 .helper1{
+								display:inline-block;
+								height:100%;
+								vertical-align:middle;
+							}
+							.hover_bkgr_fricc1 > div {
+								background-color: #fff;
+								box-shadow: 10px 10px 60px #555;
+								display: inline-block;
+								height: auto;
+								max-width: 550px;
+								min-height: 100px;
+								vertical-align: middle;
+								width: 40%;
+								position: relative;
+								border-radius: 8px;
+								padding: 15px 5%;
+							}
+							.popupCloseButton1 {
+								background-color: #fff;
+								border: 3px solid #999;
+								border-radius: 50px;
+								cursor: pointer;
+								display: inline-block;
+								font-family: arial;
+								font-weight: bold;
+								position: absolute;
+								top: -20px;
+								right: -20px;
+								font-size: 25px;
+								line-height: 30px;
+								width: 30px;
+								height: 30px;
+								text-align: center;
+							}
+							.popupCloseButton:hover1 {
+								background-color: #ccc;
+							}
+							.trigger_popup_fricc1 {
+								cursor: pointer;
+								font-size: 15px;
+								font-weight: bold;
+								
+							}
+							/* Popup box BEGIN */</style>
+						   
+						   <script>
+						   $(window).load(function () {
+							$(".trigger_popup_fricc1").click(function(){
+							   $('.hover_bkgr_fricc1').show();
+							});
+							
+							$('.hover_bkgr_fricc1').click(function(){
+								$('.hover_bkgr_fricc1').hide();
+							});
+							$('.popupCloseButton1').click(function(){
+								$('.hover_bkgr_fricc1').hide();
+							});
+						});
+						   </script>
+ 
+			
+ 
+ <!-- modal for add testimonial -->
+     <div class="modal fade" id="edit_testimonials" role="dialog">
+         <div class="modal-dialog">
+           
+            <div class="modal-content">
+               <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <div class="profile_section">
+                     <div class="title">ADD TESTIMONIAL</div>
+                     <div class="form">
+                        <form method="POST" action="edit_testimonials.php" enctype="multipart/form-data">
+                           <div class="inputfield">
+                             <label>Upload photo</label> 
+							 <div>
+                              <input type="file"  id="att_photo" name="att_photo" required="">
+							  <center><a class="trigger_popup_fricc1">photo template</a></center>
+							</div>
+							  </div>
+							  
+							  
+							  
+								<div class="hover_bkgr_fricc1">
+								<span class="helper1"></span>
+								<div>
+									<div class="popupCloseButton1">&times;</div>
+									Upload Photo in square dimension to get best fit.
+									<img src="images/Dimensions/square.jpg" style="max-width: 100%;" >
+								</div>
+								</div>
+
+                           <div class="inputfield">
+                              <label>Upload audio</label>
+                              <input type="file" id="att_audio" name="att_audio" >
+                           </div>
+						   
+                           <div class="inputfield">
+                              <label>Name of attestant</label>
+                              <input type="text" class="input" id="att_name" name="att_name" required="">
+                           </div>
+                           <div class="inputfield">
+                              <label>Designation of attestant</label>
+                              <input type="text" class="input" id="att_desig" name="att_desig" required="">
+                           </div>
+                           <div class="inputfield">
+                              <label>Testimony</label>
+                              <textarea type="text" class="textarea" id="testimony" name="testimony" required=""></textarea>
+                           </div>
+						   
+						  <center>
+                              <p style="margin-top: -2px;">Only Last 3 Attestants Added will be displayed</p>
+                           </center>
+						   
+						   
+                           <div class="row">
+                              <div class="col-sm-4"></div>
+                              <div class="col-sm-4">
+                                 <div class="inputfield">
+                                    <input type="submit" name="save_test" id="save_test" value="SAVE" class="btn">
+                                 </div>
+								  <div class="alert alert-danger" role="alert" id="save-test-error" style="display: none;">
+								</div>
+								<div class="alert alert-success" role="alert" id="test-save-msg-user" style="display: none;">
+								<p>Attestant Added</p>
+								</div>
+								 
+                              </div>
+                              <div class="col-sm-4"></div>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div> 
+    <!--  end modal for add testimonial --->
+	  
+	  <script>
+		/*  $(document).ready(function() {
+			$('#save_test').click(function() {
+						
+						var fd1 = new FormData();
+						var att_photo = $('#att_photo')[0].files[0];
+						var att_audio = $('#att_audio')[0].files[0];
+						var att_desig = document.getElementById("att_desig").value;
+						var att_name = document.getElementById("att_name").value;
+						var testimony = document.getElementById('testimony').value;
+						
+						
+						fd1.append('att_photo',att_photo);
+						fd1.append('att_audio',att_audio);
+						fd1.append('att_desig',att_desig);
+						fd1.append('att_name',att_name);
+						fd1.append('testimony',testimony);
+						
+						
+						
+						$.ajax({
+								url: 'edit_testimonials.php',
+								type: 'post',
+								data: fd1,
+								contentType: false,
+								processData: false,
+								success: function(error) {
+								if(error == 0)
+									$('#test-save-msg-user').show();
+								else {
+									document.getElementById("save-test-error").innerHTML = error;
+									document.getElementById("save-test-error").style.display = "block";
+								}
+							}
+								
+						});
+						
+					});
+				});  */
+			
+	  </script>
+ 
+ 
+ 
 
       <!-- modal for SME password change --->
       <div class="modal fade" id="passwordChangeSME" role="dialog">
@@ -844,6 +1426,7 @@ else{
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="profile_section">
                      <div class="title">CHANGE PASSWORD</div>
                      <div class="form">
@@ -933,6 +1516,7 @@ else{
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="profile_section">
                      <div class="title">CHOOSE CONSULTATION MODE</div>
                      <div class="form">
@@ -1018,9 +1602,7 @@ else{
                            </div>
                            <br>
                      
-						<script>
-							document.getElementById('label1').innerHTML = "HII";
-						</script>
+						
 					 
 					 
 					    <!--Email reply starts --->
@@ -1205,6 +1787,22 @@ else{
             </div>
          </div>
       </div>
+	  
+	  
+	  
+	   <div class="modal fade" id="deletewebinar" role="dialog">
+         <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body" style="text-align: center;">
+                  <a style="color: #38489E; font-size: 18px; font-weight: bold;" >Are you sure you want to delete a webinar -&nbsp;</a><a style="color: #38489E; font-size: 18px; font-weight: bold;" id="del_web_name"></a><br><br>
+                  <button class="btn" id="del_web" style="background-color: #F3834B;">CONFIRM</button>
+               </div>
+            </div>
+         </div>
+      </div>
+	  
+	  
 	  <!-- <script>
 		function decline_confirm(questionid) {
 			$.ajax({
@@ -1220,6 +1818,22 @@ else{
 			});
 		}
 	  </script> -->
+	  
+	  <script>
+		function confirm_delete_webinar(webinarid) {
+			$.ajax({
+				url: "delete_webinar.php",
+				method: "POST",
+				data: {webinarid: webinarid},
+				success: function(status) {
+					if(status.trim() == "1") {
+						window.location.replace("sme_dashboard.php");
+						alert("Webinar Deleted.");
+					}
+				}
+			});
+		}
+	  </script>
       <!--end modal for request decline confirmation --->
 	  
 	  
@@ -1229,6 +1843,7 @@ else{
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="profile_section cancel_consultation">
                      <div class="title">CANCEL CONSULTATION</div>
                      <div class="form">
@@ -1291,23 +1906,14 @@ else{
 					reason = document.getElementById("reason".concat(i+1)).innerHTML;
 					break
 				}
-
-			$.ajax({
-				url: "cancel_consultations.php",
-				method: "POST",
-				data: {do:"entry", questionid: questionid, reason: reason},
-				success: function(status) {
-					window.location.replace("sme_dashboard.php");
-					if(status.trim() == "1") {
-						alert("The consultation has been cancelled.");
+					
 						$.ajax({
 							url: "cancel_consultations.php",
 							method: "POST",
-							data: {do:"mail", questionid: questionid, reason: reason}
+							data: {questionid: questionid, reason: reason}
 						});
-					}
-				}
-			});
+						window.location.replace("sme_dashboard.php");	
+			
 		}
 	  </script>
       <!--end modal for cancel consultation --->
@@ -1322,10 +1928,11 @@ else{
             <!-- Modal content-->
             <div class="modal-content">
                <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
                   <div class="profile_section">
                      <div class="title">POST A WEBINAR</div>
                      <div class="form">
-                        <form method="POST" action="post_webinar.php" enctype="multipart/form-data">
+                        <form method="POST" action="post_webinar.php" enctype="multipart/form-data" >
 							
                            <div class="inputfield">
                               <label>Webinar topic</label>
@@ -1333,15 +1940,15 @@ else{
                            </div>
                            <div class="inputfield">
                               <label>Description(Within 200 words)</label>
-                              <textarea type="text" name="webinar_desc" id="webinar_desc" class="textarea" required="" placeholder="Objective of the course"></textarea>
+                              <textarea type="text" name="webinar_desc" id="webinar_desc" class="input" required="" placeholder="Objective of the course"></textarea>
                            </div>
                            <div class="inputfield">
                               <label>Who can attend?</label>
-                              <textarea type="text" name="who_attend" id="who_attend" class="textarea" required="" placeholder="Target audience"></textarea>
+                              <textarea type="text" name="who_attend" id="who_attend" class="input" required="" placeholder="Target audience"></textarea>
                            </div>
                            <div class="inputfield">
                               <label>Key takeaways (Within 100 words)</label>
-                              <textarea type="text" name="key_takeaways" id="key_takeaways" class="textarea" required=""></textarea>
+                              <textarea type="text" name="key_takeaways" id="key_takeaways" class="input" required=""></textarea>
                            </div>
                            <div class="inputfield">
                               <label>Fees</label>
@@ -1350,13 +1957,105 @@ else{
 						   
 						   <div class="inputfield">
                               <label>Webinar Venue</label>
-                              <input type="text" name="webinar_venue" id="webinar_venue" class="input" placeholder="Zoom call, Google meet, etc." required="">
+                              <input type="text" name="webinar_venue" id="webinar_venue" class="input" placeholder="zoom call, google meet, etc." required="">
                            </div>
 						   
 						   <div class="inputfield">
                               <label>Course Image</label>
-                              <input type="file" name="course_image" id="course_image" >
+                              <input type="file" required="" name="course_image" id="course_image" >
+							  
+							    <a class="trigger_popup_fricc">Course image template</a>
+								<div class="hover_bkgr_fricc">
+								<span class="helper"></span>
+								<div>
+									<div class="popupCloseButton">&times;</div>
+									<p>Upload Course image in this dimension. to get best fit on webinar page.</p>
+									<img src="images/Dimensions/portrait.jpg" style="max-width: 100%;" >
+								</div>
+								</div>
+							  
+							  
                            </div>
+						   
+						   
+						   
+						   
+						   
+						   <style>/* Popup box BEGIN */
+							.hover_bkgr_fricc{
+								
+								cursor:pointer;
+								display:none;
+								height:100%;
+								position:fixed;
+								text-align:center;
+								top:0;
+								width:100%;
+								z-index:10000;
+							}
+							.hover_bkgr_fricc .helper{
+								display:inline-block;
+								height:100%;
+								vertical-align:middle;
+							}
+							.hover_bkgr_fricc > div {
+								background-color: #fff;
+								box-shadow: 10px 10px 60px #555;
+								display: inline-block;
+								height: auto;
+								max-width: 550px;
+								min-height: 100px;
+								vertical-align: bottom;
+								width: 40%;
+								position: relative;
+								border-radius: 8px;
+								padding: 15px 5%;
+							}
+							.popupCloseButton {
+								background-color: #fff;
+								border: 3px solid #999;
+								border-radius: 50px;
+								cursor: pointer;
+								display: inline-block;
+								font-family: arial;
+								font-weight: bold;
+								position: absolute;
+								top: -20px;
+								right: -20px;
+								font-size: 25px;
+								line-height: 30px;
+								width: 30px;
+								height: 30px;
+								text-align: center;
+							}
+							.popupCloseButton:hover {
+								background-color: #ccc;
+							}
+							.trigger_popup_fricc {
+								cursor: pointer;
+								font-size: 20px;
+								margin: 20px;
+								display: inline-block;
+								font-weight: bold;
+							}
+							/* Popup box BEGIN */</style>
+						   
+						   <script>
+						   $(window).load(function () {
+							$(".trigger_popup_fricc").click(function(){
+							   $('.hover_bkgr_fricc').show();
+							});
+							
+							$('.hover_bkgr_fricc').click(function(){
+								$('.hover_bkgr_fricc').hide();
+							});
+							$('.popupCloseButton').click(function(){
+								$('.hover_bkgr_fricc').hide();
+							});
+						});
+						   </script>
+						  
+						  
 						  
                            <div class="inputfield">
 						    <label for="Tooltips" class="error" id="iddate"></label>
@@ -1388,6 +2087,8 @@ else{
                               <div class="col-sm-3"></div>
                            </div>
                         </form>
+						
+
                      </div>
                   </div>
                </div>
@@ -1401,6 +2102,252 @@ else{
 	  
 	  
 	  
+	  
+	  	<!-- modal for EDIT webinar--->
+      <div class="modal fade" id="editWebinar" role="dialog">
+         <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <div class="profile_section">
+                     <div class="title">Edit Your WEBINAR</div>
+                     <div class="form">
+                        <form method="POST" action="edit_webinar.php" enctype="multipart/form-data" >
+							
+                           <div class="inputfield">
+                              <label>Webinar topic</label>
+							  
+                              <input type="text" name="webinar_topic1" id="webinar_topic1" class="input" required="">
+                           </div>
+                           <div class="inputfield">
+                              <label>Description(Within 200 words)</label>
+                              <textarea type="text" name="webinar_desc1" id="webinar_desc1" class="input" required="" placeholder="Objective of the course"></textarea>
+                           </div>
+                           <div class="inputfield">
+                              <label>Who can attend?</label>
+                              <textarea type="text" name="who_attend1" id="who_attend1" class="input" required="" placeholder="Target audience"></textarea>
+                           </div>
+                           <div class="inputfield">
+                              <label>Key takeaways (Within 100 words)</label>
+                              <textarea type="text" name="key_takeaways1" id="key_takeaways1" class="input" required=""></textarea>
+                           </div>
+                           <div class="inputfield">
+                              <label>Fees</label>
+                              <input type="text" name="webinar_fees1" id="webinar_fees1" class="input" required="">
+                           </div>
+						   
+						   <div class="inputfield">
+                              <label>Webinar Venue</label>
+                              <input type="text" name="webinar_venue1" id="webinar_venue1" class="input"  required="">
+                           </div>
+						   
+						   <div class="inputfield">
+                              <label>Course Image</label>
+                              <input type="file"  name="course_image1" id="course_image1" >
+							  
+							    <a class="trigger_popup_fricc">Course image template</a>
+								<div class="hover_bkgr_fricc">
+								<span class="helper"></span>
+								<div>
+									<div class="popupCloseButton">&times;</div>
+									<p>Upload Course image in this dimension. to get best fit on webinar page.</p>
+									<img src="images/Dimensions/portrait.jpg" style="max-width: 100%;" >
+								</div>
+								</div>
+							  
+							  
+                           </div>
+						  
+                           <div class="inputfield">
+						    <label for="Tooltips" class="error" id="iddate11"></label>
+                              <label>Date</label>
+                              <input type="date" id="date11" name="date11" class="input" required="" onblur="dateChecker(this);">
+                           </div>
+
+                           <div class="inputfield">
+                              <label>Start time</label>
+                              <input type="time"  id="startone11" name="startone11" class="input" required="" onblur="timeChecker(this);">
+                           </div>
+						   <label for="Tooltips" class="error" id="idone11"></label>
+                           <div class="inputfield">
+                              <label>End time</label>
+                              <input type="time" id="one11" name="one11" class="input" required="" onblur="timeChecker(this);">
+                           </div>
+						   
+						   <input id="webinar_id1" name="webinar_id1" style="display: none;">
+
+						   
+						   
+                           <div class="row">
+                              <div class="col-sm-3"></div>
+                              <div class="col-sm-6">
+                                 <div class="inputfield">
+                                    <input type="submit" name="edit_webinar" id="edit_webinar" value="UPDATE WEBINAR" class="btn">
+                                 </div>
+							<div class="alert alert-danger" role="alert" id="post-webinar-error" style="display: none;">
+						   </div>
+						    <div class="alert alert-success" role="alert" id="email-sent-msg-user" style="display: none;">
+							<p>Your Webinar has been Posted</p>
+						   </div>
+                              </div>
+                              <div class="col-sm-3"></div>
+                           </div>
+                        </form>
+						
+
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+	  
+
+      <!--end modal for EDIT webinar --->
+	  
+	
+	  
+      
+	  
+	  
+	  
+	  
+	  
+	  
+	  <!-- modal for FOLLOWUP chat connect --->
+      <div class="modal fade" id="connectToChat" role="dialog">
+         <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body" style="padding: 0px;">
+                 <div class="chat_modal container-fluid">
+                     <div class="row header_row">
+                        <div class="col-3 col-sm-3">
+                           <img src="images/img1.jpg">
+                        </div>
+                        <div class="col-8 col-sm-8">
+                           <h4><span id="chatModalLabel"></span>
+						   <button class="btn" type="button" data-dismiss="modal" data-toggle="modal" data-target="#followup" onclick="followup('<?= $questionId ?>');">Follow up</button>
+
+						
+                              <button class="btn" type="button" data-dismiss="modal">Close</button>
+                           </h4>
+                        </div>
+                        <div class="col-1 col-sm-1" style="padding: 15px;">
+                           <div class="dropdown">
+                              <span class="fas fa-ellipsis-v"></span>
+                              <div class="dropdown-content">
+                                  <a href="#" id="export-chat">Export chat</a>
+                                 <a href="#" id="clr-msgs">Clear chat</a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="chat_body" id="chats"></div>
+                     <div class="row footer_row">
+                        <div class="col-9 col-sm-9" style="padding: 0px;">
+                           <textarea placeholder="Write a message" id="msg" onkeydown="return (event.keyCode!=13);"></textarea>
+                        </div>
+                        <div class="col-3 col-sm-3">
+                           <label for="attachedFile"><i class="fas fa-paperclip"></i></label>
+                           <input type="file" name="attachedFile" id="attachedFile"/>
+                           <a href="#" id="send-msg"><i class="fas fa-paper-plane"></i></a>
+                        </div>
+                     </div>
+					 <a href="" id="exportLink" style="display: none;" download></a>
+                  </div>
+
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--end modal for FOLLOWUP chat connect --->
+	  
+	  
+	  
+	  
+	  <!-- modal for follow up --->
+      <div class="modal fade" id="followup" role="dialog">
+         <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+               <div class="modal-body">
+			   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <div class="profile_section">
+                     <div class="title" id="followup_user_name"></div>
+                     <div class="form">
+                        <form form method="POST" action="followup.php" enctype="multipart/form-data">
+                           <div class="inputfield">
+						   <label for="Tooltips" class="error" id="iddate22"></label>
+                              <label>Date</label>
+                              <input type="date" class="input" required="" id="date22" name="date22" onblur="dateChecker(this);">
+                           </div>
+                           <div class="inputfield">
+                              <label>From time</label>
+                              <input type="time" class="input" required="" id="startone22" name="startone22" onblur="timeChecker(this);">
+                           </div>
+                           <div class="inputfield">
+						    <label for="Tooltips" class="error" id="idone22"></label>
+                              <label>To time</label>
+                              <input type="time" class="input" required="" id="one22" name="one22" onblur="timeChecker(this);">
+                           </div>
+						  
+						  
+						  
+						    <input id="followup_cid" name="followup_cid" style="display: none;">
+							<input id="followup_sme_email" name="followup_sme_email" style="display: none;">
+							<input id="followup_client_email" name="followup_client_email" style="display: none;">
+							
+						   
+						   
+                           <div class="row">
+                              <div class="col-sm-4"></div>
+                              <div class="col-sm-4">
+                                 <div class="inputfield">
+                                    <input type="submit" id="post_followup" name="post_followup" value="SCHEDULE" class="btn">
+                                 </div>
+                              </div>
+                              <div class="col-sm-4"></div>
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--end modal for follow up --->
+	  
+	  
+	   <!-- modal for disconnect chat --->
+      <div class="modal fade" id="disconnectChatModal" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-body" style="text-align: center;">
+					<p style="color: #38489E; font-size: 18px; font-weight: bold;">Are you sure you want to disconnect?</p>
+					<button class="btn" onclick="closeChat();" style="background-color: #F3834B;">Disconnect</button>
+				</div>
+			</div>
+		</div>
+      </div>
+	  
+	 
+		
+	  <!-- modal for clear chat --->
+      <div class="modal fade" id="clrChatsModal" role="dialog">
+		<div class="modal-dialog modal-sm">
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-body" style="text-align: center;">
+					<p style="color: #38489E; font-size: 18px; font-weight: bold;">Are you sure you want to clear chats?</p>
+					<button class="btn" id="confirm-clr-msgs" style="background-color: #F3834B;">Clear</button>
+				</div>
+			</div>
+		</div>
+		</div>
+	 
       <!-- Start footer -->
 	  <br><br>
       <footer style="background-color: #f2f2f2">
@@ -1427,13 +2374,16 @@ else{
       <!--- Scripts section --->
       <!-- sticky nav -->
       <script src="js/jquery-2.2.4.min.js"></script>
+	  <script src="js/jquery.convform.js"></script>
       <script src="js/parallax.min.js"></script>
       <script src="js/owl.carousel.min.js"></script>
       <script src="js/isotope.pkgd.min.js"></script>
       <script src="js/jquery.magnific-popup.min.js"></script>
       <script src="js/jquery.sticky.js"></script>
       <script src="js/main.js"></script>
-      <script src="js/pageHandler.js"></script>
+	  <script src="pageHandler.js"></script>
+	  <script src="check.js"></script>
+	  
       <!-- For carousel --->
       <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
